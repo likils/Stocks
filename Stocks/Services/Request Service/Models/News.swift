@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct News: Decodable, CustomStringConvertible {
+struct News: Decodable {
     
     /// Market news category for request.
     enum Category {
@@ -92,11 +92,6 @@ struct News: Decodable, CustomStringConvertible {
         
         let _url = try container.decode(String.self, forKey: CodingKeys.url)
         url = URL(string: _url)
-    }
-    
-    // MARK: - Public properties
-    var description: String {
-        "Category: \(category)\nTime: \(date)\nHead line: \(headline)\nSummary: \(summary)\nSource: \(source)\nImage: \(image!)"
     }
     
 }

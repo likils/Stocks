@@ -7,7 +7,19 @@
 
 import Foundation
 
-struct RequestService {
+protocol NewsService: class {
+    
+    func getNews(category: News.Category, completion: @escaping ([News]) -> Void)
+    
+}
+
+protocol CurrencyService: class {
+    
+    func getCurrencyRate(currency: String, completion: @escaping (Currency) -> Void)
+    
+}
+
+class RequestService: NewsService, CurrencyService {
     private enum RequestError: Error, CustomStringConvertible {
         case newsError(error: String)
         case currencyError(error: String)
@@ -38,7 +50,7 @@ struct RequestService {
     }()
     
     // MARK: - Public methods
-    mutating func getNews(category: News.Category, completion: @escaping ([News]) -> Void) {
+    func getNews(category: News.Category, completion: @escaping ([News]) -> Void) {
         let url = URL(string: baseUrlString + category.urlPart)
         baseUrlRequest.url = url
         
@@ -61,7 +73,7 @@ struct RequestService {
         task.resume()
     }
     
-    mutating func getCurrencyRate(currency: String, completion: @escaping (Currency) -> Void) {
+    func getCurrencyRate(currency: String, completion: @escaping (Currency) -> Void) {
         let url = URL(string: baseUrlString + "/forex/rates?base=\(currency)")
         baseUrlRequest.url = url
         
