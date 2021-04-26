@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B2802B282623767F00B6AADA /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B272623767F00B6AADA /* Currency.swift */; };
+		B2802B2E26244E9600B6AADA /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B2D26244E9600B6AADA /* News.swift */; };
+		B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */; };
+		B2CE57142621CD5700C5722D /* RequestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CE57132621CD5700C5722D /* RequestService.swift */; };
 		B2DEC14D26209D3600C13589 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14C26209D3600C13589 /* AppDelegate.swift */; };
 		B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14E26209D3600C13589 /* SceneDelegate.swift */; };
 		B2DEC15126209D3600C13589 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC15026209D3600C13589 /* ViewController.swift */; };
@@ -16,6 +20,10 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B2802B272623767F00B6AADA /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
+		B2802B2D26244E9600B6AADA /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
+		B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		B2CE57132621CD5700C5722D /* RequestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestService.swift; sourceTree = "<group>"; };
 		B2DEC14926209D3600C13589 /* Stocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2DEC14C26209D3600C13589 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2DEC14E26209D3600C13589 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -37,6 +45,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B2802B2B2624485F00B6AADA /* Request Model */ = {
+			isa = PBXGroup;
+			children = (
+				B2802B272623767F00B6AADA /* Currency.swift */,
+				B2802B2D26244E9600B6AADA /* News.swift */,
+			);
+			path = "Request Model";
+			sourceTree = "<group>";
+		};
+		B2802B2C2624487C00B6AADA /* Request Service */ = {
+			isa = PBXGroup;
+			children = (
+				B2802B2B2624485F00B6AADA /* Request Model */,
+				B2CE57132621CD5700C5722D /* RequestService.swift */,
+			);
+			path = "Request Service";
+			sourceTree = "<group>";
+		};
 		B2DEC14026209D3600C13589 = {
 			isa = PBXGroup;
 			children = (
@@ -58,6 +84,8 @@
 			children = (
 				B2DEC14C26209D3600C13589 /* AppDelegate.swift */,
 				B2DEC14E26209D3600C13589 /* SceneDelegate.swift */,
+				B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */,
+				B2802B2C2624487C00B6AADA /* Request Service */,
 				B2DEC15026209D3600C13589 /* ViewController.swift */,
 				B2DEC15226209D3600C13589 /* Main.storyboard */,
 				B2DEC15526209D3600C13589 /* Assets.xcassets */,
@@ -137,9 +165,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B2802B2E26244E9600B6AADA /* News.swift in Sources */,
 				B2DEC15126209D3600C13589 /* ViewController.swift in Sources */,
+				B2802B282623767F00B6AADA /* Currency.swift in Sources */,
+				B2CE57142621CD5700C5722D /* RequestService.swift in Sources */,
 				B2DEC14D26209D3600C13589 /* AppDelegate.swift in Sources */,
 				B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */,
+				B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,6 +321,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 72AKTAX57S;
 				INFOPLIST_FILE = Stocks/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -308,6 +341,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 72AKTAX57S;
 				INFOPLIST_FILE = Stocks/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

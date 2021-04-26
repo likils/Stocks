@@ -8,12 +8,24 @@
 import UIKit
 
 class ViewController: UIViewController {
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view.
+    
+    private var requestService: RequestService?
+    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var textView: UITextView!
+    
+    override func loadView() {
+        super.loadView()
+        textView.isEditable = false
+        requestService = RequestService()
     }
+    
 
-
+    @IBAction func button(_ sender: UIButton) {
+        requestService?.getNews(category: .company(symbol: "AAPL"), completion: { news in
+            DispatchQueue.main.async {
+                self.textView.text = "\(news)"
+            }
+        })
+    }
 }
 
