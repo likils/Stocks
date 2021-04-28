@@ -7,13 +7,13 @@
 
 import Foundation
 
-protocol NewsService: class {
+protocol NewsService: AnyObject {
     
     func getNews(category: News.Category, completion: @escaping ([News]) -> Void)
     
 }
 
-protocol CurrencyService: class {
+protocol CurrencyService: AnyObject {
     
     func getCurrencyRate(currency: String, completion: @escaping (Currency) -> Void)
     
@@ -39,7 +39,7 @@ class RequestService: NewsService, CurrencyService {
     
     
     // MARK: - Private properties
-    private let session = URLSession(configuration: .default)
+    private let session = URLSession.shared
     private let baseUrlString = "https://finnhub.io/api/v1"
     private lazy var baseUrlRequest: URLRequest = {
         let url = URL(string: baseUrlString)!
@@ -63,7 +63,7 @@ class RequestService: NewsService, CurrencyService {
                     print("\n::: JSONDecoder News error:\n\(error.localizedDescription)")
                 }
             }
-            if let response = response {
+            if let response = response as? HTTPURLResponse, response.statusCode != 200 {
                 print("\n::: Received News response:\n\(response)") 
             }
             if let error = error {
@@ -86,7 +86,7 @@ class RequestService: NewsService, CurrencyService {
                     print("\n::: JSONDecoder CurrencyRate error:\n\(error.localizedDescription)")
                 }
             }
-            if let response = response {
+            if let response = response as? HTTPURLResponse, response.statusCode != 200 {
                 print("\n::: Received CurrencyRate response:\n\(response)") 
             }
             if let error = error {

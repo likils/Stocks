@@ -1,5 +1,5 @@
 //
-//  newsCoordinator.swift
+//  NewsCoordinator.swift
 //  Stocks
 //
 //  Created by likils on 26.04.2021.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol NewsCoordination: NavCoordinator {
+protocol NewsCoordination: NavCoordination {
     
 }
 

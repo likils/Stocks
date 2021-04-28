@@ -51,12 +51,16 @@ class NewsVC: UIViewController, NewsView {
     
     // MARK: - Private methods
     private func setupView() {
-        view.backgroundColor = .white
-        navigationController?.isNavigationBarHidden = true
+        view.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        navigationItem.title = "Business News"
+        navigationController?.navigationBar.prefersLargeTitles = true
         
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
+        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        tableView.separatorStyle = .none
+        
         view.addSubview(tableView)
         
         NSLayoutConstraint.activate([
@@ -75,9 +79,15 @@ extension NewsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath)
-        cell.textLabel?.text = news[indexPath.row].headline
-        cell.detailTextLabel?.text = news[indexPath.row].summary
+        let news = news[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! NewsTableViewCell
+        cell.date = news.date
+        cell.headLine = news.headline
+        cell.id = news.id
+        cell.imageUrl = news.imageUrl
+        cell.redirectUrl = news.url
+        cell.source = news.source
+        cell.summary = news.summary
         return cell
     }
     

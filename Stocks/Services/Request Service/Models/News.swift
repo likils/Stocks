@@ -35,16 +35,16 @@ struct News: Decodable {
     let category: String
     
     /// Published time.
-    let date: String
+    let date: Date
     
     /// News headline.
     let headline: String
     
-    /// News ID. This value can be used to get the latest news only.
+    /// News ID. This value can be used to get the latest news.
     let id: Int
     
-    /// Thumbnail image.
-    let image: URL?
+    /// Thumbnail image URL.
+    let imageUrl: URL
     
     /// Related stocks and companies mentioned in the article.
     let related: String
@@ -56,7 +56,7 @@ struct News: Decodable {
     let summary: String
     
     /// URL of the original article.
-    let url: URL?
+    let url: URL
     
     // MARK: - JSON Decoding
     enum CodingKeys: String, CodingKey {
@@ -64,7 +64,7 @@ struct News: Decodable {
         case date = "datetime"
         case headline
         case id
-        case image
+        case imageUrl = "image"
         case related
         case source
         case summary
@@ -73,25 +73,16 @@ struct News: Decodable {
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        
         category = try container.decode(String.self, forKey: CodingKeys.category)
+        date  = try container.decode(Date.self, forKey: CodingKeys.date)
         headline = try container.decode(String.self, forKey: CodingKeys.headline)
         id = try container.decode(Int.self, forKey: CodingKeys.id)
+        imageUrl = try container.decode(URL.self, forKey: CodingKeys.imageUrl)
         related = try container.decode(String.self, forKey: CodingKeys.related)
         source = try container.decode(String.self, forKey: CodingKeys.source)
         summary = try container.decode(String.self, forKey: CodingKeys.summary)
-        
-        let _date  = try container.decode(Double.self, forKey: CodingKeys.date)
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .short
-        formatter.timeZone = .current
-        date = formatter.string(from: Date(timeIntervalSince1970: _date))
-        
-        let _image = try container.decode(String.self, forKey: CodingKeys.image)
-        image = URL(string: _image)
-        
-        let _url = try container.decode(String.self, forKey: CodingKeys.url)
-        url = URL(string: _url)
+        url = try container.decode(URL.self, forKey: CodingKeys.url)
     }
     
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol StocksCoordination: NavCoordinator {
+protocol StocksCoordination: NavCoordination {
     
 }
 

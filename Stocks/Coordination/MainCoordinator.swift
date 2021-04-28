@@ -7,16 +7,16 @@
 
 import UIKit
 
-class MainCoordinator: TabCoordinator {
+class MainCoordinator: Coordination {
     
     // MARK: - Public properties
-    var tabController: UITabBarController
     var didFinishClosure: (() -> ())?
     
     // MARK: - Private properties
     private let newsCoordinator: NewsCoordination
     private let stocksCoordinator: StocksCoordination
     private let settingsCoordinator: SettingsCoordination
+    private let tabController: UITabBarController
     private let service: RequestService
     
     // MARK: - Init
@@ -37,7 +37,7 @@ class MainCoordinator: TabCoordinator {
         settingsNC.tabBarItem.title = "Settings"
         settingsCoordinator = SettingsCoordinator(navController: settingsNC)
         
-        tabController.viewControllers = [newsNC]
+        tabController.viewControllers = [newsNC, stocksNC, settingsNC]
     }
     
     // MARK: - Public methods
@@ -45,6 +45,10 @@ class MainCoordinator: TabCoordinator {
         newsCoordinator.start()
         stocksCoordinator.start()
         settingsCoordinator.start()
+        settingsCoordinator.didFinishClosure = { [unowned self] in
+            self.didFinishClosure?()
+        }
+        tabController.selectedIndex = 0
     }
     
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-protocol SettingsCoordination: NavCoordinator {
+protocol SettingsCoordination: NavCoordination {
     
 }
 
@@ -26,6 +26,9 @@ class SettingsCoordinator: SettingsCoordination {
     
     // MARK: - Public methods
     func start() {
-        
+        let vm = SettingsVM(coordinator: self)
+        let vc = SettingsVC(viewModel: vm)
+        navController.viewControllers = [vc]
     }
+    
 }

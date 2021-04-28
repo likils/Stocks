@@ -7,27 +7,25 @@
 
 import UIKit
 
-class AppCoordinator: WindowCoordinator {
-    
-    // MARK: - Public properties
-    var window: UIWindow
-    var didFinishClosure: (() -> ())?
+class AppCoordinator {
     
     // MARK: - Private properties
+    private let window: UIWindow
+    private var authCoordinator: NavCoordination?
+    private let mainCoordinator: Coordination
+    private let tabController: UITabBarController
     private let service: RequestService
-    private let mainCoordinator: TabCoordinator
-    private let tabBarController: UITabBarController
     // TODO: Add login service
-    private var isLoggedIn = true
+    var isLoggedIn = false
     
     // MARK: - Init
-    init(window: UIWindow, service: RequestService) {
+    init(window: UIWindow) {
         self.window = window
-        self.service = service
         
-        let tabBarController = UITabBarController()
-        self.tabBarController = tabBarController
-        mainCoordinator = MainCoordinator(tabController: tabBarController, service: service)
+        service = RequestService()
+        
+        tabController = UITabBarController()
+        mainCoordinator = MainCoordinator(tabController: tabController, service: service)
     }
     
     // MARK: - Public methods
@@ -37,21 +35,34 @@ class AppCoordinator: WindowCoordinator {
         window.rootViewController = launchController
         window.makeKeyAndVisible()
         
-        if isLoggedIn {
-            showMain()
-        } else {
-            showRegistration()
-        }
+        logIn()
     }
     
     // MARK: - Private methods
+    private func logIn() {
+        isLoggedIn ? showMain() : showRegistration()
+    }
+    
     private func showMain() {
+        mainCoordinator.didFinishClosure = { [unowned self] in
+            self.isLoggedIn = false
+            self.logIn()
+        }
+        window.rootViewController = tabController
         mainCoordinator.start()
-        window.rootViewController = tabBarController
     }
     
     private func showRegistration() {
+        let navController = UINavigationController()
+        authCoordinator = AuthCoordinator(navController: navController)
+        authCoordinator?.didFinishClosure = { [unowned self] in
+            self.authCoordinator = nil
+            self.isLoggedIn = true
+            self.logIn()
+        }
         
+        window.rootViewController = navController
+        authCoordinator?.start()
     }
     
 }
