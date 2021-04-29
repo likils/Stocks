@@ -10,10 +10,13 @@ import UIKit
 class NewsVC: UIViewController, NewsView {
     
     // MARK: - Subviews
-    let tableView: UITableView = {
+    private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = false
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
         return tableView
     }()
     
@@ -22,7 +25,6 @@ class NewsVC: UIViewController, NewsView {
     
     // MARK: - Private properties
     private let viewModel: NewsViewModel
-    private let cellIdentifier = "NewsCell"
 
     // MARK: - Init
     init(viewModel: NewsViewModel) {
@@ -38,8 +40,10 @@ class NewsVC: UIViewController, NewsView {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
+        tableView.delegate = self
+        tableView.dataSource = self
         
+        setupView()
         viewModel.getNews()
     }
     
@@ -49,20 +53,18 @@ class NewsVC: UIViewController, NewsView {
         tableView.reloadData()
     }
     
+    func showImage(_ image: UIImage, at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return }
+        cell.image = image
+    }
+    
     // MARK: - Private methods
     private func setupView() {
         view.backgroundColor = UIColor(rgb: 0xF8F8FA)
         navigationItem.title = "Business News"
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: cellIdentifier)
-        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
-        tableView.separatorStyle = .none
-        
         view.addSubview(tableView)
-        
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
@@ -70,8 +72,10 @@ class NewsVC: UIViewController, NewsView {
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
         ])
     }
+    
 }
 
+// MARK: - TableView Delegate & DataSource
 extension NewsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -79,15 +83,20 @@ extension NewsVC: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let news = news[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellIdentifier, for: indexPath) as! NewsTableViewCell
-        cell.date = news.date
-        cell.headLine = news.headline
-        cell.id = news.id
-        cell.imageUrl = news.imageUrl
-        cell.redirectUrl = news.url
-        cell.source = news.source
-        cell.summary = news.summary
+        let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
+        if let cell = cell as? NewsTableViewCell {
+            let news = news[indexPath.row]
+            
+            cell.date = news.date
+            cell.headLine = news.headline
+            cell.id = news.id
+            cell.sourceUrl = news.sourceUrl
+            cell.source = news.source
+            cell.summary = news.summary
+            
+            cell.image = UIImage() // reset old cell picture
+            viewModel.fetchImage(from: news.imageUrl, for: indexPath)
+        }
         return cell
     }
     

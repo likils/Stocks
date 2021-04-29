@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol SettingsViewModel {
+protocol SettingsViewModel: AnyObject {
     
     func logout()
     

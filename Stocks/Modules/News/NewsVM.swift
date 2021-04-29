@@ -15,11 +15,13 @@ class NewsVM: NewsViewModel {
     //MARK: - Private properties
     private let coordinator: NewsCoordination
     private let newsService: NewsService
+    private let cacheService: CacheService
     
     // MARK: - Init
-    init(coordinator: NewsCoordination, newsService: NewsService) {
+    init(coordinator: NewsCoordination, newsService: NewsService, cacheService: CacheService) {
         self.coordinator = coordinator
         self.newsService = newsService
+        self.cacheService = cacheService
     }
     
     // MARK: - Public properties
@@ -27,6 +29,14 @@ class NewsVM: NewsViewModel {
         newsService.getNews(category: .general) { news in
             DispatchQueue.main.async {
                 self.view?.showNews(news)
+            }
+        }
+    }
+    
+    func fetchImage(from url: URL, for indexPath: IndexPath) {
+        cacheService.fetchImage(from: url) { image in
+            DispatchQueue.main.async {
+                self.view?.showImage(image, at: indexPath)
             }
         }
     }

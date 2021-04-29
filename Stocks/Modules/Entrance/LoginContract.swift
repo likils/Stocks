@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol LoginViewModel {
+protocol LoginViewModel: AnyObject {
     
     func login()
     

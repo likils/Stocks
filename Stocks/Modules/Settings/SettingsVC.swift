@@ -18,7 +18,7 @@ class SettingsVC: UIViewController {
         button.layer.borderWidth = 3
         button.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
         button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
+        button.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
         return button
     }()
     
@@ -42,7 +42,7 @@ class SettingsVC: UIViewController {
     }
     
     // MARK: - Actions
-    @objc func loginTapped() {
+    @objc func logoutTapped() {
         viewModel.logout()
     }
     

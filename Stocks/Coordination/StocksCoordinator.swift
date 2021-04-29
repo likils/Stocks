@@ -18,12 +18,16 @@ class StocksCoordinator: StocksCoordination {
     var didFinishClosure: (() -> ())?
     
     // MARK: - Private properties
-    private let service: RequestService
+    private let newsService: NewsService
+    private let currencyService: CurrencyService
+    private let cacheService: CacheService
     
     // MARK: - Init
-    init(navController: UINavigationController, service: RequestService) {
+    init(navController: UINavigationController, newsService: NewsService, currencyService: CurrencyService, cacheService: CacheService) {
         self.navController = navController
-        self.service = service
+        self.newsService = newsService
+        self.currencyService = currencyService
+        self.cacheService = cacheService
     }
     
     // MARK: - Public methods

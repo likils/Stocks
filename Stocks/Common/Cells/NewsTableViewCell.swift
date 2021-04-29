@@ -60,7 +60,7 @@ class NewsTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let thumbnailImage: UIImageView = {
+    private let thumbnailImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
@@ -70,6 +70,13 @@ class NewsTableViewCell: UITableViewCell {
     }()
     
     // MARK: - Public properties
+    static var identifier: String {
+        "\(Self.self)"
+    }
+    
+    var id = 0
+    var sourceUrl: URL!
+    
     var source = "" {
         didSet {
             sourceLabel.text = source
@@ -78,9 +85,8 @@ class NewsTableViewCell: UITableViewCell {
     
     var date = Date() {
         didSet {
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd 'at' HH:mm"
-            dateLabel.text = dateFormatter.string(from: date)
+            let formatter = RelativeDateTimeFormatter()
+            dateLabel.text = formatter.localizedString(for: date, relativeTo: Date())
         }
     }
     
@@ -96,20 +102,11 @@ class NewsTableViewCell: UITableViewCell {
         }
     }
     
-    var imageUrl: URL? {
+    var image = UIImage() {
         didSet {
-            DispatchQueue.global().async {
-                let data = try! Data(contentsOf: self.imageUrl!)
-                let image = UIImage(data: data)
-                DispatchQueue.main.async {
-                    self.thumbnailImage.image = image
-                }
-            }
+            thumbnailImageView.image = image
         }
     }
-    
-    var id = 0
-    var redirectUrl: URL?
     
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -133,7 +130,7 @@ class NewsTableViewCell: UITableViewCell {
         backView.addSubview(dateLabel)
         backView.addSubview(headLineLabel)
         backView.addSubview(summaryLabel)
-        backView.addSubview(thumbnailImage)
+        backView.addSubview(thumbnailImageView)
         
         NSLayoutConstraint.activate([
             backView.topAnchor.constraint(equalTo: self.contentView.topAnchor, constant: 16),
@@ -156,11 +153,12 @@ class NewsTableViewCell: UITableViewCell {
             summaryLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
             summaryLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
             
-            thumbnailImage.topAnchor.constraint(equalTo: summaryLabel.bottomAnchor, constant: 8),
-            thumbnailImage.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
-            thumbnailImage.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
-            thumbnailImage.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -16),
-            thumbnailImage.heightAnchor.constraint(equalToConstant: 167)
+            thumbnailImageView.topAnchor.constraint(equalTo: summaryLabel.bottomAnchor, constant: 8),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
+            thumbnailImageView.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -16),
+            thumbnailImageView.heightAnchor.constraint(equalToConstant: 167)
         ])
     }
+    
 }

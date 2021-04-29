@@ -14,18 +14,23 @@ class AppCoordinator {
     private var authCoordinator: NavCoordination?
     private let mainCoordinator: Coordination
     private let tabController: UITabBarController
-    private let service: RequestService
+    private let serviceContainer: ServiceContainer
     // TODO: Add login service
-    var isLoggedIn = false
+    private var isLoggedIn = false
     
     // MARK: - Init
     init(window: UIWindow) {
         self.window = window
         
-        service = RequestService()
+        let newsService = NewsServiceImpl()
+        let currencyService = CurrencyServiceImpl()
+        let cacheService = CacheServiceImpl()
+        serviceContainer = ServiceContainerImpl(newsService: newsService,
+                                                currencyService: currencyService,
+                                                cacheService: cacheService)
         
         tabController = UITabBarController()
-        mainCoordinator = MainCoordinator(tabController: tabController, service: service)
+        mainCoordinator = MainCoordinator(tabController: tabController, serviceContainer: serviceContainer)
     }
     
     // MARK: - Public methods

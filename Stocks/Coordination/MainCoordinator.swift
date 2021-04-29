@@ -17,21 +17,26 @@ class MainCoordinator: Coordination {
     private let stocksCoordinator: StocksCoordination
     private let settingsCoordinator: SettingsCoordination
     private let tabController: UITabBarController
-    private let service: RequestService
+    private let serviceContainer: ServiceContainer
     
     // MARK: - Init
-    init(tabController: UITabBarController, service: RequestService) {
+    init(tabController: UITabBarController, serviceContainer: ServiceContainer) {
         self.tabController = tabController
-        self.service = service
+        self.serviceContainer = serviceContainer
         
         let newsNC = UINavigationController()
         newsNC.title = nil
         newsNC.tabBarItem.title = "News"
-        newsCoordinator = NewsCoordinator(navController: newsNC, service: service)
+        newsCoordinator = NewsCoordinator(navController: newsNC,
+                                          newsService: serviceContainer.newsService,
+                                          cacheService: serviceContainer.cacheService)
         
         let stocksNC = UINavigationController()
         stocksNC.tabBarItem.title = "Stocks"
-        stocksCoordinator = StocksCoordinator(navController: stocksNC, service: service)
+        stocksCoordinator = StocksCoordinator(navController: stocksNC,
+                                              newsService: serviceContainer.newsService,
+                                              currencyService: serviceContainer.currencyService,
+                                              cacheService: serviceContainer.cacheService)
         
         let settingsNC = UINavigationController()
         settingsNC.tabBarItem.title = "Settings"

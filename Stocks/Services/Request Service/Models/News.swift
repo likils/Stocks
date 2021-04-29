@@ -56,7 +56,7 @@ struct News: Decodable {
     let summary: String
     
     /// URL of the original article.
-    let url: URL
+    let sourceUrl: URL
     
     // MARK: - JSON Decoding
     enum CodingKeys: String, CodingKey {
@@ -68,21 +68,22 @@ struct News: Decodable {
         case related
         case source
         case summary
-        case url
+        case sourceUrl = "url"
     }
     
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
+        let _date  = try container.decode(Double.self, forKey: CodingKeys.date)
+        date = Date(timeIntervalSince1970: _date)
         category = try container.decode(String.self, forKey: CodingKeys.category)
-        date  = try container.decode(Date.self, forKey: CodingKeys.date)
         headline = try container.decode(String.self, forKey: CodingKeys.headline)
         id = try container.decode(Int.self, forKey: CodingKeys.id)
         imageUrl = try container.decode(URL.self, forKey: CodingKeys.imageUrl)
         related = try container.decode(String.self, forKey: CodingKeys.related)
         source = try container.decode(String.self, forKey: CodingKeys.source)
         summary = try container.decode(String.self, forKey: CodingKeys.summary)
-        url = try container.decode(URL.self, forKey: CodingKeys.url)
+        sourceUrl = try container.decode(URL.self, forKey: CodingKeys.sourceUrl)
     }
     
 }
