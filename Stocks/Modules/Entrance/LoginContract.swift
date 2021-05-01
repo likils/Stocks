@@ -9,6 +9,6 @@ import Foundation
 
 protocol LoginViewModel: AnyObject {
     
-    func login()
+    func login(with type: SocialButton.SocialType)
     
 }

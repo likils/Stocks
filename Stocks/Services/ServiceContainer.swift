@@ -9,6 +9,7 @@ import Foundation
 
 protocol ServiceContainer {
     
+    var loginService: LoginService { get }
     var newsService: NewsService { get }
     var currencyService: CurrencyService { get }
     var cacheService: CacheService { get }
@@ -17,14 +18,17 @@ protocol ServiceContainer {
 
 class ServiceContainerImpl: ServiceContainer {
     
+    let loginService: LoginService 
     let newsService: NewsService
     let currencyService: CurrencyService
     let cacheService: CacheService
     
-    init(newsService: NewsService,
+    init(loginService: LoginService,
+         newsService: NewsService,
          currencyService: CurrencyService,
          cacheService: CacheService) {
         
+        self.loginService = loginService
         self.newsService = newsService
         self.currencyService = currencyService
         self.cacheService = cacheService

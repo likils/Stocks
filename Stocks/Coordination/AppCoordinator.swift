@@ -22,10 +22,12 @@ class AppCoordinator {
     init(window: UIWindow) {
         self.window = window
         
+        let loginService = AppleLoginService()
         let newsService = NewsServiceImpl()
         let currencyService = CurrencyServiceImpl()
         let cacheService = CacheServiceImpl()
-        serviceContainer = ServiceContainerImpl(newsService: newsService,
+        serviceContainer = ServiceContainerImpl(loginService: loginService,
+                                                newsService: newsService,
                                                 currencyService: currencyService,
                                                 cacheService: cacheService)
         
@@ -59,7 +61,7 @@ class AppCoordinator {
     
     private func showRegistration() {
         let navController = UINavigationController()
-        authCoordinator = AuthCoordinator(navController: navController)
+        authCoordinator = AuthCoordinator(navController: navController, loginService: serviceContainer.loginService)
         authCoordinator?.didFinishClosure = { [unowned self] in
             self.authCoordinator = nil
             self.isLoggedIn = true

@@ -10,17 +10,28 @@ import UIKit
 class LoginVC: UIViewController {
     
     // MARK: - Subviews
-    private let button: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Login", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 3
-        button.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
-        return button
+    private let label: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "S T O C K S"
+        label.font = UIFont.systemFont(ofSize: 40, weight: .heavy)
+        return label
     }()
+    
+    private let stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.alignment = .fill
+        stackView.axis = .vertical
+        stackView.distribution = .fillEqually
+        stackView.spacing = 8
+        return stackView
+    }()
+    
+    
+    private let appleButton = SocialButton(socialType: .apple)
+    private let googleButton = SocialButton(socialType: .google)
+    private let facebookButton = SocialButton(socialType: .facebook)
     
     // MARK: - Private properties
     private let viewModel: LoginViewModel
@@ -39,24 +50,36 @@ class LoginVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
+        appleButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
+        googleButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
+        facebookButton.addTarget(self, action: #selector(loginTapped), for: .touchUpInside)
     }
     
     // MARK: - Actions
-    @objc func loginTapped() {
-        viewModel.login()
+    @objc func loginTapped(selector: SocialButton) {
+        viewModel.login(with: selector.socialType)
     }
     
     // MARK: - Private methods
     private func setupView() {
         view.backgroundColor = .white
         navigationController?.isNavigationBarHidden = true
-        view.addSubview(button)
+        
+        view.addSubview(label)
+        view.addSubview(stackView)
+        
+        stackView.addArrangedSubview(appleButton)
+        stackView.addArrangedSubview(googleButton)
+        stackView.addArrangedSubview(facebookButton)
         
         NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 100),
-            button.heightAnchor.constraint(equalToConstant: 50)
+            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            
+            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
         
     }

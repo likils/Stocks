@@ -7,20 +7,30 @@
 
 import UIKit
 
-class AuthCoordinator: NavCoordination {
+protocol AuthCoordination: NavCoordination {
+    
+    
+    
+}
+
+class AuthCoordinator: AuthCoordination {
     
     // MARK: - Public properties
     var navController: UINavigationController
     var didFinishClosure: (() -> ())?
     
+    // MARK: - Private properties
+    private let loginService: LoginService
+    
     // MARK: - Init
-    init(navController: UINavigationController) {
+    init(navController: UINavigationController, loginService: LoginService) {
         self.navController = navController
+        self.loginService = loginService
     }
     
     // MARK: - Public methods
     func start() {
-        let vm = LoginVM(coordinator: self)
+        let vm = LoginVM(coordinator: self, loginService: loginService)
         let vc = LoginVC(viewModel: vm)
         navController.viewControllers = [vc]
     }
