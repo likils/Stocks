@@ -21,18 +21,22 @@ class StocksCoordinator: StocksCoordination {
     private let newsService: NewsService
     private let currencyService: CurrencyService
     private let cacheService: CacheService
+    private let stocksService: StocksService
     
     // MARK: - Init
-    init(navController: UINavigationController, newsService: NewsService, currencyService: CurrencyService, cacheService: CacheService) {
+    init(navController: UINavigationController, newsService: NewsService, currencyService: CurrencyService, cacheService: CacheService, stocksService: StocksService) {
         self.navController = navController
         self.newsService = newsService
         self.currencyService = currencyService
         self.cacheService = cacheService
+        self.stocksService = stocksService
     }
     
     // MARK: - Public methods
     func start() {
-        
+        let vm = StocksVM(coordinator: self, stocksService: stocksService)
+        let vc = StocksVC(viewModel: vm)
+        navController.viewControllers = [vc]
     }
     
 }

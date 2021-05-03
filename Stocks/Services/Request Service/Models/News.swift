@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct News: Decodable {
+struct News: Decodable, Equatable {
     
     /// Market news category for request.
     enum Category {
         case general, forex, crypto, merger
-        case company(symbol: String)
+        case company(Company)
         
         var urlPart: String {
             switch self {
@@ -24,8 +24,8 @@ struct News: Decodable {
                     return "/news?category=crypto"
                 case .merger:
                     return "/news?category=merger"
-                case .company(let symbol):
-                    return "/company-news?symbol=\(symbol)&from=2021-03-01&to=2021-03-09"
+                case .company(let company):
+                    return "/company-news?symbol=\(company.symbol)&from=2021-03-01&to=2021-03-09"
             }
         }
     }

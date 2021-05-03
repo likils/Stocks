@@ -28,7 +28,7 @@ class NewsVM: NewsViewModel {
     func getNews() {
         newsService.getNews(category: .general) { news in
             DispatchQueue.main.async {
-                self.view?.showNews(news)
+                self.view?.show(news: news)
             }
         }
     }
@@ -36,7 +36,7 @@ class NewsVM: NewsViewModel {
     func fetchImage(from url: URL, for indexPath: IndexPath) {
         cacheService.fetchImage(from: url) { image in
             DispatchQueue.main.async {
-                self.view?.showImage(image, at: indexPath)
+                self.view?.show(image: image, at: indexPath)
             }
         }
     }

@@ -28,7 +28,6 @@ class LoginVC: UIViewController {
         return stackView
     }()
     
-    
     private let appleButton = SocialButton(socialType: .apple)
     private let googleButton = SocialButton(socialType: .google)
     private let facebookButton = SocialButton(socialType: .facebook)

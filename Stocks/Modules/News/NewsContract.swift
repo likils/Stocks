@@ -18,9 +18,7 @@ protocol NewsViewModel: AnyObject {
 
 protocol NewsView: AnyObject {
     
-    var news: [News] { get set }
-    
-    func showNews(_ news: [News])
-    func showImage(_ image: UIImage, at indexPath: IndexPath)
+    func show(news: [News])
+    func show(image: UIImage, at indexPath: IndexPath)
     
 }

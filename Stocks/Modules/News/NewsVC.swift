@@ -20,11 +20,9 @@ class NewsVC: UIViewController, NewsView {
         return tableView
     }()
     
-    //MARK: - Public properties
-    var news = [News]()
-    
     // MARK: - Private properties
     private let viewModel: NewsViewModel
+    private var news = [News]()
 
     // MARK: - Init
     init(viewModel: NewsViewModel) {
@@ -42,18 +40,28 @@ class NewsVC: UIViewController, NewsView {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         setupView()
         viewModel.getNews()
     }
     
-    // MARK: - Public methods
-    func showNews(_ news: [News]) {
-        self.news = news
-        tableView.reloadData()
+    // MARK: - Actions
+    @objc func refresh() {
+        viewModel.getNews()
     }
     
-    func showImage(_ image: UIImage, at indexPath: IndexPath) {
+    // MARK: - Public methods
+    func show(news: [News]) {
+        if self.news != news {
+            self.news = news
+            tableView.reloadData()
+        }
+        tableView.refreshControl?.endRefreshing()
+    }
+    
+    func show(image: UIImage, at indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return }
         cell.image = image
     }
@@ -66,10 +74,10 @@ class NewsVC: UIViewController, NewsView {
         
         view.addSubview(tableView)
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor)
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     

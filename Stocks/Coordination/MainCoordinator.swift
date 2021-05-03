@@ -36,7 +36,8 @@ class MainCoordinator: Coordination {
         stocksCoordinator = StocksCoordinator(navController: stocksNC,
                                               newsService: serviceContainer.newsService,
                                               currencyService: serviceContainer.currencyService,
-                                              cacheService: serviceContainer.cacheService)
+                                              cacheService: serviceContainer.cacheService,
+                                              stocksService: serviceContainer.stocksService)
         
         let settingsNC = UINavigationController()
         settingsNC.tabBarItem.title = "Settings"

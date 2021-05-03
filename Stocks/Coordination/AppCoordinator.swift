@@ -16,7 +16,7 @@ class AppCoordinator {
     private let tabController: UITabBarController
     private let serviceContainer: ServiceContainer
     // TODO: Add login service
-    private var isLoggedIn = false
+    private var isLoggedIn = true
     
     // MARK: - Init
     init(window: UIWindow) {
@@ -24,10 +24,12 @@ class AppCoordinator {
         
         let loginService = AppleLoginService()
         let newsService = NewsServiceImpl()
+        let stocksService = StocksServiceImpl()
         let currencyService = CurrencyServiceImpl()
         let cacheService = CacheServiceImpl()
         serviceContainer = ServiceContainerImpl(loginService: loginService,
                                                 newsService: newsService,
+                                                stocksService: stocksService,
                                                 currencyService: currencyService,
                                                 cacheService: cacheService)
         

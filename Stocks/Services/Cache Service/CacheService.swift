@@ -59,7 +59,6 @@ class CacheServiceImpl: CacheService {
             return nil
         }
         
-        // Return the downsampled image as UIImage
         return UIImage(cgImage: downsampledImage)
     }
     

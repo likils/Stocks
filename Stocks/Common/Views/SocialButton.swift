@@ -70,9 +70,9 @@ class SocialButton: UIButton {
         NSLayoutConstraint.activate([
             stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
             stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
+            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 4),
             stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 8),
             stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -8),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 4),
             stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -4),
             
             socialImageView.heightAnchor.constraint(equalTo: socialLabel.heightAnchor, multiplier: 0.32),
