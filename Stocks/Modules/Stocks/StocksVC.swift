@@ -7,26 +7,21 @@
 
 import UIKit
 
-class StocksVC: UIViewController, StocksView {
+class StocksVC: UITableViewController, StocksView {
     
     // MARK: - Subviews
-    private let tableView: UITableView = {
-        let tableView = UITableView()
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = true
-        tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
-        return tableView
-    }()
+    private let searchVC: UITableViewController
     
     // MARK: - Private properties
     private let viewModel: StocksViewModel
-    private var stocks = [(Company, CompanyQuotes)]()
+    private var externalSearchResults = [Company]()
+    private var internalSearchResults = [Company]()
+    private var watchlist = [(company: Company, quotes: CompanyQuotes)]()
     
     // MARK: - Init
     init(viewModel: StocksViewModel) {
         self.viewModel = viewModel
+        searchVC = UITableViewController()
         super.init(nibName: nil, bundle: nil)
         viewModel.view = self
     }
@@ -38,69 +33,138 @@ class StocksVC: UIViewController, StocksView {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupView()
-        setupControllers()
-    }
-    
-    // MARK: - Public methods
-    func showSearchResult(with info: [(Company, CompanyQuotes)]) {
-        stocks = info
-        tableView.reloadSections(IndexSet(integer: 0), with: .top)
-    }
-
-    // MARK: - Private methods
-    private func setupView() {
+        
         view.backgroundColor = UIColor(rgb: 0xF8F8FA)
         navigationItem.title = "Stock Quotes"
         navigationController?.navigationBar.prefersLargeTitles = true
         
-        view.addSubview(tableView)
-        
-        NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-        ])
+        setupTableView(tableView)
+        setupTableView(searchVC.tableView)
+        setupDelegation()
     }
     
-    private func setupControllers() {
-        navigationItem.searchController = UISearchController()
-        navigationItem.searchController?.searchBar.delegate = self
+    // MARK: - Public methods
+    func show(companies: [Company]) {
+        let searchResults = Set(companies).subtracting(Set(internalSearchResults))
+        externalSearchResults = searchResults.sorted()
+        searchVC.tableView.reloadSections(IndexSet(0...1), with: .automatic)
+    }
+    
+    func add(company: (Company, CompanyQuotes)) {
+        watchlist.append(company)
+        tableView.insertRows(at: [IndexPath(row: watchlist.count-1, section: 0)], with: .bottom)
+    }
+
+    // MARK: - Private methods
+    private func setupTableView(_ tableView: UITableView) {
+        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        tableView.separatorStyle = .none
+        tableView.showsVerticalScrollIndicator = true
+        tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
+    }
+    
+    private func setupDelegation() {
+        searchVC.tableView.delegate = self
+        searchVC.tableView.dataSource = self
         
-        tableView.delegate = self
-        tableView.dataSource = self
+        let searchController = UISearchController(searchResultsController: searchVC)
+        navigationItem.searchController = searchController
+        searchController.searchBar.delegate = self
     }
     
 }
 
+// MARK: - SearchBar Delegate
 extension StocksVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if !stocks.isEmpty {
-            stocks.removeAll()
-            tableView.reloadSections(IndexSet(integer: 0), with: .top)
-        }
+        internalSearchResults.removeAll()
+        externalSearchResults.removeAll()
+        searchVC.tableView.reloadSections(IndexSet(0...1), with: .automatic)
         
-        let text = searchText.trimmingCharacters(in: .whitespaces)
-        guard !text.contains(" "), text.count > 3 else { return }
+        let text = searchText.trimmingCharacters(in: .whitespaces).lowercased()
+        guard !text.contains(" "), text.count > 2 else { return }
+        
+        watchlist.forEach {
+            if $0.company.description.lowercased().contains(text) || $0.company.symbol.lowercased().contains(text) {
+                internalSearchResults.append($0.company)
+            }
+        }
         
         viewModel.searchCompany(text)
     }
     
 }
 
-extension StocksVC: UITableViewDelegate, UITableViewDataSource {
+extension StocksVC {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        stocks.count
+    // MARK: - TableView Datasource
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if tableView === searchVC.tableView {
+            return 2
+        } else {
+            return 1
+        }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if tableView === searchVC.tableView {
+            if section == 0 && !internalSearchResults.isEmpty {
+                return "Watchlist"
+            } else if section == 1 && !externalSearchResults.isEmpty {
+                return "Symbols"
+            } else {
+                return nil
+            }
+        } else {
+            return nil
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if tableView === self.tableView {
+            return watchlist.count
+        } else {
+            return section == 0 ? internalSearchResults.count : externalSearchResults.count
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: StocksTableViewCell.identifier, for: indexPath) as! StocksTableViewCell
-        let company = stocks[indexPath.row]
-        cell.company = "\(company.0.description)(\(company.0.symbol)) - \(company.1.currentPrice)"
+        if tableView === self.tableView {
+            let company = watchlist[indexPath.row]
+            cell.company = "\(company.0.description)(\(company.0.symbol)) - \(company.1.currentPrice)"
+        } else {
+            let company: Company
+            if indexPath.section == 0 {
+                company = internalSearchResults[indexPath.row]
+            } else {
+                company = externalSearchResults[indexPath.row]
+            }
+            cell.company = "\(company.description) (\(company.symbol))"
+        }
+        
         return cell
+    }
+    
+    //MARK: - TableView Delegate
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView === searchVC.tableView && indexPath.section == 1 {
+            let company = externalSearchResults[indexPath.row]
+            let alertVC = UIAlertController(title: "Add \(company.description)?", message: nil, preferredStyle: .alert)
+            let action = UIAlertAction(title: "Yes", style: .default) { [unowned self] _ in
+                viewModel.fetchQuotes(for: company)
+                
+                externalSearchResults.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .left)
+                
+                internalSearchResults.append(company)
+                tableView.insertRows(at: [IndexPath(row: internalSearchResults.count-1, section: 0)], with: .left)
+            }
+            alertVC.addAction(action)
+            alertVC.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
+            present(alertVC, animated: true)
+        }
     }
     
 }

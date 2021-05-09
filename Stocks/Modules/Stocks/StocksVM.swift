@@ -25,17 +25,34 @@ class StocksVM: StocksViewModel {
     // MARK: - Public methods
     func searchCompany(_ name: String) {
         stocksService.searchCompany(with: name) { [weak self] companies in
-            var stocks = [(Company, CompanyQuotes?)]()
+            DispatchQueue.main.async {
+                self?.view?.show(companies: companies)
+            }
+        }
+    }
+    
+    func fetchQuotes(for company: Company) {
+        stocksService.getQuotes(for: company) { quote in
+            guard let quote = quote else { return }
             
-            companies.forEach { company in
-                self?.stocksService.getQuotes(for: company) { quote in
-                    stocks.append((company, quote))
+            DispatchQueue.main.async { [weak self] in
+                self?.view?.add(company: (company, quote))
+            }
+        }
+    }
+    
+    func reloadQuotes(for companies: [Company]) {
+        var stocks = [(Company, CompanyQuotes?)]()
+        
+        companies.forEach { company in
+            stocksService.getQuotes(for: company) { quote in
+                stocks.append((company, quote))
+                
+                if companies.count == stocks.count {
+                    let stocks = stocks.filter { $0.1 != nil }.map { ($0.0, $0.1!) }
                     
-                    if companies.count == stocks.count {
-                        let stocks = stocks.filter { $0.1 != nil }.map { ($0.0, $0.1!) }
-                        DispatchQueue.main.async {
-                            self?.view?.showSearchResult(with: stocks)
-                        }
+                    DispatchQueue.main.async { [weak self] in
+                        
                     }
                 }
             }

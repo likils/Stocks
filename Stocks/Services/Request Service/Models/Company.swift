@@ -7,7 +7,11 @@
 
 import Foundation
 
-struct Company: Decodable {
+struct Company: Decodable, Hashable, Comparable {
+    
+    static func < (lhs: Company, rhs: Company) -> Bool {
+        lhs.description.localizedCaseInsensitiveCompare(rhs.description) == .orderedAscending
+    }
     
     let description: String
     let displaySymbol: String

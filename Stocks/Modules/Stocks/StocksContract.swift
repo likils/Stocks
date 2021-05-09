@@ -12,11 +12,14 @@ protocol StocksViewModel: AnyObject {
     var view: StocksView? { get set }
     
     func searchCompany(_ name: String)
+    func fetchQuotes(for company: Company)
+    func reloadQuotes(for companies: [Company])
     
 }
 
 protocol StocksView: AnyObject {
     
-    func showSearchResult(with info: [(Company, CompanyQuotes)])
+    func show(companies: [Company])
+    func add(company: (Company, CompanyQuotes))
     
 }
