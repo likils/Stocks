@@ -10,15 +10,17 @@ import UIKit
 protocol NewsViewModel: AnyObject {
     
     var view: NewsView? { get set }
+    var news: [News] { get }
     
     func getNews()
     func fetchImage(from url: URL, for indexPath: IndexPath)
+    func cellTapped(with url: URL?)
     
 }
 
 protocol NewsView: AnyObject {
     
-    func show(news: [News])
-    func show(image: UIImage, at indexPath: IndexPath)
+    func reloadNews(if isUpdated: Bool)
+    func showImage(_ image: UIImage, at indexPath: IndexPath)
     
 }

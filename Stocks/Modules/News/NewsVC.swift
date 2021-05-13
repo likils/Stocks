@@ -13,7 +13,7 @@ class NewsVC: UIViewController, NewsView {
     private let tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
@@ -22,7 +22,6 @@ class NewsVC: UIViewController, NewsView {
     
     // MARK: - Private properties
     private let viewModel: NewsViewModel
-    private var news = [News]()
 
     // MARK: - Init
     init(viewModel: NewsViewModel) {
@@ -53,22 +52,21 @@ class NewsVC: UIViewController, NewsView {
     }
     
     // MARK: - Public methods
-    func show(news: [News]) {
-        if self.news != news {
-            self.news = news
+    func reloadNews(if isUpdated: Bool) {
+        tableView.refreshControl?.endRefreshing()
+        if isUpdated {
             tableView.reloadData()
         }
-        tableView.refreshControl?.endRefreshing()
     }
     
-    func show(image: UIImage, at indexPath: IndexPath) {
+    func showImage(_ image: UIImage, at indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return }
-        cell.image = image
+        cell.setImage(image)
     }
     
     // MARK: - Private methods
     private func setupView() {
-        view.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        view.backgroundColor = .View.backgroundColor
         navigationItem.title = "Business News"
         navigationController?.navigationBar.prefersLargeTitles = true
         
@@ -87,25 +85,25 @@ class NewsVC: UIViewController, NewsView {
 extension NewsVC: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        news.count
+        viewModel.news.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
         if let cell = cell as? NewsTableViewCell {
-            let news = news[indexPath.row]
-            
-            cell.date = news.date
-            cell.headLine = news.headline
-            cell.id = news.id
-            cell.sourceUrl = news.sourceUrl
-            cell.source = news.source
-            cell.summary = news.summary
-            
-            cell.image = UIImage() // reset old cell picture
+            let news = viewModel.news[indexPath.row]
+            cell.news = news
             viewModel.fetchImage(from: news.imageUrl, for: indexPath)
         }
         return cell
     }
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return nil }
+        cell.animate { [weak self] in
+            self?.viewModel.cellTapped(with: cell.news?.sourceUrl)
+        }
+        
+        return indexPath
+    }
 }

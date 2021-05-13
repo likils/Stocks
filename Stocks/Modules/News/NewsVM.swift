@@ -11,9 +11,16 @@ class NewsVM: NewsViewModel {
     
     // MARK: - Public properties
     weak var view: NewsView?
+    private(set) var news = [News]() {
+        didSet {
+            DispatchQueue.main.async { [weak self] in
+                self?.view?.reloadNews(if: self?.news != oldValue)
+            }
+        }
+    }
     
     //MARK: - Private properties
-    private let coordinator: NewsCoordination
+    private let coordinator: NewsCoordination?
     private let newsService: NewsService
     private let cacheService: CacheService
     
@@ -26,19 +33,22 @@ class NewsVM: NewsViewModel {
     
     // MARK: - Public properties
     func getNews() {
-        newsService.getNews(category: .general) { news in
-            DispatchQueue.main.async {
-                self.view?.show(news: news)
-            }
+        newsService.getNews(category: .general) { [weak self] news in
+            self?.news = news
         }
     }
     
     func fetchImage(from url: URL, for indexPath: IndexPath) {
-        cacheService.fetchImage(from: url) { image in
+        cacheService.fetchImage(from: url) { [weak self] image in
             DispatchQueue.main.async {
-                self.view?.show(image: image, at: indexPath)
+                self?.view?.showImage(image, at: indexPath)
             }
         }
+    }
+    
+    func cellTapped(with url: URL?) {
+        guard let url = url else { return }
+        coordinator?.showWebPage(with: url)
     }
     
 }

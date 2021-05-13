@@ -48,7 +48,7 @@ class SettingsVC: UIViewController {
     
     // MARK: - Private methods
     private func setupView() {
-        view.backgroundColor = .white
+        view.backgroundColor = .View.backgroundColor
         navigationController?.isNavigationBarHidden = true
         view.addSubview(button)
         

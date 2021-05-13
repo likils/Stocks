@@ -14,9 +14,6 @@ class StocksVC: UITableViewController, StocksView {
     
     // MARK: - Private properties
     private let viewModel: StocksViewModel
-    private var externalSearchResults = [Company]()
-    private var internalSearchResults = [Company]()
-    private var watchlist = [(company: Company, quotes: CompanyQuotes)]()
     
     // MARK: - Init
     init(viewModel: StocksViewModel) {
@@ -34,30 +31,56 @@ class StocksVC: UITableViewController, StocksView {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        view.backgroundColor = .View.backgroundColor
         navigationItem.title = "Stock Quotes"
         navigationController?.navigationBar.prefersLargeTitles = true
+        
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         setupTableView(tableView)
         setupTableView(searchVC.tableView)
         setupDelegation()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refresh()
+    }
+    
+    // MARK: - Actions
+    @objc func refresh() {
+        if !viewModel.watchlist.isEmpty {
+            viewModel.updateQuotes()
+        } else {
+            tableView.refreshControl?.endRefreshing()
+        }
+    }
+    
     // MARK: - Public methods
-    func show(companies: [Company]) {
-        let searchResults = Set(companies).subtracting(Set(internalSearchResults))
-        externalSearchResults = searchResults.sorted()
+    func updateSearchlist() {
         searchVC.tableView.reloadSections(IndexSet(0...1), with: .automatic)
     }
     
-    func add(company: (Company, CompanyQuotes)) {
-        watchlist.append(company)
-        tableView.insertRows(at: [IndexPath(row: watchlist.count-1, section: 0)], with: .bottom)
+    func updateWatchlist(at indexPath: IndexPath, with action: Action) {
+        switch action {
+            case .insert:
+                tableView.insertRows(at: [indexPath], with: .bottom)
+            case .delete:
+                tableView.deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    func updateQuotes(_ quotes: CompanyQuotes, at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
+        cell.companyQuotes = quotes
+        
+        tableView.refreshControl?.endRefreshing()
     }
 
     // MARK: - Private methods
     private func setupTableView(_ tableView: UITableView) {
-        tableView.backgroundColor = UIColor(rgb: 0xF8F8FA)
+        tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = true
         tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
@@ -78,20 +101,7 @@ class StocksVC: UITableViewController, StocksView {
 extension StocksVC: UISearchBarDelegate {
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        internalSearchResults.removeAll()
-        externalSearchResults.removeAll()
-        searchVC.tableView.reloadSections(IndexSet(0...1), with: .automatic)
-        
-        let text = searchText.trimmingCharacters(in: .whitespaces).lowercased()
-        guard !text.contains(" "), text.count > 2 else { return }
-        
-        watchlist.forEach {
-            if $0.company.description.lowercased().contains(text) || $0.company.symbol.lowercased().contains(text) {
-                internalSearchResults.append($0.company)
-            }
-        }
-        
-        viewModel.searchCompany(text)
+        viewModel.searchCompany(with: searchText)
     }
     
 }
@@ -109,9 +119,9 @@ extension StocksVC {
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if tableView === searchVC.tableView {
-            if section == 0 && !internalSearchResults.isEmpty {
+            if section == 0 && !viewModel.internalSearchResults.isEmpty {
                 return "Watchlist"
-            } else if section == 1 && !externalSearchResults.isEmpty {
+            } else if section == 1 && !viewModel.externalSearchResults.isEmpty {
                 return "Symbols"
             } else {
                 return nil
@@ -123,47 +133,66 @@ extension StocksVC {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if tableView === self.tableView {
-            return watchlist.count
+            return viewModel.watchlist.count
         } else {
-            return section == 0 ? internalSearchResults.count : externalSearchResults.count
+            return section == 0 ? viewModel.internalSearchResults.count : viewModel.externalSearchResults.count
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StocksTableViewCell.identifier, for: indexPath) as! StocksTableViewCell
-        if tableView === self.tableView {
-            let company = watchlist[indexPath.row]
-            cell.company = "\(company.0.description)(\(company.0.symbol)) - \(company.1.currentPrice)"
-        } else {
-            let company: Company
-            if indexPath.section == 0 {
-                company = internalSearchResults[indexPath.row]
+        let cell = tableView.dequeueReusableCell(withIdentifier: StocksTableViewCell.identifier, for: indexPath)
+        
+        if let cell = cell as? StocksTableViewCell {
+            if tableView === self.tableView {
+                let company = viewModel.watchlist[indexPath.row]
+                cell.company = company
+                viewModel.fetchQuotes(for: company, at: indexPath)
             } else {
-                company = externalSearchResults[indexPath.row]
+                let company: Company
+                if indexPath.section == 0 {
+                    company = viewModel.internalSearchResults[indexPath.row]
+                } else {
+                    company = viewModel.externalSearchResults[indexPath.row]
+                }
+                cell.company = company
             }
-            cell.company = "\(company.description) (\(company.symbol))"
-        }
+        } 
         
         return cell
     }
     
     //MARK: - TableView Delegate
+    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return nil }
+        cell.animate(completion: nil)
+        return indexPath
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if tableView === searchVC.tableView && indexPath.section == 1 {
-            let company = externalSearchResults[indexPath.row]
+            let company = viewModel.externalSearchResults[indexPath.row]
             let alertVC = UIAlertController(title: "Add \(company.description)?", message: nil, preferredStyle: .alert)
             let action = UIAlertAction(title: "Yes", style: .default) { [unowned self] _ in
-                viewModel.fetchQuotes(for: company)
+                viewModel.updateWatchlist(at: indexPath.row, with: .insert)
                 
-                externalSearchResults.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .left)
-                
-                internalSearchResults.append(company)
-                tableView.insertRows(at: [IndexPath(row: internalSearchResults.count-1, section: 0)], with: .left)
+                tableView.performBatchUpdates { 
+                    tableView.deleteRows(at: [indexPath], with: .left)
+                    tableView.insertRows(at: [IndexPath(row: viewModel.internalSearchResults.count-1, section: 0)], with: .left)
+                }
             }
             alertVC.addAction(action)
             alertVC.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
             present(alertVC, animated: true)
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        tableView === searchVC.tableView ? false : true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            viewModel.updateWatchlist(at: indexPath.row, with: .delete)
         }
     }
     

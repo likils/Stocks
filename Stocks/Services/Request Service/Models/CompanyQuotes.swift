@@ -9,11 +9,11 @@ import Foundation
 
 struct CompanyQuotes: Decodable {
     
-    let openPrice: Float
-    let highPrice: Float
-    let lowPrice: Float
-    let currentPrice: Float
-    let previousClosePrice: Float
+    let openPrice: Double
+    let highPrice: Double
+    let lowPrice: Double
+    let currentPrice: Double
+    let previousClosePrice: Double
     
     enum CodingKeys: String, CodingKey {
         case openPrice = "o"
@@ -26,11 +26,11 @@ struct CompanyQuotes: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
-        openPrice = try container.decode(Float.self, forKey: CodingKeys.openPrice)
-        highPrice = try container.decode(Float.self, forKey: CodingKeys.highPrice)
-        lowPrice = try container.decode(Float.self, forKey: CodingKeys.lowPrice)
-        currentPrice = try container.decode(Float.self, forKey: CodingKeys.currentPrice)
-        previousClosePrice = try container.decode(Float.self, forKey: CodingKeys.previousClosePrice)
+        openPrice = try container.decode(Double.self, forKey: CodingKeys.openPrice)
+        highPrice = try container.decode(Double.self, forKey: CodingKeys.highPrice)
+        lowPrice = try container.decode(Double.self, forKey: CodingKeys.lowPrice)
+        currentPrice = try container.decode(Double.self, forKey: CodingKeys.currentPrice)
+        previousClosePrice = try container.decode(Double.self, forKey: CodingKeys.previousClosePrice)
     }
     
 }

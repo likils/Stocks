@@ -11,51 +11,77 @@ class StocksVM: StocksViewModel {
     
     // MARK: - Public properties
     weak var view: StocksView?
+    private(set) var externalSearchResults = [Company]()
+    private(set) var internalSearchResults = [Company]()
+    private(set) var watchlist = [Company]()
     
     //MARK: - Private properties
-    private let coordinator: StocksCoordination
+    private let coordinator: StocksCoordination?
     private let stocksService: StocksService
     
     // MARK: - Init
     init(coordinator: StocksCoordination, stocksService: StocksService) {
         self.coordinator = coordinator
         self.stocksService = stocksService
+        
+        watchlist = [Company(description: "APPLE INC", displaySymbol: "AAPL", symbol: "AAPL", type: "Common Stock"),
+                     Company(description: "TESLA INC", displaySymbol: "TSLA", symbol: "TSLA", type: "Common Stock"),
+                     Company(description: "PFIZER INC", displaySymbol: "PFE", symbol: "PFE", type: "Common Stock")]
     }
     
     // MARK: - Public methods
-    func searchCompany(_ name: String) {
-        stocksService.searchCompany(with: name) { [weak self] companies in
+    func searchCompany(with symbol: String) {
+        internalSearchResults.removeAll()
+        externalSearchResults.removeAll()
+        view?.updateSearchlist()
+        
+        let text = symbol.trimmingCharacters(in: .whitespaces).lowercased()
+        guard !text.isEmpty else { return }
+        
+        watchlist.forEach {
+            if $0.description.lowercased().contains(text) || $0.symbol.lowercased().contains(text) {
+                internalSearchResults.append($0)
+            }
+        }
+        
+        stocksService.searchCompany(with: text) { [weak self] companies in
+            guard let internalSearchResults = self?.internalSearchResults else { return }
+            
+            let searchResults = Set(companies).subtracting(Set(internalSearchResults))
+            self?.externalSearchResults = searchResults.sorted()
+            
             DispatchQueue.main.async {
-                self?.view?.show(companies: companies)
+                self?.view?.updateSearchlist()
             }
         }
     }
     
-    func fetchQuotes(for company: Company) {
-        stocksService.getQuotes(for: company) { quote in
-            guard let quote = quote else { return }
+    func updateWatchlist(at index: Int, with action: Action) {
+        switch action {
+            case .insert:
+                let company = externalSearchResults.remove(at: index)
+                internalSearchResults.append(company)
+                watchlist.append(company)
+                view?.updateWatchlist(at: IndexPath(row: watchlist.count-1, section: 0), with: action)
+            case .delete:
+                watchlist.remove(at: index)
+                view?.updateWatchlist(at: IndexPath(row: index, section: 0), with: action)
+        }
+    }
+    
+    func fetchQuotes(for company: Company, at indexPath: IndexPath) {
+        stocksService.getQuotes(for: company) { quotes in
+            guard let quotes = quotes else { return }
             
             DispatchQueue.main.async { [weak self] in
-                self?.view?.add(company: (company, quote))
+                self?.view?.updateQuotes(quotes, at: indexPath)
             }
         }
     }
     
-    func reloadQuotes(for companies: [Company]) {
-        var stocks = [(Company, CompanyQuotes?)]()
-        
-        companies.forEach { company in
-            stocksService.getQuotes(for: company) { quote in
-                stocks.append((company, quote))
-                
-                if companies.count == stocks.count {
-                    let stocks = stocks.filter { $0.1 != nil }.map { ($0.0, $0.1!) }
-                    
-                    DispatchQueue.main.async { [weak self] in
-                        
-                    }
-                }
-            }
+    func updateQuotes() {
+        watchlist.enumerated().forEach { index, company in
+            fetchQuotes(for: company, at: IndexPath(row: index, section: 0))
         }
     }
     

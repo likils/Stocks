@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import SafariServices
 
 protocol StocksCoordination: NavCoordination {
+    
+    func showWebPage(with url: URL)
     
 }
 
@@ -37,6 +40,11 @@ class StocksCoordinator: StocksCoordination {
         let vm = StocksVM(coordinator: self, stocksService: stocksService)
         let vc = StocksVC(viewModel: vm)
         navController.viewControllers = [vc]
+    }
+    
+    func showWebPage(with url: URL) {
+        let vc = SFSafariViewController(url: url)
+        navController.present(vc, animated: true)
     }
     
 }

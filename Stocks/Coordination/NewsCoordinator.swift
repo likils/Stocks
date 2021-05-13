@@ -6,8 +6,11 @@
 //
 
 import UIKit
+import SafariServices
 
 protocol NewsCoordination: NavCoordination {
+    
+    func showWebPage(with url: URL)
     
 }
 
@@ -33,6 +36,11 @@ class NewsCoordinator: NewsCoordination {
         let vm = NewsVM(coordinator: self, newsService: newsService, cacheService: cacheService)
         let vc = NewsVC(viewModel: vm)
         navController.viewControllers = [vc]
+    }
+    
+    func showWebPage(with url: URL) {
+        let vc = SFSafariViewController(url: url)
+        navController.present(vc, animated: true)
     }
     
 }

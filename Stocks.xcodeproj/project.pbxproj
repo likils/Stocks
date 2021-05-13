@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B22799BC2639B95A0088A8B2 /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22799BB2639B95A0088A8B2 /* UIColor.swift */; };
+		B22799BC2639B95A0088A8B2 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22799BB2639B95A0088A8B2 /* ColorScheme.swift */; };
 		B22D09C8263C2CDA0032380F /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09C7263C2CDA0032380F /* SocialButton.swift */; };
 		B22D09CB263C6A0F0032380F /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09CA263C6A0F0032380F /* LoginService.swift */; };
 		B22D09CD263C6A350032380F /* AppleLoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09CC263C6A350032380F /* AppleLoginService.swift */; };
@@ -18,6 +18,9 @@
 		B23D1564263DA52F0010AB57 /* StocksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23D1563263DA52F0010AB57 /* StocksTableViewCell.swift */; };
 		B23D1566263DA7EB0010AB57 /* CompanyQuotes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23D1565263DA7EB0010AB57 /* CompanyQuotes.swift */; };
 		B23D1568263FF3580010AB57 /* Company.swift in Sources */ = {isa = PBXBuildFile; fileRef = B23D1567263FF3580010AB57 /* Company.swift */; };
+		B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */; };
+		B2535274264C4E22005CEB74 /* Double+roundForText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2535273264C4E22005CEB74 /* Double+roundForText.swift */; };
+		B2535276264D32B6005CEB74 /* CellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2535275264D32B6005CEB74 /* CellBackgroundView.swift */; };
 		B2802B282623767F00B6AADA /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B272623767F00B6AADA /* Currency.swift */; };
 		B2802B2E26244E9600B6AADA /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B2D26244E9600B6AADA /* News.swift */; };
 		B2A55B4F2636DAFC0036AB01 /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2A55B4E2636DAFC0036AB01 /* MainCoordinator.swift */; };
@@ -49,7 +52,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B22799BB2639B95A0088A8B2 /* UIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColor.swift; sourceTree = "<group>"; };
+		B22799BB2639B95A0088A8B2 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		B22D09C7263C2CDA0032380F /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		B22D09CA263C6A0F0032380F /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
 		B22D09CC263C6A350032380F /* AppleLoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleLoginService.swift; sourceTree = "<group>"; };
@@ -60,6 +63,9 @@
 		B23D1563263DA52F0010AB57 /* StocksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StocksTableViewCell.swift; sourceTree = "<group>"; };
 		B23D1565263DA7EB0010AB57 /* CompanyQuotes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyQuotes.swift; sourceTree = "<group>"; };
 		B23D1567263FF3580010AB57 /* Company.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Company.swift; sourceTree = "<group>"; };
+		B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+identifier.swift"; sourceTree = "<group>"; };
+		B2535273264C4E22005CEB74 /* Double+roundForText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+roundForText.swift"; sourceTree = "<group>"; };
+		B2535275264D32B6005CEB74 /* CellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellBackgroundView.swift; sourceTree = "<group>"; };
 		B2802B272623767F00B6AADA /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		B2802B2D26244E9600B6AADA /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
 		B2A55B4E2636DAFC0036AB01 /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
@@ -106,6 +112,7 @@
 		B22799B82639AFC70088A8B2 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				B2535272264C1AD2005CEB74 /* Schemes */,
 				B22D09C6263C28FF0032380F /* Views */,
 				B22799BA2639B9490088A8B2 /* Extensions */,
 				B22799B92639AFD30088A8B2 /* Cells */,
@@ -125,7 +132,8 @@
 		B22799BA2639B9490088A8B2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				B22799BB2639B95A0088A8B2 /* UIColor.swift */,
+				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
+				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -134,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				B22D09C7263C2CDA0032380F /* SocialButton.swift */,
+				B2535275264D32B6005CEB74 /* CellBackgroundView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -155,6 +164,14 @@
 				B23D155F263D92400010AB57 /* StocksVC.swift */,
 			);
 			path = Stocks;
+			sourceTree = "<group>";
+		};
+		B2535272264C1AD2005CEB74 /* Schemes */ = {
+			isa = PBXGroup;
+			children = (
+				B22799BB2639B95A0088A8B2 /* ColorScheme.swift */,
+			);
+			path = Schemes;
 			sourceTree = "<group>";
 		};
 		B2802B2B2624485F00B6AADA /* Models */ = {
@@ -383,10 +400,13 @@
 				B2802B2E26244E9600B6AADA /* News.swift in Sources */,
 				B22D09CD263C6A350032380F /* AppleLoginService.swift in Sources */,
 				B2802B282623767F00B6AADA /* Currency.swift in Sources */,
+				B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */,
 				B2B0D8802638287E00A59015 /* SettingsContract.swift in Sources */,
+				B2535274264C4E22005CEB74 /* Double+roundForText.swift in Sources */,
 				B23D1562263D93320010AB57 /* StocksService.swift in Sources */,
 				B2CE57142621CD5700C5722D /* RequestSettings.swift in Sources */,
-				B22799BC2639B95A0088A8B2 /* UIColor.swift in Sources */,
+				B22799BC2639B95A0088A8B2 /* ColorScheme.swift in Sources */,
+				B2535276264D32B6005CEB74 /* CellBackgroundView.swift in Sources */,
 				B2C0AF04263B087600A7E8BA /* CurrencyService.swift in Sources */,
 				B2A55B692636F3B60036AB01 /* NewsContract.swift in Sources */,
 				B2B0D886263828B600A59015 /* SettingsVC.swift in Sources */,
