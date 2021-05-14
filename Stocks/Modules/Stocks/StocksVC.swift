@@ -14,6 +14,7 @@ class StocksVC: UITableViewController, StocksView {
     
     // MARK: - Private properties
     private let viewModel: StocksViewModel
+    private weak var refreshTimer: Timer?
     
     // MARK: - Init
     init(viewModel: StocksViewModel) {
@@ -48,8 +49,17 @@ class StocksVC: UITableViewController, StocksView {
         refresh()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        refreshTimer?.invalidate()
+    }
+    
     // MARK: - Actions
     @objc func refresh() {
+        refreshTimer?.invalidate()
+        refreshTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(refresh), userInfo: nil, repeats: false)
+        refreshTimer?.tolerance = 1
+        
         if !viewModel.watchlist.isEmpty {
             viewModel.updateQuotes()
         } else {
