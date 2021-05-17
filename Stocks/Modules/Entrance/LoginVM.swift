@@ -21,8 +21,11 @@ class LoginVM: LoginViewModel {
     
     // MARK: - Public methods
     func login(with type: SocialButton.SocialType) {
-        
-        
+        coordinator?.didFinishClosure?()
+    }
+    
+    // TODO: Implement login via Facebook and Google
+    private func ligin() {
         loginService.login()
         
         loginService.didSignUp = { [unowned self] userId, token, userEmail, firstName, lastName in
@@ -39,7 +42,6 @@ class LoginVM: LoginViewModel {
             print(password)
             self.coordinator?.didFinishClosure?()
         }
-        
     }
     
 }

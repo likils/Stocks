@@ -10,28 +10,11 @@ import UIKit
 class SocialButton: UIButton {
     
     // MARK: - Subviews
-    private let stackView: UIStackView = {
-        let stackView = UIStackView()
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        stackView.alignment = .center
-        stackView.axis = .horizontal
-        stackView.distribution = .fill
-        stackView.spacing = 6
-        return stackView
-    }()
-    
     private let socialImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         return imageView
-    }()
-    
-    private let socialLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-//        label.font = UIFont.systemFont(ofSize: 18.5, weight: .semibold)
-        return label
     }()
 
     // MARK: - Public properties
@@ -54,28 +37,19 @@ class SocialButton: UIButton {
         heightAnchor.constraint(equalToConstant: 50).isActive = true
         layer.cornerRadius = 10
         
-//        setTitle(type.loginTitle, for: .normal)
-//        setTitleColor(type.titleColor, for: .normal)
-        
-        socialLabel.textColor = type.titleColor
-        socialLabel.text = type.loginTitle
+        setTitle(type.loginTitle, for: .normal)
+        setTitleColor(type.titleColor, for: .normal)
         
         backgroundColor = type.backgroundColor
         socialImageView.image = type.logo
         
-        addSubview(stackView)
-        stackView.addArrangedSubview(socialImageView)
-        stackView.addArrangedSubview(socialLabel)
+        addSubview(socialImageView)
         
         NSLayoutConstraint.activate([
-            stackView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            stackView.topAnchor.constraint(greaterThanOrEqualTo: topAnchor, constant: 4),
-            stackView.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 8),
-            stackView.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -8),
-            stackView.bottomAnchor.constraint(lessThanOrEqualTo: bottomAnchor, constant: -4),
+            socialImageView.centerYAnchor.constraint(equalTo: titleLabel!.centerYAnchor, constant: -1),
+            socialImageView.trailingAnchor.constraint(equalTo: titleLabel!.leadingAnchor, constant: -8),
             
-            socialImageView.heightAnchor.constraint(equalTo: socialLabel.heightAnchor, multiplier: 0.32),
+            socialImageView.heightAnchor.constraint(equalTo: titleLabel!.heightAnchor, multiplier: 0.32),
             socialImageView.widthAnchor.constraint(equalTo: socialImageView.heightAnchor)
         ])
     }
