@@ -10,16 +10,21 @@ import Foundation
 protocol StocksService {
     
     func searchCompany(with symbol: String, completion: @escaping ([Company]) -> Void)
-    func getQuotes(for company: Company, completion: @escaping (CompanyQuotes?) -> Void)
+    func getCompanyProfile(for company: Company, completion: @escaping (CompanyProfile) -> Void)
+    func getQuotes(for company: CompanyProfile, completion: @escaping (CompanyQuotes?) -> Void)
 }
 
 class StocksServiceImpl: StocksService {
 
-    private let baseUrlString = RequestSettings.baseUrlString
+    private var baseUrlString: String {
+        RequestSettings.baseUrlString
+    }
     private lazy var baseUrlRequest = RequestSettings.baseUrlRequest
     
     func searchCompany(with symbol: String, completion: @escaping ([Company]) -> Void) {
-        let url = URL(string: baseUrlString + "/search?q=\(symbol)")
+        let query = ["q": symbol]
+        let url = URL(string: baseUrlString + "/search?")?.withQueries(query)
+        
         baseUrlRequest.url = url
         
         let task = URLSession.shared.dataTask(with: baseUrlRequest) { data, response, error in
@@ -41,8 +46,36 @@ class StocksServiceImpl: StocksService {
         task.resume()
     }
     
-    func getQuotes(for company: Company, completion: @escaping (CompanyQuotes?) -> Void) {
-        let url = URL(string: baseUrlString + "/quote?symbol=\(company.symbol)")
+    func getCompanyProfile(for company: Company, completion: @escaping (CompanyProfile) -> Void) {
+        let query = ["symbol": company.symbol]
+        let url = URL(string: baseUrlString + "/stock/profile2?")?.withQueries(query)
+        
+        baseUrlRequest.url = url
+        
+        let task = URLSession.shared.dataTask(with: baseUrlRequest) { data, response, error in
+            if let data = data {
+                do {
+                    let profile = try JSONDecoder().decode(CompanyProfile.self, from: data)
+                    completion(profile)
+                } catch let error {
+                    print("\n::: JSONDecoder CompanyProfile error:\n\(error.localizedDescription)")
+                }
+            }
+            if let response = response as? HTTPURLResponse, response.statusCode != 200 {
+                print("\n::: Received CompanyProfile response statusCode: \(response.statusCode) for company: \(company.description)(\(company.symbol)).") 
+            }
+            if let error = error {
+                print("\n::: Received CompanyProfile error:\n\(error.localizedDescription)")
+            }
+        }
+        task.resume()
+        
+    }
+    
+    func getQuotes(for company: CompanyProfile, completion: @escaping (CompanyQuotes?) -> Void) {
+        let query = ["symbol": company.ticker]
+        let url = URL(string: baseUrlString + "/quote?")?.withQueries(query)
+        
         baseUrlRequest.url = url
         
         let task = URLSession.shared.dataTask(with: baseUrlRequest) { data, response, error in
@@ -51,7 +84,7 @@ class StocksServiceImpl: StocksService {
                 completion(companyQuotes)
             }
             if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                print("\n::: Received Quotes response statusCode: \(response.statusCode) for company: \(company.description)(\(company.symbol)).") 
+                print("\n::: Received Quotes response statusCode: \(response.statusCode) for company: \(company.name)(\(company.ticker)).") 
             }
             if let error = error {
                 print("\n::: Received Quotes error:\n\(error.localizedDescription)")

@@ -15,11 +15,15 @@ protocol CurrencyService {
 
 class CurrencyServiceImpl: CurrencyService {
     
-    private let baseUrlString = RequestSettings.baseUrlString
+    private var baseUrlString: String {
+        RequestSettings.baseUrlString
+    }
     private lazy var baseUrlRequest = RequestSettings.baseUrlRequest
     
     func getCurrencyRate(currency: String, completion: @escaping (Currency) -> Void) {
-        let url = URL(string: baseUrlString + "/forex/rates?base=\(currency)")
+        let query = ["base": currency]
+        let url = URL(string: baseUrlString + "/forex/rates?")?.withQueries(query)
+        
         baseUrlRequest.url = url
         
         let task = URLSession.shared.dataTask(with: baseUrlRequest) { data, response, error in

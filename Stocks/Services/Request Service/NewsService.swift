@@ -15,11 +15,14 @@ protocol NewsService {
 
 class NewsServiceImpl: NewsService {
     
-    private let baseUrlString = RequestSettings.baseUrlString
+    private var baseUrlString: String {
+        RequestSettings.baseUrlString
+    }
     private lazy var baseUrlRequest = RequestSettings.baseUrlRequest
     
     func getNews(category: News.Category, completion: @escaping ([News]) -> Void) {
-        let url = URL(string: baseUrlString + category.urlPart)
+        let url = URL(string: baseUrlString + category.urlPath)?.withQueries(category.query)
+        
         baseUrlRequest.url = url
         
         let task = URLSession.shared.dataTask(with: baseUrlRequest) { data, response, error in

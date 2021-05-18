@@ -35,6 +35,14 @@ extension UIColor {
             UIColor(rgb: 0x9A9CA5)
         }
         
+        static var positivePriceColor: UIColor {
+            UIColor(rgb: 0x3FD672)
+        }
+        
+        static var negativePriceColor: UIColor {
+            UIColor(rgb: 0xD6463F)
+        }
+        
     }
     
     // MARK: - RGB Init

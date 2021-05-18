@@ -12,6 +12,15 @@ class StocksTableViewCell: UITableViewCell {
     // MARK: - Subviews
     private let backView = CellBackgroundView()
     
+    private let logo: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.contentMode = .scaleAspectFit
+        imageView.layer.cornerRadius = 12
+        imageView.clipsToBounds = true
+        return imageView
+    }()
+    
     private let symbolLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -45,24 +54,33 @@ class StocksTableViewCell: UITableViewCell {
     }()
     
     // MARK: - Public properties
+    var companyProfile: CompanyProfile? {
+        didSet {
+            symbolLabel.text = companyProfile?.ticker
+            companyLabel.text = companyProfile?.name
+        }
+    }
+    
     var company: Company? {
         didSet {
-            if let company = company {
-                symbolLabel.text = company.symbol
-                companyLabel.text = company.description
-            }
+            symbolLabel.text = company?.symbol
+            companyLabel.text = company?.description
         }
     }
     
     var companyQuotes: CompanyQuotes? {
         didSet {
-            if let quotes = companyQuotes {
-                stockPriceLabel.text = quotes.currentPrice.roundForText
+            if let quotes = companyQuotes, let profile = companyProfile {
+                stockPriceLabel.text = quotes.currentPrice.roundForText + " " + profile.currencyLogo
                 
                 let priceDiff = quotes.currentPrice - quotes.previousClosePrice
-                priceChangeLabel.textColor = priceDiff < 0 ? UIColor(rgb: 0xD6463F) : UIColor(rgb: 0x3FD672)
-                let text = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
-                priceChangeLabel.text = text
+                let priceDiffPercent = abs((priceDiff * 100) / quotes.previousClosePrice)
+                
+                let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
+                
+                priceChangeLabel.textColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
+                
+                priceChangeLabel.text = "\(diffText) \(profile.currencyLogo) (\(priceDiffPercent.roundForText)%)"
             }
         }
     }
@@ -78,6 +96,10 @@ class StocksTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public methods
+    func setLogo(_ image: UIImage) {
+        logo.image = image
+    }
+    
     func animate(completion: (() -> Void)?) {
         backView.animate(completion: completion)
     }
@@ -90,6 +112,7 @@ class StocksTableViewCell: UITableViewCell {
         
         contentView.addSubview(backView)
         
+        backView.addSubview(logo)
         backView.addSubview(symbolLabel)
         backView.addSubview(companyLabel)
         backView.addSubview(stockPriceLabel)
@@ -102,10 +125,15 @@ class StocksTableViewCell: UITableViewCell {
             backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
             backView.heightAnchor.constraint(equalToConstant: 56),
             
-            symbolLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 8),
-            symbolLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
+            logo.topAnchor.constraint(equalTo: backView.topAnchor, constant: 8),
+            logo.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 8),
+            logo.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -8),
+            logo.heightAnchor.constraint(equalTo: logo.widthAnchor),
             
-            companyLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
+            symbolLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 8),
+            symbolLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 8),
+            
+            companyLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 8),
             companyLabel.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -8),
             
             stockPriceLabel.centerYAnchor.constraint(equalTo: symbolLabel.centerYAnchor),

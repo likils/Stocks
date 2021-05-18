@@ -38,8 +38,8 @@ class NewsVM: NewsViewModel {
         }
     }
     
-    func fetchImage(from url: URL, for indexPath: IndexPath) {
-        cacheService.fetchImage(from: url) { [weak self] image in
+    func fetchImage(from url: URL, withSize size: Float, for indexPath: IndexPath) {
+        cacheService.fetchImage(from: url, withSize: size) { [weak self] image in
             DispatchQueue.main.async {
                 self?.view?.showImage(image, at: indexPath)
             }

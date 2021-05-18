@@ -9,7 +9,7 @@ import UIKit
 
 protocol CacheService {
     
-    func fetchImage(from url: URL, completion: @escaping (UIImage) -> Void)
+    func fetchImage(from url: URL, withSize size: Float, completion: @escaping (UIImage) -> Void)
     
 }
 
@@ -19,12 +19,12 @@ class CacheServiceImpl: CacheService {
     private var nsCache = NSCache<NSURL, UIImage>()
     
     // MARK: - Public methods
-    func fetchImage(from url: URL, completion: @escaping (UIImage) -> Void) {
+    func fetchImage(from url: URL, withSize size: Float, completion: @escaping (UIImage) -> Void) {
         if let image = nsCache.object(forKey: url as NSURL) {
             completion(image)
         } else {
             DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                if let image = self?.downsampleImage(at: url) {
+                if let image = self?.downsampleImage(at: url, with: CGFloat(size)) {
                     self?.nsCache.setObject(image, forKey: url as NSURL)
                     completion(image)
                 }
@@ -33,7 +33,7 @@ class CacheServiceImpl: CacheService {
     }
     
     // MARK: - Private methods
-    private func downsampleImage(at imageURL: URL) -> UIImage? {
+    private func downsampleImage(at imageURL: URL, with maxImageSize: CGFloat) -> UIImage? {
         
 // used from https://swiftsenpai.com/development/reduce-uiimage-memory-footprint/
         
@@ -44,7 +44,6 @@ class CacheServiceImpl: CacheService {
         }
         
         // Calculate the desired dimension
-        let maxImageSize: CGFloat = 200
         let dimensionInPixels = maxImageSize * UIScreen.main.scale
         
         // Perform downsampling

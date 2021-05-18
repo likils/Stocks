@@ -81,6 +81,11 @@ class StocksVC: UITableViewController, StocksView {
         }
     }
     
+    func showLogo(_ image: UIImage, at indexPath: IndexPath) {
+        guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
+        cell.setLogo(image)
+    }
+    
     func updateQuotes(_ quotes: CompanyQuotes, at indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
         cell.companyQuotes = quotes
@@ -155,7 +160,13 @@ extension StocksVC {
         if let cell = cell as? StocksTableViewCell {
             if tableView === self.tableView {
                 let company = viewModel.watchlist[indexPath.row]
-                cell.company = company
+                cell.companyProfile = company
+                
+                if let logoUrl = company.logoUrl {
+                    let logoSize = cell.bounds.height
+                    viewModel.fetchLogo(from: logoUrl, withSize: Float(logoSize), for: indexPath) 
+                }
+                
                 viewModel.fetchQuotes(for: company, at: indexPath)
             } else {
                 let company: Company
@@ -204,6 +215,10 @@ extension StocksVC {
         if editingStyle == .delete {
             viewModel.updateWatchlist(at: indexPath.row, with: .delete)
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        
     }
     
 }

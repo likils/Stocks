@@ -38,6 +38,8 @@
 		B2B0D8802638287E00A59015 /* SettingsContract.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0D87F2638287E00A59015 /* SettingsContract.swift */; };
 		B2B0D883263828A600A59015 /* SettingsVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0D882263828A600A59015 /* SettingsVM.swift */; };
 		B2B0D886263828B600A59015 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B0D885263828B600A59015 /* SettingsVC.swift */; };
+		B2B460BB2653B3CF007B2877 /* CompanyProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B460BA2653B3CF007B2877 /* CompanyProfile.swift */; };
+		B2B460BD2653CA2C007B2877 /* URL+withQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */; };
 		B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */; };
 		B2BFBFBB2636BF86004F40B0 /* Coordination.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFBA2636BF86004F40B0 /* Coordination.swift */; };
 		B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0AEFD263AC41F00A7E8BA /* CacheService.swift */; };
@@ -83,6 +85,8 @@
 		B2B0D87F2638287E00A59015 /* SettingsContract.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsContract.swift; sourceTree = "<group>"; };
 		B2B0D882263828A600A59015 /* SettingsVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVM.swift; sourceTree = "<group>"; };
 		B2B0D885263828B600A59015 /* SettingsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
+		B2B460BA2653B3CF007B2877 /* CompanyProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfile.swift; sourceTree = "<group>"; };
+		B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+withQueries.swift"; sourceTree = "<group>"; };
 		B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		B2BFBFBA2636BF86004F40B0 /* Coordination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordination.swift; sourceTree = "<group>"; };
 		B2C0AEFD263AC41F00A7E8BA /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
@@ -134,6 +138,7 @@
 			children = (
 				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
 				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
+				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -179,6 +184,7 @@
 			children = (
 				B2802B2D26244E9600B6AADA /* News.swift */,
 				B23D1567263FF3580010AB57 /* Company.swift */,
+				B2B460BA2653B3CF007B2877 /* CompanyProfile.swift */,
 				B23D1565263DA7EB0010AB57 /* CompanyQuotes.swift */,
 				B2802B272623767F00B6AADA /* Currency.swift */,
 			);
@@ -390,6 +396,7 @@
 			files = (
 				B2BFBFBB2636BF86004F40B0 /* Coordination.swift in Sources */,
 				B2A55B4F2636DAFC0036AB01 /* MainCoordinator.swift in Sources */,
+				B2B460BD2653CA2C007B2877 /* URL+withQueries.swift in Sources */,
 				B22D09CB263C6A0F0032380F /* LoginService.swift in Sources */,
 				B23D155E263D921C0010AB57 /* StocksVM.swift in Sources */,
 				B2A55B74263717A70036AB01 /* NewsTableViewCell.swift in Sources */,
@@ -425,6 +432,7 @@
 				B2C0AF02263B052A00A7E8BA /* NewsService.swift in Sources */,
 				B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */,
 				B2B0D8782637F4DD00A59015 /* LoginVM.swift in Sources */,
+				B2B460BB2653B3CF007B2877 /* CompanyProfile.swift in Sources */,
 				B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */,
 				B2A55B5D2636EF4D0036AB01 /* AuthCoordinator.swift in Sources */,
 				B2A55B562636EC380036AB01 /* StocksCoordinator.swift in Sources */,

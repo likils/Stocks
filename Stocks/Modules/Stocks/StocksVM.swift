@@ -13,20 +13,20 @@ class StocksVM: StocksViewModel {
     weak var view: StocksView?
     private(set) var externalSearchResults = [Company]()
     private(set) var internalSearchResults = [Company]()
-    private(set) var watchlist = [Company]()
+    private(set) var watchlist = [CompanyProfile]() { didSet { save() } }
     
     //MARK: - Private properties
     private let coordinator: StocksCoordination?
     private let stocksService: StocksService
+    private let cacheService: CacheService
     
     // MARK: - Init
-    init(coordinator: StocksCoordination, stocksService: StocksService) {
+    init(coordinator: StocksCoordination, stocksService: StocksService, cacheService: CacheService) {
         self.coordinator = coordinator
         self.stocksService = stocksService
+        self.cacheService = cacheService
         
-        watchlist = [Company(description: "APPLE INC", displaySymbol: "AAPL", symbol: "AAPL", type: "Common Stock"),
-                     Company(description: "TESLA INC", displaySymbol: "TSLA", symbol: "TSLA", type: "Common Stock"),
-                     Company(description: "PFIZER INC", displaySymbol: "PFE", symbol: "PFE", type: "Common Stock")]
+        load()
     }
     
     // MARK: - Public methods
@@ -39,16 +39,16 @@ class StocksVM: StocksViewModel {
         guard !text.isEmpty else { return }
         
         watchlist.forEach {
-            if $0.description.lowercased().contains(text) || $0.symbol.lowercased().contains(text) {
-                internalSearchResults.append($0)
+            if $0.name.lowercased().contains(text) || $0.ticker.lowercased().contains(text) {
+                internalSearchResults.append(Company(description: $0.name, symbol: $0.ticker))
             }
         }
         
         stocksService.searchCompany(with: text) { [weak self] companies in
-            guard let internalSearchResults = self?.internalSearchResults else { return }
+            guard let internalSearchResults = self?.internalSearchResults.map({$0.symbol}) else { return }
+            let result = Set(internalSearchResults)
             
-            let searchResults = Set(companies).subtracting(Set(internalSearchResults))
-            self?.externalSearchResults = searchResults.sorted()
+            self?.externalSearchResults = companies.filter { !$0.symbol.contains(".") && !result.contains($0.symbol) }
             
             DispatchQueue.main.async {
                 self?.view?.updateSearchlist()
@@ -61,15 +61,31 @@ class StocksVM: StocksViewModel {
             case .insert:
                 let company = externalSearchResults.remove(at: index)
                 internalSearchResults.append(company)
-                watchlist.append(company)
-                view?.updateWatchlist(at: IndexPath(row: watchlist.count-1, section: 0), with: action)
+                
+                stocksService.getCompanyProfile(for: company) { [weak self] profile in
+                    if let self = self {
+                        self.watchlist.append(profile)
+                        
+                        DispatchQueue.main.async {
+                            self.view?.updateWatchlist(at: IndexPath(row: self.watchlist.count-1, section: 0), with: action)
+                        }
+                    }
+                }
             case .delete:
                 watchlist.remove(at: index)
                 view?.updateWatchlist(at: IndexPath(row: index, section: 0), with: action)
         }
     }
     
-    func fetchQuotes(for company: Company, at indexPath: IndexPath) {
+    func fetchLogo(from url: URL, withSize size: Float, for indexPath: IndexPath) {
+        cacheService.fetchImage(from: url, withSize: size) { [weak self] image in
+            DispatchQueue.main.async {
+                self?.view?.showLogo(image, at: indexPath)
+            }
+        }
+    }
+    
+    func fetchQuotes(for company: CompanyProfile, at indexPath: IndexPath) {
         stocksService.getQuotes(for: company) { quotes in
             guard let quotes = quotes else { return }
             
@@ -82,6 +98,24 @@ class StocksVM: StocksViewModel {
     func updateQuotes() {
         watchlist.enumerated().forEach { index, company in
             fetchQuotes(for: company, at: IndexPath(row: index, section: 0))
+        }
+    }
+    
+    // MARK: - Saving for app tests
+    
+    private var url: URL {
+        try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("watchlist.json")
+    }
+    private func save() {
+        if let data = try? JSONEncoder().encode(watchlist) {
+            try? data.write(to: url)
+        }
+    }
+    
+    private func load() {
+        if let data = try? Data(contentsOf: url), 
+           let watchlist = try? JSONDecoder().decode([CompanyProfile].self, from: data) {
+            self.watchlist = watchlist
         }
     }
     

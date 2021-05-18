@@ -9,14 +9,17 @@ import Foundation
 
 struct Company: Decodable, Hashable, Comparable {
     
-    static func < (lhs: Company, rhs: Company) -> Bool {
-        lhs.description.localizedCaseInsensitiveCompare(rhs.description) == .orderedAscending
-    }
-    
+    /// Company name.
     let description: String
-    let displaySymbol: String
+    
+    /// Company symbol / ticker as used on the listed exchange.
+    /// 
+    /// Can be used as unique symbol to search company for other queries.
     let symbol: String
-    let type: String
+    
+    static func < (lhs: Company, rhs: Company) -> Bool {
+        lhs.symbol.localizedCaseInsensitiveCompare(rhs.symbol) == .orderedAscending
+    }
     
 }
 

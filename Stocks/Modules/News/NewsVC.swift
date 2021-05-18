@@ -93,7 +93,8 @@ extension NewsVC: UITableViewDelegate, UITableViewDataSource {
         if let cell = cell as? NewsTableViewCell {
             let news = viewModel.news[indexPath.row]
             cell.news = news
-            viewModel.fetchImage(from: news.imageUrl, for: indexPath)
+            let cellImageSize = cell.frame.size.width
+            viewModel.fetchImage(from: news.imageUrl, withSize: Float(cellImageSize), for: indexPath)
         }
         return cell
     }

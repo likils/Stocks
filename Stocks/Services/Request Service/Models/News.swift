@@ -12,22 +12,34 @@ struct News: Decodable, Equatable {
     /// Market news category for request.
     enum Category {
         case general, forex, crypto, merger
-        case company(Company)
+        case company(CompanyProfile)
         
-        var urlPart: String {
+        var urlPath: String {
             switch self {
-                case .general:
-                    return "/news?category=general"
-                case .forex:
-                    return "/news?category=forex"
-                case .crypto:
-                    return "/news?category=crypto"
-                case .merger:
-                    return "/news?category=merger"
-                case .company(let company):
-                    return "/company-news?symbol=\(company.symbol)&from=2021-03-01&to=2021-03-09"
+                case .company:
+                    return "/company-news?"
+                default:
+                    return "/news?"
             }
         }
+        
+        var query: [String: String] {
+            switch self {
+                case .general:
+                    return ["category": "general"]
+                case .forex:
+                    return ["category": "forex"]
+                case .crypto:
+                    return ["category": "crypto"]
+                case .merger:
+                    return ["category": "merger"]
+                case .company(let company):
+                    return ["symbol": company.ticker,
+                            "from": "2021-03-01",
+                            "to": "2021-03-09"]
+            }
+        }
+        
     }
     
     // MARK: - Public properties
