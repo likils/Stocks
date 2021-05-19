@@ -86,6 +86,10 @@ class StocksTableViewCell: UITableViewCell {
         }
     }
     
+    var _backView: UIView {
+        self.backView
+    }
+    
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)

@@ -12,6 +12,8 @@ class StocksVC: UITableViewController, StocksView {
     // MARK: - Private properties
     private let viewModel: StocksViewModel
     private weak var refreshTimer: Timer?
+    private var sourceIndexPath: IndexPath?
+    private var snapshot: UIView?
     
     // MARK: - Init
     init(viewModel: StocksViewModel) {
@@ -57,6 +59,51 @@ class StocksVC: UITableViewController, StocksView {
         }
     }
     
+    @objc func pressToMove(sender: UILongPressGestureRecognizer) {
+        let location = sender.location(in: tableView)
+        guard let indexPath = tableView.indexPathForRow(at: location) else { cleanup(); return }
+        
+        switch sender.state {
+            case .began:
+                sourceIndexPath = indexPath
+                guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
+                snapshot = cell._backView.takeSnapshot()
+                guard let snapshot = snapshot else { return }
+                snapshot.center = cell.center
+                tableView.addSubview(snapshot)
+                UIView.animate(withDuration: 0.25) { 
+                    snapshot.center.y = location.y
+                    snapshot.transform = CGAffineTransform(scaleX: 1.03, y: 1.03)
+                    cell.alpha = 0
+                } completion: { _ in
+                    cell.isHidden = true
+                }
+            case .changed:
+                guard let snapshot = snapshot, let sourceIndexPath = sourceIndexPath else { return }
+                snapshot.center.y = location.y
+                if snapshot.center.y < 16 {
+                    fallthrough
+                }
+                if indexPath != sourceIndexPath {
+                    viewModel.updateWatchlist(at: sourceIndexPath.row, to: indexPath.row, with: .move)
+                    tableView.moveRow(at: sourceIndexPath, to: indexPath)
+                    self.sourceIndexPath = indexPath
+                }
+            default:
+                guard let cell = tableView.cellForRow(at: indexPath),
+                      let snapshot = snapshot else { return }
+                
+                UIView.animate(withDuration: 0.25) {
+                    snapshot.center = cell.center
+                    snapshot.transform = CGAffineTransform.identity
+                } completion: { _ in
+                    cell.alpha = 1
+                    cell.isHidden = false
+                    self.cleanup()
+                }
+        }
+    }
+    
     // MARK: - Public methods
     func updateWatchlist(at indexPath: IndexPath, with action: Action) {
         switch action {
@@ -64,6 +111,8 @@ class StocksVC: UITableViewController, StocksView {
                 tableView.insertRows(at: [indexPath], with: .bottom)
             case .delete:
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+            case .move:
+                tableView.reloadData()
         }
     }
     
@@ -83,12 +132,15 @@ class StocksVC: UITableViewController, StocksView {
     private func setupTableView() {
         tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = true
         
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
+        
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(pressToMove))
+        longPress.minimumPressDuration = 1
+        tableView.addGestureRecognizer(longPress)
     }
     
     private func setupSearchController() {
@@ -100,6 +152,12 @@ class StocksVC: UITableViewController, StocksView {
         navigationItem.searchController = searchController
         
         searchController.searchBar.delegate = searchVC
+    }
+    
+    private func cleanup() {
+        sourceIndexPath = nil
+        snapshot?.removeFromSuperview()
+        snapshot = nil
     }
     
 }
@@ -124,7 +182,7 @@ extension StocksVC {
             }
             
             viewModel.fetchQuotes(for: company, at: indexPath)
-        } 
+        }
         
         return cell
     }
@@ -137,12 +195,8 @@ extension StocksVC {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            viewModel.updateWatchlist(at: indexPath.row, with: .delete)
+            viewModel.updateWatchlist(at: indexPath.row, to: nil, with: .delete)
         }
-    }
-    
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
     }
     
 }

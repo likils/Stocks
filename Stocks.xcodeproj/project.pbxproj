@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B2168B15265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2168B14265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift */; };
+		B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */; };
 		B22799BC2639B95A0088A8B2 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22799BB2639B95A0088A8B2 /* ColorScheme.swift */; };
 		B22D09C8263C2CDA0032380F /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09C7263C2CDA0032380F /* SocialButton.swift */; };
 		B22D09CB263C6A0F0032380F /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09CA263C6A0F0032380F /* LoginService.swift */; };
@@ -53,10 +53,11 @@
 		B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14E26209D3600C13589 /* SceneDelegate.swift */; };
 		B2DEC15626209D3600C13589 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2DEC15526209D3600C13589 /* Assets.xcassets */; };
 		B2DEC15926209D3600C13589 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B2DEC15726209D3600C13589 /* LaunchScreen.storyboard */; };
+		B2FD00BE265558B800880841 /* UIView+snapshot.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FD00BD265558B800880841 /* UIView+snapshot.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B2168B14265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+BackgroundColorAnimation.swift"; sourceTree = "<group>"; };
+		B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+backgroundColorAnimation.swift"; sourceTree = "<group>"; };
 		B22799BB2639B95A0088A8B2 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		B22D09C7263C2CDA0032380F /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		B22D09CA263C6A0F0032380F /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
@@ -104,6 +105,7 @@
 		B2DEC15526209D3600C13589 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B2DEC15826209D3600C13589 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B2DEC15A26209D3600C13589 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B2FD00BD265558B800880841 /* UIView+snapshot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+snapshot.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,7 +145,8 @@
 				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
 				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
 				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
-				B2168B14265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift */,
+				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
+				B2FD00BD265558B800880841 /* UIView+snapshot.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -411,7 +414,7 @@
 				B2B0D8752637F46800A59015 /* LoginVC.swift in Sources */,
 				B2A55B662636F3960036AB01 /* NewsVC.swift in Sources */,
 				B2802B2E26244E9600B6AADA /* News.swift in Sources */,
-				B2168B15265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift in Sources */,
+				B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */,
 				B22D09CD263C6A350032380F /* AppleLoginService.swift in Sources */,
 				B2802B282623767F00B6AADA /* Currency.swift in Sources */,
 				B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */,
@@ -438,6 +441,7 @@
 				B2A55B5A2636ECB40036AB01 /* SettingsCoordinator.swift in Sources */,
 				B23D1568263FF3580010AB57 /* Company.swift in Sources */,
 				B2C0AF02263B052A00A7E8BA /* NewsService.swift in Sources */,
+				B2FD00BE265558B800880841 /* UIView+snapshot.swift in Sources */,
 				B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */,
 				B2B0D8782637F4DD00A59015 /* LoginVM.swift in Sources */,
 				B2B460BB2653B3CF007B2877 /* CompanyProfile.swift in Sources */,

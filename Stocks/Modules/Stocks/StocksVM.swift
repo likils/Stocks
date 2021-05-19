@@ -59,10 +59,10 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     }
     
     func updateSearchList(at index: Int) {
-        updateWatchlist(at: index, with: .insert)
+        updateWatchlist(at: index, to: nil, with: .insert)
     }
     
-    func updateWatchlist(at index: Int, with action: Action) {
+    func updateWatchlist(at index: Int, to newIndex: Int?, with action: Action) {
         switch action {
             case .insert:
                 let company = externalSearchResults.remove(at: index)
@@ -80,6 +80,10 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
             case .delete:
                 watchlist.remove(at: index)
                 view?.updateWatchlist(at: IndexPath(row: index, section: 0), with: action)
+            case .move:
+                guard let newIndex = newIndex else { return }
+                let company = watchlist.remove(at: index)
+                watchlist.insert(company, at: newIndex)
         }
     }
     
