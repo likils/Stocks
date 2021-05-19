@@ -33,7 +33,7 @@ class StocksTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textColor = .Text.secondaryColor
-        label.numberOfLines = 2
+        label.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
         return label
     }()
     
@@ -79,6 +79,7 @@ class StocksTableViewCell: UITableViewCell {
                 let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
                 
                 priceChangeLabel.textColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
+                stockPriceLabel.animateBackgroundColor(with: priceChangeLabel.textColor)
                 
                 priceChangeLabel.text = "\(diffText) \(profile.currencyLogo) (\(priceDiffPercent.roundForText)%)"
             }
