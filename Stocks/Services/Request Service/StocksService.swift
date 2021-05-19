@@ -62,7 +62,7 @@ class StocksServiceImpl: StocksService {
                 }
             }
             if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                print("\n::: Received CompanyProfile response statusCode: \(response.statusCode) for company: \(company.description)(\(company.symbol)).") 
+                print("\n::: Received CompanyProfile response statusCode: \(response.statusCode) for company: \(company.description)(\(company.symbol)).\n\(response.description)") 
             }
             if let error = error {
                 print("\n::: Received CompanyProfile error:\n\(error.localizedDescription)")
@@ -84,7 +84,7 @@ class StocksServiceImpl: StocksService {
                 completion(companyQuotes)
             }
             if let response = response as? HTTPURLResponse, response.statusCode != 200 {
-                print("\n::: Received Quotes response statusCode: \(response.statusCode) for company: \(company.name)(\(company.ticker)).") 
+                print("\n::: Received Quotes response statusCode: \(response.statusCode) for company: \(company.name)(\(company.ticker)).\n\(response.description)") 
             }
             if let error = error {
                 print("\n::: Received Quotes error:\n\(error.localizedDescription)")

@@ -34,9 +34,13 @@ struct News: Decodable, Equatable {
                 case .merger:
                     return ["category": "merger"]
                 case .company(let company):
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy-MM-dd"
+                    let past = formatter.string(from: Date(timeIntervalSinceNow: -7.884E+6)) // 3 months
+                    let current = formatter.string(from: Date())
                     return ["symbol": company.ticker,
-                            "from": "2021-03-01",
-                            "to": "2021-03-09"]
+                            "from": past,
+                            "to": current]
             }
         }
         

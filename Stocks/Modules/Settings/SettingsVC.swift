@@ -49,7 +49,7 @@ class SettingsVC: UIViewController {
     // MARK: - Private methods
     private func setupView() {
         view.backgroundColor = .View.backgroundColor
-        navigationController?.isNavigationBarHidden = true
+        navigationItem.title = "Settings"
         view.addSubview(button)
         
         NSLayoutConstraint.activate([

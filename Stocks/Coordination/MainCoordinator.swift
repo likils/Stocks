@@ -25,13 +25,16 @@ class MainCoordinator: Coordination {
         self.serviceContainer = serviceContainer
         
         let newsNC = UINavigationController()
-        newsNC.title = nil
+        newsNC.navigationBar.prefersLargeTitles = true
+        newsNC.tabBarItem.image = UIImage(systemName: "newspaper")
         newsNC.tabBarItem.title = "News"
         newsCoordinator = NewsCoordinator(navController: newsNC,
                                           newsService: serviceContainer.newsService,
                                           cacheService: serviceContainer.cacheService)
         
         let stocksNC = UINavigationController()
+        stocksNC.navigationBar.prefersLargeTitles = true
+        stocksNC.tabBarItem.image = UIImage(systemName: "briefcase")
         stocksNC.tabBarItem.title = "Stocks"
         stocksCoordinator = StocksCoordinator(navController: stocksNC,
                                               newsService: serviceContainer.newsService,
@@ -40,6 +43,8 @@ class MainCoordinator: Coordination {
                                               stocksService: serviceContainer.stocksService)
         
         let settingsNC = UINavigationController()
+        settingsNC.navigationBar.prefersLargeTitles = true
+        settingsNC.tabBarItem.image = UIImage(systemName: "arrow.2.squarepath")
         settingsNC.tabBarItem.title = "Settings"
         settingsCoordinator = SettingsCoordinator(navController: settingsNC)
         

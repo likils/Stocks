@@ -68,7 +68,6 @@ class NewsVC: UIViewController, NewsView {
     private func setupView() {
         view.backgroundColor = .View.backgroundColor
         navigationItem.title = "Business News"
-        navigationController?.navigationBar.prefersLargeTitles = true
         
         view.addSubview(tableView)
         NSLayoutConstraint.activate([

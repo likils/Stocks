@@ -7,12 +7,14 @@
 
 import Foundation
 
-class StocksVM: StocksViewModel {
+class StocksVM: StocksViewModel, SearchCompanyViewModel {
     
     // MARK: - Public properties
-    weak var view: StocksView?
+    weak var searchView: SearchCompanyView?
     private(set) var externalSearchResults = [Company]()
     private(set) var internalSearchResults = [Company]()
+    
+    weak var view: StocksView?
     private(set) var watchlist = [CompanyProfile]() { didSet { save() } }
     
     //MARK: - Private properties
@@ -33,7 +35,7 @@ class StocksVM: StocksViewModel {
     func searchCompany(with symbol: String) {
         internalSearchResults.removeAll()
         externalSearchResults.removeAll()
-        view?.updateSearchlist()
+        searchView?.updateSearchlist()
         
         let text = symbol.trimmingCharacters(in: .whitespaces).lowercased()
         guard !text.isEmpty else { return }
@@ -51,9 +53,13 @@ class StocksVM: StocksViewModel {
             self?.externalSearchResults = companies.filter { !$0.symbol.contains(".") && !result.contains($0.symbol) }
             
             DispatchQueue.main.async {
-                self?.view?.updateSearchlist()
+                self?.searchView?.updateSearchlist()
             }
         }
+    }
+    
+    func updateSearchList(at index: Int) {
+        updateWatchlist(at: index, with: .insert)
     }
     
     func updateWatchlist(at index: Int, with action: Action) {
