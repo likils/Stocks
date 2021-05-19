@@ -28,7 +28,7 @@ protocol SearchCompanyView: AnyObject {
 // MARK: - Stocks Module
 
 enum Action {
-    case insert, delete
+    case insert, delete, move
 }
 
 protocol StocksViewModel: AnyObject {
@@ -37,7 +37,7 @@ protocol StocksViewModel: AnyObject {
     var watchlist: [CompanyProfile] { get }
     
     
-    func updateWatchlist(at index: Int, with action: Action)
+    func updateWatchlist(at index: Int, to newIndex: Int?, with action: Action)
     func fetchLogo(from url: URL, withSize size: Float, for indexPath: IndexPath)
     func fetchQuotes(for company: CompanyProfile, at indexPath: IndexPath)
     func updateQuotes()
@@ -46,7 +46,7 @@ protocol StocksViewModel: AnyObject {
 
 protocol StocksView: AnyObject {
     
-    func updateWatchlist(at indexPath: IndexPath, with action: Action)
+    func updateWatchlist(at index: Int, with action: Action)
     func showLogo(_ image: UIImage, at indexPath: IndexPath)
     func updateQuotes(_ quotes: CompanyQuotes, at indexPath: IndexPath)
     

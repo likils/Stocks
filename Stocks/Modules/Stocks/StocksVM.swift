@@ -62,7 +62,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         updateWatchlist(at: index, with: .insert)
     }
     
-    func updateWatchlist(at index: Int, with action: Action) {
+    func updateWatchlist(at index: Int, to newIndex: Int? = nil, with action: Action) {
         switch action {
             case .insert:
                 let company = externalSearchResults.remove(at: index)
@@ -73,13 +73,17 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                         self.watchlist.append(profile)
                         
                         DispatchQueue.main.async {
-                            self.view?.updateWatchlist(at: IndexPath(row: self.watchlist.count-1, section: 0), with: action)
+                            self.view?.updateWatchlist(at: self.watchlist.count - 1, with: action)
                         }
                     }
                 }
             case .delete:
                 watchlist.remove(at: index)
-                view?.updateWatchlist(at: IndexPath(row: index, section: 0), with: action)
+                view?.updateWatchlist(at: index, with: action)
+            case .move:
+                guard let newIndex = newIndex else { return }
+                let company = watchlist.remove(at: index)
+                watchlist.insert(company, at: newIndex)
         }
     }
     

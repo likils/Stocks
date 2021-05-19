@@ -58,12 +58,15 @@ class StocksVC: UITableViewController, StocksView {
     }
     
     // MARK: - Public methods
-    func updateWatchlist(at indexPath: IndexPath, with action: Action) {
+    func updateWatchlist(at index: Int, with action: Action) {
+        let indexPath = IndexPath(row: index, section: 0)
         switch action {
             case .insert:
                 tableView.insertRows(at: [indexPath], with: .bottom)
             case .delete:
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+            case .move:
+                break
         }
     }
     
@@ -83,7 +86,10 @@ class StocksVC: UITableViewController, StocksView {
     private func setupTableView() {
         tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = true
+        
+        tableView.dragInteractionEnabled = true
+        tableView.dragDelegate = self
+        tableView.dropDelegate = self
         
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -124,7 +130,7 @@ extension StocksVC {
             }
             
             viewModel.fetchQuotes(for: company, at: indexPath)
-        } 
+        }
         
         return cell
     }
@@ -137,12 +143,32 @@ extension StocksVC {
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            viewModel.updateWatchlist(at: indexPath.row, with: .delete)
+            viewModel.updateWatchlist(at: indexPath.row, to: nil, with: .delete)
         }
     }
     
-    override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        
+}
+
+// MARK: - Drag&Drop
+extension StocksVC: UITableViewDragDelegate, UITableViewDropDelegate {
+    
+    func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        [UIDragItem(itemProvider: NSItemProvider())]
+    }
+    
+    func tableView(_ tableView: UITableView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UITableViewDropProposal {
+        UITableViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+    }
+    
+    func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else { return }
+        for item in coordinator.items {
+            if let sourceIndexPath = item.sourceIndexPath {
+                viewModel.updateWatchlist(at: sourceIndexPath.row, to: destinationIndexPath.row, with: .move)
+                tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
+                coordinator.drop(item.dragItem, toRowAt: destinationIndexPath)
+            }
+        }
     }
     
 }

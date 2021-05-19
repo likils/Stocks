@@ -43,7 +43,11 @@ class NewsVC: UIViewController, NewsView {
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         setupView()
-        viewModel.getNews()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        refresh()
     }
     
     // MARK: - Actions

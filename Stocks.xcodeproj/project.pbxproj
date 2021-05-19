@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B2168B15265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2168B14265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift */; };
+		B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */; };
 		B22799BC2639B95A0088A8B2 /* ColorScheme.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22799BB2639B95A0088A8B2 /* ColorScheme.swift */; };
 		B22D09C8263C2CDA0032380F /* SocialButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09C7263C2CDA0032380F /* SocialButton.swift */; };
 		B22D09CB263C6A0F0032380F /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B22D09CA263C6A0F0032380F /* LoginService.swift */; };
@@ -56,7 +56,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B2168B14265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+BackgroundColorAnimation.swift"; sourceTree = "<group>"; };
+		B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+backgroundColorAnimation.swift"; sourceTree = "<group>"; };
 		B22799BB2639B95A0088A8B2 /* ColorScheme.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorScheme.swift; sourceTree = "<group>"; };
 		B22D09C7263C2CDA0032380F /* SocialButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialButton.swift; sourceTree = "<group>"; };
 		B22D09CA263C6A0F0032380F /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
@@ -143,7 +143,7 @@
 				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
 				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
 				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
-				B2168B14265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift */,
+				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -411,7 +411,7 @@
 				B2B0D8752637F46800A59015 /* LoginVC.swift in Sources */,
 				B2A55B662636F3960036AB01 /* NewsVC.swift in Sources */,
 				B2802B2E26244E9600B6AADA /* News.swift in Sources */,
-				B2168B15265516EE00AA0C72 /* UIView+BackgroundColorAnimation.swift in Sources */,
+				B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */,
 				B22D09CD263C6A350032380F /* AppleLoginService.swift in Sources */,
 				B2802B282623767F00B6AADA /* Currency.swift in Sources */,
 				B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */,
