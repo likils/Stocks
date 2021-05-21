@@ -93,6 +93,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
             case .delete:
                 let profile = watchlist.remove(at: index)
                 webSocketService.unsubscribeFrom(company: profile)
+                companyIndexInWatchlist.removeAll()
                 
                 watchlist.enumerated().forEach { index, profile in
                     companyIndexInWatchlist[profile.ticker] = index
