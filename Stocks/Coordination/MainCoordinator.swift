@@ -40,7 +40,8 @@ class MainCoordinator: Coordination {
                                               newsService: serviceContainer.newsService,
                                               currencyService: serviceContainer.currencyService,
                                               cacheService: serviceContainer.cacheService,
-                                              stocksService: serviceContainer.stocksService)
+                                              stocksService: serviceContainer.stocksService,
+                                              webSocketService: serviceContainer.webSocketService)
         
         let settingsNC = UINavigationController()
         settingsNC.navigationBar.prefersLargeTitles = true

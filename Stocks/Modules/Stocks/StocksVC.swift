@@ -11,7 +11,6 @@ class StocksVC: UITableViewController, StocksView {
     
     // MARK: - Private properties
     private let viewModel: StocksViewModel
-    private weak var refreshTimer: Timer?
     
     // MARK: - Init
     init(viewModel: StocksViewModel) {
@@ -34,31 +33,18 @@ class StocksVC: UITableViewController, StocksView {
         setupSearchController()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        refresh()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        viewModel.onlineUpdateBegin()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        refreshTimer?.invalidate()
-    }
-    
-    // MARK: - Actions
-    @objc func refresh() {
-        refreshTimer?.invalidate()
-        refreshTimer = Timer.scheduledTimer(timeInterval: 15, target: self, selector: #selector(refresh), userInfo: nil, repeats: false)
-        refreshTimer?.tolerance = 1
-        
-        if !viewModel.watchlist.isEmpty {
-            viewModel.updateQuotes()
-        } else {
-            tableView.refreshControl?.endRefreshing()
-        }
+        viewModel.onlineUpdateEnd()
     }
     
     // MARK: - Public methods
-    func updateWatchlist(at index: Int, with action: Action) {
+    func updateWatchlist(at index: Int, to newIndex: Int?, with action: Action) {
         let indexPath = IndexPath(row: index, section: 0)
         switch action {
             case .insert:
@@ -66,7 +52,8 @@ class StocksVC: UITableViewController, StocksView {
             case .delete:
                 tableView.deleteRows(at: [indexPath], with: .automatic)
             case .move:
-                break
+                guard let newIndex = newIndex else { return }
+                tableView.moveRow(at: indexPath, to: IndexPath(row: newIndex, section: 0))
         }
     }
     
@@ -75,11 +62,9 @@ class StocksVC: UITableViewController, StocksView {
         cell.setLogo(image)
     }
     
-    func updateQuotes(_ quotes: CompanyQuotes, at indexPath: IndexPath) {
+    func updateQuotes(_ quotes: CompanyQuotes?, at indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
         cell.companyQuotes = quotes
-        
-        tableView.refreshControl?.endRefreshing()
     }
 
     // MARK: - Private methods
@@ -90,9 +75,6 @@ class StocksVC: UITableViewController, StocksView {
         tableView.dragInteractionEnabled = true
         tableView.dragDelegate = self
         tableView.dropDelegate = self
-        
-        tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         
         tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
     }
@@ -129,7 +111,12 @@ extension StocksVC {
                 viewModel.fetchLogo(from: logoUrl, withSize: Float(logoSize), for: indexPath) 
             }
             
-            viewModel.fetchQuotes(for: company, at: indexPath)
+            if let quotes = company.companyQuotes, quotes.date.isRelevant {
+                cell.companyQuotes = quotes
+            } else {
+                viewModel.fetchQuotes(for: company, at: indexPath)
+            }
+            
         }
         
         return cell
@@ -165,7 +152,7 @@ extension StocksVC: UITableViewDragDelegate, UITableViewDropDelegate {
         for item in coordinator.items {
             if let sourceIndexPath = item.sourceIndexPath {
                 viewModel.updateWatchlist(at: sourceIndexPath.row, to: destinationIndexPath.row, with: .move)
-                tableView.moveRow(at: sourceIndexPath, to: destinationIndexPath)
+                
                 coordinator.drop(item.dragItem, toRowAt: destinationIndexPath)
             }
         }

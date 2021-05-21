@@ -36,18 +36,18 @@ protocol StocksViewModel: AnyObject {
     var view: StocksView? { get set }
     var watchlist: [CompanyProfile] { get }
     
-    
     func updateWatchlist(at index: Int, to newIndex: Int?, with action: Action)
     func fetchLogo(from url: URL, withSize size: Float, for indexPath: IndexPath)
     func fetchQuotes(for company: CompanyProfile, at indexPath: IndexPath)
-    func updateQuotes()
+    func onlineUpdateBegin()
+    func onlineUpdateEnd()
     
 }
 
 protocol StocksView: AnyObject {
     
-    func updateWatchlist(at index: Int, with action: Action)
+    func updateWatchlist(at index: Int, to newIndex: Int?, with action: Action)
     func showLogo(_ image: UIImage, at indexPath: IndexPath)
-    func updateQuotes(_ quotes: CompanyQuotes, at indexPath: IndexPath)
+    func updateQuotes(_ quotes: CompanyQuotes?, at indexPath: IndexPath)
     
 }

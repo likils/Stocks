@@ -63,4 +63,7 @@ struct CompanyProfile: Codable {
         }
     }
     
+    /// Current company quotes
+    var companyQuotes: CompanyQuotes?
+    
 }

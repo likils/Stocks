@@ -42,6 +42,7 @@ class StocksTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
         label.textAlignment = .right
+        label.layer.cornerRadius = 4
         return label
     }()
     
@@ -70,8 +71,9 @@ class StocksTableViewCell: UITableViewCell {
     
     var companyQuotes: CompanyQuotes? {
         didSet {
-            if let quotes = companyQuotes, let profile = companyProfile {
-                stockPriceLabel.text = quotes.currentPrice.roundForText + " " + profile.currencyLogo
+            if companyQuotes?.currentPrice != oldValue?.currentPrice,
+               let quotes = companyQuotes,
+               let profile = companyProfile {
                 
                 let priceDiff = quotes.currentPrice - quotes.previousClosePrice
                 let priceDiffPercent = abs((priceDiff * 100) / quotes.previousClosePrice)
@@ -79,8 +81,11 @@ class StocksTableViewCell: UITableViewCell {
                 let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
                 
                 priceChangeLabel.textColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
-                stockPriceLabel.animateBackgroundColor(with: priceChangeLabel.textColor)
                 
+                let pricebackgroundColor: UIColor = quotes.currentPrice < (oldValue?.currentPrice ?? 0) ? .Text.negativePriceColor : .Text.positivePriceColor
+                stockPriceLabel.animateBackgroundColor(with: pricebackgroundColor)
+                
+                stockPriceLabel.text = quotes.currentPrice.roundForText + " " + profile.currencyLogo
                 priceChangeLabel.text = "\(diffText) \(profile.currencyLogo) (\(priceDiffPercent.roundForText)%)"
             }
         }
