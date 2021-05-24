@@ -133,7 +133,6 @@
 		B22799B92639AFD30088A8B2 /* Cells */ = {
 			isa = PBXGroup;
 			children = (
-				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 				B2A55B73263717A70036AB01 /* NewsTableViewCell.swift */,
 				B23D1563263DA52F0010AB57 /* StocksTableViewCell.swift */,
 			);
@@ -146,6 +145,7 @@
 				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
 				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
 				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
+				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 				B2FD00BD265558B800880841 /* UIView+snapshot.swift */,
 			);
 			path = Extensions;
