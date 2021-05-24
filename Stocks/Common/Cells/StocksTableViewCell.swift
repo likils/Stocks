@@ -64,6 +64,8 @@ class StocksTableViewCell: UITableViewCell {
     
     var company: Company? {
         didSet {
+            logo.removeConstraint(logo.constraints.first!)
+            logo.widthAnchor.constraint(equalToConstant: 0).isActive = true
             symbolLabel.text = company?.symbol
             companyLabel.text = company?.description
         }

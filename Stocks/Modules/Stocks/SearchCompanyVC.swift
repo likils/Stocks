@@ -40,7 +40,6 @@ class SearchCompanyVC: UITableViewController, SearchCompanyView {
     private func setupTableView() {
         tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = true
         tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
     }
     
@@ -58,6 +57,7 @@ extension SearchCompanyVC: UISearchBarDelegate {
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        viewModel.searchCompany(with: "")
         delaySearchTimer?.invalidate()
     }
     
