@@ -187,7 +187,6 @@
 				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
 				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
 				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
-				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 				B2968D902656759E009AA143 /* Date+isRelevant.swift */,
 			);
 			path = Extensions;
@@ -198,6 +197,7 @@
 			children = (
 				B22D09C7263C2CDA0032380F /* SocialButton.swift */,
 				B2535275264D32B6005CEB74 /* CellBackgroundView.swift */,
+				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
