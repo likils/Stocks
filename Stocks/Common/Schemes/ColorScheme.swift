@@ -23,6 +23,10 @@ extension UIColor {
             UIColor(rgb: 0x303040)
         }
         
+        static var selectedControlColor: UIColor {
+            UIColor(rgb: 0x8D75F2)
+        }
+        
     }
     
     struct Text {

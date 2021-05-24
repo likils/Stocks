@@ -29,6 +29,7 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
     
     // MARK: - Private properties
     private var webSocketTask: URLSessionWebSocketTask!
+    private let pingTime: TimeInterval = 15
     
     // MARK: - Public methods
     func openConnection() {
@@ -100,7 +101,7 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
             } else {
                 print("{ping}")
                 
-                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 15) {
+                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.pingTime) {
                     self.ping()
                 }
             }

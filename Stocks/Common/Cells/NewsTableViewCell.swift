@@ -102,10 +102,10 @@ class NewsTableViewCell: UITableViewCell {
         backView.addSubview(thumbnailImageView)
         
         NSLayoutConstraint.activate([
-            backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            backView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8),
+            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             
             sourceLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 16),
             sourceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),

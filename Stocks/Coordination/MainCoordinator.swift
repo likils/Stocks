@@ -25,17 +25,17 @@ class MainCoordinator: Coordination {
         self.serviceContainer = serviceContainer
         
         let newsNC = UINavigationController()
-        newsNC.navigationBar.prefersLargeTitles = true
-        newsNC.tabBarItem.image = UIImage(systemName: "newspaper")
         newsNC.tabBarItem.title = "News"
+        newsNC.tabBarItem.image = UIImage(systemName: "newspaper")
+        newsNC.navigationBar.prefersLargeTitles = true
         newsCoordinator = NewsCoordinator(navController: newsNC,
                                           newsService: serviceContainer.newsService,
                                           cacheService: serviceContainer.cacheService)
         
         let stocksNC = UINavigationController()
-        stocksNC.navigationBar.prefersLargeTitles = true
-        stocksNC.tabBarItem.image = UIImage(systemName: "briefcase")
         stocksNC.tabBarItem.title = "Stocks"
+        stocksNC.tabBarItem.image = UIImage(systemName: "briefcase")
+        stocksNC.navigationBar.prefersLargeTitles = true
         stocksCoordinator = StocksCoordinator(navController: stocksNC,
                                               newsService: serviceContainer.newsService,
                                               currencyService: serviceContainer.currencyService,
@@ -44,9 +44,9 @@ class MainCoordinator: Coordination {
                                               webSocketService: serviceContainer.webSocketService)
         
         let settingsNC = UINavigationController()
-        settingsNC.navigationBar.prefersLargeTitles = true
-        settingsNC.tabBarItem.image = UIImage(systemName: "arrow.2.squarepath")
         settingsNC.tabBarItem.title = "Settings"
+        settingsNC.tabBarItem.image = UIImage(systemName: "arrow.2.squarepath")
+        settingsNC.navigationBar.prefersLargeTitles = true
         settingsCoordinator = SettingsCoordinator(navController: settingsNC)
         
         tabController.viewControllers = [newsNC, stocksNC, settingsNC]

@@ -8,6 +8,10 @@
 import UIKit
 
 class CellBackgroundView: UIView {
+    
+    var animationBeginColor = UIColor.View.pressButtonColor
+    var animationEndColor = UIColor.white
+    var pressedScale: CGFloat = 0.99
 
     // MARK: - Init
     init() {
@@ -20,18 +24,18 @@ class CellBackgroundView: UIView {
     }
     
     // MARK: - Public methods
-    func animate(completion: (() -> Void)?) {
+    func animate(completion: (() -> Void)? = nil) {
         UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.1, delay: 0, options: []) { 
             self.layer.shadowOpacity = 0
-            self.transform = CGAffineTransform.init(scaleX: 0.99, y: 0.99)
-            self.backgroundColor = .View.pressButtonColor
+            self.transform = CGAffineTransform.init(scaleX: self.pressedScale, y: self.pressedScale)
+            self.backgroundColor = self.animationBeginColor
         }
         completion: { state in
             if state == .end {
                 UIViewPropertyAnimator.runningPropertyAnimator(withDuration: 0.1, delay: 0, options: []) { 
                     self.layer.shadowOpacity = 0.12
                     self.transform = CGAffineTransform.identity
-                    self.backgroundColor = .white
+                    self.backgroundColor = self.animationEndColor
                 }
                 completion: { state in
                     if state == .end {

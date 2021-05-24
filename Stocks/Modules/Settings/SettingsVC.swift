@@ -38,6 +38,8 @@ class SettingsVC: UIViewController {
     // MARK: - Lifesycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "Settings"
+        
         setupView()
     }
     
@@ -49,7 +51,6 @@ class SettingsVC: UIViewController {
     // MARK: - Private methods
     private func setupView() {
         view.backgroundColor = .View.backgroundColor
-        navigationItem.title = "Settings"
         view.addSubview(button)
         
         NSLayoutConstraint.activate([

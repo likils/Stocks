@@ -44,6 +44,36 @@ struct News: Decodable, Equatable {
             }
         }
         
+        var name: String {
+            switch self {
+                case .general:
+                    return "👋🏻General"
+                case .forex:
+                    return "📈Forex"
+                case .crypto:
+                    return "💰Crypto"
+                case .merger:
+                    return "👔Merger"
+                case .company(let company):
+                    return "\(company.name) News"
+            }
+        }
+        
+        var width: Int {
+            switch self {
+                case .general:
+                    return 94
+                case .forex:
+                    return 80
+                case .crypto:
+                    return 86
+                case .merger:
+                    return 90
+                case .company(_):
+                    return 0
+            }
+        }
+        
     }
     
     // MARK: - Public properties

@@ -26,7 +26,6 @@ class StocksVC: UITableViewController, StocksView {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.title = "Stock Quotes"
         
         setupTableView()

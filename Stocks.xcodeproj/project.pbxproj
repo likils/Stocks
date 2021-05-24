@@ -22,6 +22,8 @@
 		B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */; };
 		B2535274264C4E22005CEB74 /* Double+roundForText.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2535273264C4E22005CEB74 /* Double+roundForText.swift */; };
 		B2535276264D32B6005CEB74 /* CellBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2535275264D32B6005CEB74 /* CellBackgroundView.swift */; };
+		B256DF24265BAD8200870576 /* NewsCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B256DF23265BAD8200870576 /* NewsCategoryCollectionViewCell.swift */; };
+		B256DF26265BADE100870576 /* UICollectionViewCell+identifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = B256DF25265BADE100870576 /* UICollectionViewCell+identifier.swift */; };
 		B271C81C2654F83500012308 /* SearchCompanyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271C81B2654F83500012308 /* SearchCompanyVC.swift */; };
 		B2802B282623767F00B6AADA /* Currency.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B272623767F00B6AADA /* Currency.swift */; };
 		B2802B2E26244E9600B6AADA /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2802B2D26244E9600B6AADA /* News.swift */; };
@@ -74,6 +76,8 @@
 		B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITableViewCell+identifier.swift"; sourceTree = "<group>"; };
 		B2535273264C4E22005CEB74 /* Double+roundForText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+roundForText.swift"; sourceTree = "<group>"; };
 		B2535275264D32B6005CEB74 /* CellBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellBackgroundView.swift; sourceTree = "<group>"; };
+		B256DF23265BAD8200870576 /* NewsCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		B256DF25265BADE100870576 /* UICollectionViewCell+identifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UICollectionViewCell+identifier.swift"; sourceTree = "<group>"; };
 		B271C81B2654F83500012308 /* SearchCompanyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompanyVC.swift; sourceTree = "<group>"; };
 		B2802B272623767F00B6AADA /* Currency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Currency.swift; sourceTree = "<group>"; };
 		B2802B2D26244E9600B6AADA /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
@@ -176,6 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				B2A55B73263717A70036AB01 /* NewsTableViewCell.swift */,
+				B256DF23265BAD8200870576 /* NewsCategoryCollectionViewCell.swift */,
 				B23D1563263DA52F0010AB57 /* StocksTableViewCell.swift */,
 			);
 			path = Cells;
@@ -184,11 +189,12 @@
 		B22799BA2639B9490088A8B2 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
-				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
-				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
-				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 				B2968D902656759E009AA143 /* Date+isRelevant.swift */,
+				B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */,
+				B2535273264C4E22005CEB74 /* Double+roundForText.swift */,
+				B2535270264C0D65005CEB74 /* UITableViewCell+identifier.swift */,
+				B256DF25265BADE100870576 /* UICollectionViewCell+identifier.swift */,
+				B2168B14265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -442,6 +448,7 @@
 				B23D1564263DA52F0010AB57 /* StocksTableViewCell.swift in Sources */,
 				B2A55B522636DD1B0036AB01 /* NewsCoordinator.swift in Sources */,
 				B2B0D8752637F46800A59015 /* LoginVC.swift in Sources */,
+				B256DF26265BADE100870576 /* UICollectionViewCell+identifier.swift in Sources */,
 				B2A55B662636F3960036AB01 /* NewsVC.swift in Sources */,
 				B2802B2E26244E9600B6AADA /* News.swift in Sources */,
 				B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */,
@@ -466,6 +473,7 @@
 				B2968D9526569BEB009AA143 /* OnlineTrade.swift in Sources */,
 				B2A55B622636F37A0036AB01 /* NewsVM.swift in Sources */,
 				B2DEC14D26209D3600C13589 /* AppDelegate.swift in Sources */,
+				B256DF24265BAD8200870576 /* NewsCategoryCollectionViewCell.swift in Sources */,
 				B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */,
 				B22D09C8263C2CDA0032380F /* SocialButton.swift in Sources */,
 				B23D1560263D92400010AB57 /* StocksVC.swift in Sources */,

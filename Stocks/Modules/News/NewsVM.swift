@@ -18,6 +18,7 @@ class NewsVM: NewsViewModel {
             }
         }
     }
+    private(set) var newsCategories: [News.Category]
     
     //MARK: - Private properties
     private let coordinator: NewsCoordination?
@@ -29,11 +30,15 @@ class NewsVM: NewsViewModel {
         self.coordinator = coordinator
         self.newsService = newsService
         self.cacheService = cacheService
+        self.newsCategories = [News.Category.general,
+                               News.Category.forex,
+                               News.Category.crypto,
+                               News.Category.merger]
     }
     
     // MARK: - Public properties
-    func getNews() {
-        newsService.getNews(category: .general) { [weak self] news in
+    func getNews(category: News.Category) {
+        newsService.getNews(category: category) { [weak self] news in
             self?.news = news
         }
     }
