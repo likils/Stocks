@@ -7,20 +7,10 @@
 
 import UIKit
 
-class SettingsVC: UIViewController {
+class SettingsVC: UITableViewController {
     
-    // MARK: - Subviews
-    private let button: UIButton = {
-        let button = UIButton()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Logout", for: .normal)
-        button.setTitleColor(.black, for: .normal)
-        button.layer.borderWidth = 3
-        button.layer.borderColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
-        button.layer.cornerRadius = 25
-        button.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
-        return button
-    }()
+    // MARK: - Dimensions
+    static private let inset: CGFloat = 16
     
     // MARK: - Private properties
     private let viewModel: SettingsViewModel
@@ -28,7 +18,7 @@ class SettingsVC: UIViewController {
     // MARK: - Init
     init(viewModel: SettingsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .insetGrouped)
     }
     
     required init?(coder: NSCoder) {
@@ -40,26 +30,35 @@ class SettingsVC: UIViewController {
         super.viewDidLoad()
         navigationItem.title = "Settings"
         
-        setupView()
-    }
-    
-    // MARK: - Actions
-    @objc func logoutTapped() {
-        viewModel.logout()
+        setupTableView()
     }
     
     // MARK: - Private methods
-    private func setupView() {
-        view.backgroundColor = .View.backgroundColor
-        view.addSubview(button)
+    private func setupTableView() {
+        tableView.backgroundColor = .View.backgroundColor
+        tableView.isScrollEnabled = false
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.inset, bottom: 0, right: Self.inset)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        viewModel.cells.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifier, for: indexPath)
+        let cellData = viewModel.cells[indexPath.row]
+        switch cellData {
+            case .logout(let title):
+                cell.textLabel?.text = title
+        }
         
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            button.widthAnchor.constraint(equalToConstant: 100),
-            button.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = viewModel.cells[indexPath.row]
+        viewModel.cellTapped(cell)
     }
     
 }

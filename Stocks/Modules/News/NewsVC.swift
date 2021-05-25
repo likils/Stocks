@@ -101,7 +101,7 @@ class NewsVC: UITableViewController, NewsView {
         tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: NewsVC.inset, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.inset, right: 0)
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
@@ -117,7 +117,7 @@ extension NewsVC {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        section == 0 ? NewsVC.tableHeaderHeight : 0
+        section == 0 ? Self.tableHeaderHeight : 0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -165,6 +165,11 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        guard let cell = collectionView.cellForItem(at: indexPath), !cell.isSelected else { return false }
+        return true
+    }
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         refresh()
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
@@ -177,12 +182,12 @@ extension NewsVC: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = CGFloat(categories[indexPath.row].width)
-        let height = NewsVC.collectionCellHeight
+        let height = Self.collectionCellHeight
         return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        NewsVC.collectionCellSpacing
+        Self.collectionCellSpacing
     }
     
 }

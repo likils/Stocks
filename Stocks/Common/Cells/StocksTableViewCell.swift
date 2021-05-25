@@ -62,15 +62,6 @@ class StocksTableViewCell: UITableViewCell {
         }
     }
     
-    var company: Company? {
-        didSet {
-            logo.removeConstraint(logo.constraints.first!)
-            logo.widthAnchor.constraint(equalToConstant: 0).isActive = true
-            symbolLabel.text = company?.symbol
-            companyLabel.text = company?.description
-        }
-    }
-    
     var companyQuotes: CompanyQuotes? {
         didSet {
             if companyQuotes?.currentPrice != oldValue?.currentPrice,
@@ -108,7 +99,7 @@ class StocksTableViewCell: UITableViewCell {
         logo.image = image
     }
     
-    func animate(completion: (() -> Void)?) {
+    func animate(completion: (() -> Void)? = nil) {
         backView.animate(completion: completion)
     }
     

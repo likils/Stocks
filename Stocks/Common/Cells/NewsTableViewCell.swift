@@ -83,7 +83,7 @@ class NewsTableViewCell: UITableViewCell {
         thumbnailImageView.image = image
     }
     
-    func animate(completion: (() -> Void)?) {
+    func animate(completion: (() -> Void)? = nil) {
         backView.animate(completion: completion)
     }
     

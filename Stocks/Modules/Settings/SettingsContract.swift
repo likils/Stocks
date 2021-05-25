@@ -7,8 +7,16 @@
 
 import Foundation
 
+enum SettingCell {
+    
+    case logout(title: String)
+    
+}
+
 protocol SettingsViewModel: AnyObject {
     
-    func logout()
+    var cells: [SettingCell] { get }
+    
+    func cellTapped(_ cell: SettingCell)
     
 }

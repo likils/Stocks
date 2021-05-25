@@ -9,14 +9,18 @@ import UIKit
 
 class SearchCompanyVC: UITableViewController, SearchCompanyView {
     
+    // MARK: - Dimensions
+    static private let tableHeaderHeight: CGFloat = 16
+    static private let inset: CGFloat = 16
+
     // MARK: - Private properties
     private let viewModel: SearchCompanyViewModel
     private weak var delaySearchTimer: Timer?
-    
+
     // MARK: - Init
     init(viewModel: SearchCompanyViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .insetGrouped)
         viewModel.searchView = self
     }
     
@@ -33,14 +37,15 @@ class SearchCompanyVC: UITableViewController, SearchCompanyView {
 
     // MARK: - Public methods
     func updateSearchlist() {
-        tableView.reloadSections(IndexSet(0...1), with: .automatic)
+        tableView.reloadSections(IndexSet(0...1), with: .fade)
     }
     
     // MARK: - Private methods
     private func setupTableView() {
         tableView.backgroundColor = .View.backgroundColor
-        tableView.separatorStyle = .none
-        tableView.register(StocksTableViewCell.self, forCellReuseIdentifier: StocksTableViewCell.identifier)
+        tableView.contentInset = UIEdgeInsets(top: -Self.inset, left: 0, bottom: -Self.inset, right: 0)
+        tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.inset, bottom: 0, right: Self.inset)
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
     }
     
 }
@@ -70,6 +75,10 @@ extension SearchCompanyVC {
         2
     }
     
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        Self.tableHeaderHeight
+    }
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         section == 0 ? viewModel.internalSearchResults.count : viewModel.externalSearchResults.count
     }
@@ -85,42 +94,51 @@ extension SearchCompanyVC {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: StocksTableViewCell.identifier, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifier, for: indexPath)
+        cell.textLabel?.numberOfLines = 2
         
-        if let cell = cell as? StocksTableViewCell {
-            let company: Company
-            if indexPath.section == 0 {
-                company = viewModel.internalSearchResults[indexPath.row]
-            } else {
-                company = viewModel.externalSearchResults[indexPath.row]
-            }
-            cell.company = company
-        } 
+        let company: Company
+        if indexPath.section == 0 {
+            company = viewModel.internalSearchResults[indexPath.row]
+        } else {
+            company = viewModel.externalSearchResults[indexPath.row]
+        }
+        
+        let symbol = NSMutableAttributedString(string: company.symbol,
+                                               attributes: [.font: UIFont.systemFont(ofSize: 16)])
+        
+        let description = NSAttributedString(string: "\n\(company.description.capitalized)",
+                                             attributes: [.foregroundColor: UIColor.gray,
+                                                          .font: UIFont.systemFont(ofSize: 14)])
+        symbol.append(description)
+        
+        cell.textLabel?.attributedText = symbol
         
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return nil }
-        cell.animate {
-            if indexPath.section == 1 {
-                let company = self.viewModel.externalSearchResults[indexPath.row]
-                let alertVC = UIAlertController(title: "Add \(company.description)?", message: nil, preferredStyle: .alert)
-                let action = UIAlertAction(title: "Yes", style: .default) { _ in
-                    self.viewModel.updateSearchList(at: indexPath.row)
-                    
-                    tableView.performBatchUpdates { 
-                        tableView.deleteRows(at: [indexPath], with: .left)
-                        tableView.insertRows(at: [IndexPath(row: self.viewModel.internalSearchResults.count-1, section: 0)], with: .left)
-                    }
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.section == 1 {
+            let company = self.viewModel.externalSearchResults[indexPath.row]
+            let alertVC = UIAlertController(title: "Add \(company.description)?", message: nil, preferredStyle: .alert)
+            let action = UIAlertAction(title: "Yes", style: .default) { _ in
+                self.viewModel.updateSearchList(at: indexPath.row)
+                
+                tableView.performBatchUpdates { 
+                    tableView.deleteRows(at: [indexPath], with: .left)
+                    tableView.insertRows(at: [IndexPath(row: self.viewModel.internalSearchResults.count-1, section: 0)], with: .left)
                 }
-                alertVC.addAction(action)
-                alertVC.addAction(UIAlertAction(title: "No", style: .cancel, handler: nil))
-                self.present(alertVC, animated: true)
+                tableView.deselectRow(at: indexPath, animated: true)
             }
+            alertVC.addAction(action)
+            alertVC.addAction(UIAlertAction(title: "No", style: .cancel, handler: { _ in
+                tableView.deselectRow(at: indexPath, animated: true)
+                
+            }))
+            self.present(alertVC, animated: true)
+        } else {
+            tableView.deselectRow(at: indexPath, animated: true)
         }
-        
-        return indexPath
     }
     
 }
