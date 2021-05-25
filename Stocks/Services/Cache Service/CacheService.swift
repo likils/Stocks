@@ -9,7 +9,7 @@ import UIKit
 
 protocol CacheService {
     
-    func fetchImage(from url: URL, withSize size: Float, completion: @escaping (UIImage) -> Void)
+    func fetchImage(from url: URL, withSize size: Double, completion: @escaping (UIImage) -> Void)
     
 }
 
@@ -19,7 +19,7 @@ class CacheServiceImpl: CacheService {
     private var nsCache = NSCache<NSURL, UIImage>()
     
     // MARK: - Public methods
-    func fetchImage(from url: URL, withSize size: Float, completion: @escaping (UIImage) -> Void) {
+    func fetchImage(from url: URL, withSize size: Double, completion: @escaping (UIImage) -> Void) {
         if let image = nsCache.object(forKey: url as NSURL) {
             completion(image)
         } else {

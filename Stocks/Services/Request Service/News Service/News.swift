@@ -36,7 +36,7 @@ struct News: Decodable, Equatable {
                 case .company(let company):
                     let formatter = DateFormatter()
                     formatter.dateFormat = "yyyy-MM-dd"
-                    let past = formatter.string(from: Date(timeIntervalSinceNow: -7.884E+6)) // 3 months
+                    let past = formatter.string(from: Date(timeIntervalSinceNow: -0.864E+6)) // 10 days
                     let current = formatter.string(from: Date())
                     return ["symbol": company.ticker,
                             "from": past,
@@ -55,7 +55,7 @@ struct News: Decodable, Equatable {
                 case .merger:
                     return "👔Merger"
                 case .company(let company):
-                    return "\(company.name) News"
+                    return company.ticker
             }
         }
         
@@ -70,7 +70,7 @@ struct News: Decodable, Equatable {
                 case .merger:
                     return 90
                 case .company(_):
-                    return 0
+                    return 80
             }
         }
         
@@ -90,7 +90,7 @@ struct News: Decodable, Equatable {
     let id: Int
     
     /// Thumbnail image URL.
-    let imageUrl: URL
+    let imageUrl: URL?
     
     /// Related stocks and companies mentioned in the article.
     let related: String
@@ -125,7 +125,8 @@ struct News: Decodable, Equatable {
         category = try container.decode(String.self, forKey: CodingKeys.category)
         headline = try container.decode(String.self, forKey: CodingKeys.headline)
         id = try container.decode(Int.self, forKey: CodingKeys.id)
-        imageUrl = try container.decode(URL.self, forKey: CodingKeys.imageUrl)
+        let _imageUrl = try container.decode(String.self, forKey: CodingKeys.imageUrl)
+        imageUrl = URL(string: _imageUrl)
         related = try container.decode(String.self, forKey: CodingKeys.related)
         source = try container.decode(String.self, forKey: CodingKeys.source)
         summary = try container.decode(String.self, forKey: CodingKeys.summary)

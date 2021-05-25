@@ -106,8 +106,8 @@ extension StocksVC {
             cell.companyProfile = company
             
             if let logoUrl = company.logoUrl {
-                let logoSize = cell.bounds.height
-                viewModel.fetchLogo(from: logoUrl, withSize: Float(logoSize), for: indexPath) 
+                let maxLogoSize = Double(cell.bounds.height)
+                viewModel.fetchLogo(from: logoUrl, withSize: maxLogoSize, for: indexPath) 
             }
             
             if let quotes = company.companyQuotes, quotes.date.isRelevant {

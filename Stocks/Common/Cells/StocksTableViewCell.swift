@@ -57,6 +57,7 @@ class StocksTableViewCell: UITableViewCell {
     // MARK: - Public properties
     var companyProfile: CompanyProfile? {
         didSet {
+            companyProfile?.companyQuotes = nil
             symbolLabel.text = companyProfile?.ticker
             companyLabel.text = companyProfile?.name
         }

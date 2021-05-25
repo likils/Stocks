@@ -133,8 +133,11 @@ extension NewsVC {
         if let cell = cell as? NewsTableViewCell {
             let news = news[indexPath.row]
             cell.news = news
-            let cellImageSize = cell.frame.size.width
-            viewModel.fetchImage(from: news.imageUrl, withSize: Float(cellImageSize), for: indexPath)
+            
+            if let url = news.imageUrl {
+                let maxImageSize = Double(cell.frame.size.width)
+                viewModel.fetchImage(from: url, withSize: maxImageSize, for: indexPath)
+            }
         }
         return cell
     }

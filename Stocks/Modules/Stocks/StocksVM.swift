@@ -112,7 +112,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
     
-    func fetchLogo(from url: URL, withSize size: Float, for indexPath: IndexPath) {
+    func fetchLogo(from url: URL, withSize size: Double, for indexPath: IndexPath) {
         cacheService.fetchImage(from: url, withSize: size) { [weak self] image in
             DispatchQueue.main.async {
                 self?.view?.showLogo(image, at: indexPath)
