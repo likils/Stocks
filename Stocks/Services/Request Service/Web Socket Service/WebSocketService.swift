@@ -29,7 +29,7 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
     
     // MARK: - Private properties
     private var webSocketTask: URLSessionWebSocketTask!
-    private let pingTime: TimeInterval = 15
+    private var pingTimer: DispatchSourceTimer?
     
     // MARK: - Public methods
     func openConnection() {
@@ -81,6 +81,7 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
                             if let data = text.data(using: .utf8) {
                                 let trades = self.fetchTradesFrom(data: data)
                                 self.receivedData?(trades)
+                                self.receive()
                             }
                         @unknown default:
                             print("@unknown default type in webSocketTask.receive result.")
@@ -88,9 +89,6 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
                 case .failure(let error):
                     print("Error when receiving: \(error.localizedDescription)")
             }
-            
-            self.receive()
-            
         }
     }
     
@@ -99,11 +97,10 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
             if let error = error {
                 print("Ping error: \(error.localizedDescription)")
             } else {
-                print("{ping}")
+                print("{ ping }")
                 
-                DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + self.pingTime) {
-                    self.ping()
-                }
+                self.pingTimer?.schedule(deadline: .now() + 10)
+                self.pingTimer?.activate()
             }
         }
     }
@@ -132,12 +129,17 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
         }
         initialCompanies.removeAll()
         
+        pingTimer = DispatchSource.makeTimerSource()
+        pingTimer?.setEventHandler { self.ping() }
+        
         ping()
         receive()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Web Socket did disconnect")
+        pingTimer?.cancel()
+        pingTimer = nil
     }
     
 }
