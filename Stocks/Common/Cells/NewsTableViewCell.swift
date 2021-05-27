@@ -54,20 +54,6 @@ class NewsTableViewCell: UITableViewCell {
         return imageView
     }()
     
-    // MARK: - Public properties
-    var news: News? {
-        didSet {
-            if let news = news {
-                let formatter = RelativeDateTimeFormatter()
-                dateLabel.text = formatter.localizedString(for: news.date, relativeTo: Date())
-                sourceLabel.text = news.source
-                headlineLabel.text = news.headline
-                summaryLabel.text = news.summary
-                thumbnailImageView.image = UIImage()
-            }
-        }
-    }
-    
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -79,6 +65,15 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public methods
+    func setNews(_ news: News) {
+        let formatter = RelativeDateTimeFormatter()
+        dateLabel.text = formatter.localizedString(for: news.date, relativeTo: Date())
+        sourceLabel.text = news.source
+        headlineLabel.text = news.headline
+        summaryLabel.text = news.summary
+        thumbnailImageView.image = UIImage()
+    }
+    
     func setImage(_ image: UIImage) {
         thumbnailImageView.image = image
     }

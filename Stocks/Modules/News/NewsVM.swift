@@ -21,7 +21,7 @@ class NewsVM: NewsViewModel {
     private(set) var newsCategories: [News.Category]
     
     //MARK: - Private properties
-    private let coordinator: NewsCoordination?
+    private let coordinator: NewsCoordination
     private let newsService: NewsService
     private let cacheService: CacheService
     
@@ -43,7 +43,9 @@ class NewsVM: NewsViewModel {
         }
     }
     
-    func fetchImage(from url: URL, withSize size: Double, for indexPath: IndexPath) {
+    func fetchImage(withSize size: Double, for indexPath: IndexPath) {
+        guard let url = news[indexPath.row].imageUrl else { return }
+        
         cacheService.fetchImage(from: url, withSize: size) { [weak self] image in
             DispatchQueue.main.async {
                 self?.view?.showImage(image, at: indexPath)
@@ -51,9 +53,9 @@ class NewsVM: NewsViewModel {
         }
     }
     
-    func cellTapped(with url: URL?) {
-        guard let url = url else { return }
-        coordinator?.showWebPage(with: url)
+    func cellTapped(at index: Int) {
+        let url = news[index].sourceUrl
+        coordinator.showWebPage(with: url)
     }
     
 }

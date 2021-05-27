@@ -41,6 +41,7 @@ class NewsVC: UITableViewController, NewsView {
     static private let collectionCellSpacing: CGFloat = 12
     static private let collectionCellHeight: CGFloat = 34
     static private let inset: CGFloat = 16
+    static private let tableContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: inset, right: 0)
     static private let collectionContentInsets = UIEdgeInsets(top: 0, left: inset, bottom: 0, right: inset)
     
     // MARK: - Private properties
@@ -101,7 +102,7 @@ class NewsVC: UITableViewController, NewsView {
         tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: Self.inset, right: 0)
+        tableView.contentInset = Self.tableContentInsets
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refresh), for: .valueChanged)
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
@@ -113,7 +114,7 @@ class NewsVC: UITableViewController, NewsView {
 extension NewsVC {
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        2 // header in section 0, content in section 1 - for animation and header hiding
+        2 // header in section 0; content in section 1 - for animation and header hiding
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -132,12 +133,10 @@ extension NewsVC {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
         if let cell = cell as? NewsTableViewCell {
             let news = news[indexPath.row]
-            cell.news = news
+            cell.setNews(news)
             
-            if let url = news.imageUrl {
-                let maxImageSize = Double(cell.frame.size.width)
-                viewModel.fetchImage(from: url, withSize: maxImageSize, for: indexPath)
-            }
+            let maxImageSize = Double(cell.frame.size.width)
+            viewModel.fetchImage(withSize: maxImageSize, for: indexPath)
         }
         return cell
     }
@@ -145,7 +144,7 @@ extension NewsVC {
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return nil }
         cell.animate { [weak self] in
-            self?.viewModel.cellTapped(with: cell.news?.sourceUrl)
+            self?.viewModel.cellTapped(at: indexPath.row)
         }
         return indexPath
     }
@@ -163,7 +162,7 @@ extension NewsVC: UICollectionViewDelegate, UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NewsCategoryCollectionViewCell.identifier, for: indexPath)
         if let cell = cell as? NewsCategoryCollectionViewCell {
             let category = categories[indexPath.item]
-            cell.text = category.name
+            cell.setText(category.name)
         }
         return cell
     }
