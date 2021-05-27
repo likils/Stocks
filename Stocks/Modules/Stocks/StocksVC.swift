@@ -121,7 +121,9 @@ extension StocksVC {
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
         guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return nil }
-        cell.animate()
+        cell.animate {
+            self.viewModel.cellTapped(at: indexPath.row)
+        }
         return indexPath
     }
     

@@ -161,6 +161,11 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         webSocketService.closeConnection()
     }
     
+    func cellTapped(at index: Int) {
+        let company = watchlist[index]
+        coordinator.showCompanyDetails(company)
+    }
+    
     // MARK: - Private methods
     private func updateQuotes() {
         watchlist.enumerated().forEach { index, company in

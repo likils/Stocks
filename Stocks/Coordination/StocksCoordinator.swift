@@ -10,6 +10,7 @@ import SafariServices
 
 protocol StocksCoordination: NavCoordination {
     
+    func showCompanyDetails(_ company: CompanyProfile)
     func showWebPage(with url: URL)
     
 }
@@ -51,6 +52,17 @@ class StocksCoordinator: StocksCoordination {
                           cacheService: cacheService)
         let vc = StocksVC(viewModel: vm)
         navController.viewControllers = [vc]
+    }
+    
+    func showCompanyDetails(_ company: CompanyProfile) {
+        let vm = CompanyDetailsVM(coordinator: self,
+                                  newsService: newsService,
+                                  stocksService: stocksService,
+                                  webSocketService: webSocketService,
+                                  cacheService: cacheService,
+                                  companyProfile: company)
+        let vc = CompanyDetailsVC(viewModel: vm)
+        navController.pushViewController(vc, animated: true)
     }
     
     func showWebPage(with url: URL) {

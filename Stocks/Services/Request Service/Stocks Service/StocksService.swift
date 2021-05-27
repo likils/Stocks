@@ -12,6 +12,8 @@ protocol StocksService {
     func searchCompany(with symbol: String, completion: @escaping ([Company]) -> Void)
     func getCompanyProfile(for company: Company, completion: @escaping (CompanyProfile) -> Void)
     func getQuotes(for company: CompanyProfile, completion: @escaping (CompanyQuotes?) -> Void)
+    func getCandles(for company: CompanyProfile, withTimeline timeline: CompanyCandles.TimeLine, completion: @escaping (CompanyCandles) -> Void)
+    
 }
 
 class StocksServiceImpl: StocksService {
@@ -93,5 +95,29 @@ class StocksServiceImpl: StocksService {
         task.resume()
     }
     
+    func getCandles(for company: CompanyProfile, withTimeline timeline: CompanyCandles.TimeLine, completion: @escaping (CompanyCandles) -> Void) {
+        let query = ["symbol": company.ticker].merging(timeline.query) { current, _ in current }
+        let url = URL(string: baseUrlString + "/stock/candle?")?.withQueries(query)
+        
+        baseUrlRequest.url = url
+        
+        let task = URLSession.shared.dataTask(with: baseUrlRequest) { data, response, error in
+            if let data = data {
+                do {
+                    let candles = try JSONDecoder().decode(CompanyCandles.self, from: data)
+                    completion(candles)
+                } catch let error {
+                    print("\n::: JSONDecoder CompanyCandles error:\n\(error.localizedDescription)")
+                }
+            }
+            if let response = response as? HTTPURLResponse, response.statusCode != 200 {
+                print("\n::: Received Candles response statusCode: \(response.statusCode) for company: \(company.name)(\(company.ticker)).\n\(response.description)") 
+            }
+            if let error = error {
+                print("\n::: Received Candles error:\n\(error.localizedDescription)")
+            }
+        }
+        task.resume()
+    }
     
 }
