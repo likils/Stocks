@@ -22,12 +22,6 @@ class NewsCategoryCollectionViewCell: UICollectionViewCell {
     }()
     
     // MARK: - Public properties
-    var text = "" {
-        didSet {
-            categoryLabel.text = text
-        }
-    }
-    
     override var isSelected: Bool {
         didSet {
             isSelected ? selectCell() : deselectCell()
@@ -42,6 +36,10 @@ class NewsCategoryCollectionViewCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    // MARK: - Public methods
+    func setText(_ text: String) {
+        categoryLabel.text = text
     }
     
     // MARK: - Private methods

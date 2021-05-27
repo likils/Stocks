@@ -45,7 +45,10 @@ class StocksCoordinator: StocksCoordination {
     
     // MARK: - Public methods
     func start() {
-        let vm = StocksVM(coordinator: self, stocksService: stocksService, webSocketService: webSocketService, cacheService: cacheService)
+        let vm = StocksVM(coordinator: self,
+                          stocksService: stocksService,
+                          webSocketService: webSocketService,
+                          cacheService: cacheService)
         let vc = StocksVC(viewModel: vm)
         navController.viewControllers = [vc]
     }

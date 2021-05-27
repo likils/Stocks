@@ -18,7 +18,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     private(set) var watchlist = [CompanyProfile]() { didSet { save() } }
     
     //MARK: - Private properties
-    private let coordinator: StocksCoordination?
+    private let coordinator: StocksCoordination
     private let stocksService: StocksService
     private let webSocketService: WebSocketService
     private let cacheService: CacheService
@@ -27,7 +27,11 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     private var tradesTimer: Timer?
     
     // MARK: - Init
-    init(coordinator: StocksCoordination, stocksService: StocksService, webSocketService: WebSocketService, cacheService: CacheService) {
+    init(coordinator: StocksCoordination,
+         stocksService: StocksService,
+         webSocketService: WebSocketService,
+         cacheService: CacheService) {
+        
         self.coordinator = coordinator
         self.stocksService = stocksService
         self.webSocketService = webSocketService
@@ -112,7 +116,9 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
     
-    func fetchLogo(from url: URL, withSize size: Double, for indexPath: IndexPath) {
+    func fetchLogo(withSize size: Double, for indexPath: IndexPath) {
+        guard let url = watchlist[indexPath.row].logoUrl else { return }
+        
         cacheService.fetchImage(from: url, withSize: size) { [weak self] image in
             DispatchQueue.main.async {
                 self?.view?.showLogo(image, at: indexPath)

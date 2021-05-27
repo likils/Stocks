@@ -120,7 +120,7 @@ extension SearchCompanyVC {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 1 {
             let company = self.viewModel.externalSearchResults[indexPath.row]
-            let alertVC = UIAlertController(title: "Add \(company.description)?", message: nil, preferredStyle: .alert)
+            let alertVC = UIAlertController(title: "Add to Watchlist?", message: "\"\(company.description.capitalized)\"", preferredStyle: .alert)
             let action = UIAlertAction(title: "Yes", style: .default) { _ in
                 self.viewModel.updateSearchList(at: indexPath.row)
                 

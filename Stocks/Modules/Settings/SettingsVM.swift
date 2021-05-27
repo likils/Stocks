@@ -13,7 +13,7 @@ class SettingsVM: SettingsViewModel {
     let cells: [SettingCell]
     
     // MARK: - Private properties
-    private weak var coordinator: SettingsCoordination?
+    private let coordinator: SettingsCoordination
     
     // MARK: - Init
     init(coordinator: SettingsCoordination) {
@@ -26,7 +26,7 @@ class SettingsVM: SettingsViewModel {
     func cellTapped(_ cell: SettingCell) {
         switch cell {
             case .logout(_):
-                coordinator?.didFinishClosure?()   
+                coordinator.didFinishClosure?()   
         }
     }
     

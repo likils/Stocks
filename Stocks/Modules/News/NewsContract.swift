@@ -14,8 +14,8 @@ protocol NewsViewModel: AnyObject {
     var newsCategories: [News.Category] { get }
     
     func getNews(category: News.Category)
-    func fetchImage(from url: URL, withSize size: Double, for indexPath: IndexPath)
-    func cellTapped(with url: URL?)
+    func fetchImage(withSize size: Double, for indexPath: IndexPath)
+    func cellTapped(at index: Int)
     
 }
 

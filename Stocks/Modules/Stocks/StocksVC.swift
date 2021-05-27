@@ -105,10 +105,8 @@ extension StocksVC {
             let company = viewModel.watchlist[indexPath.row]
             cell.companyProfile = company
             
-            if let logoUrl = company.logoUrl {
-                let maxLogoSize = Double(cell.bounds.height)
-                viewModel.fetchLogo(from: logoUrl, withSize: maxLogoSize, for: indexPath) 
-            }
+            let maxLogoSize = Double(cell.bounds.height)
+            viewModel.fetchLogo(withSize: maxLogoSize, for: indexPath)
             
             if let quotes = company.companyQuotes, quotes.date.isRelevant {
                 cell.companyQuotes = quotes
