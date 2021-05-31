@@ -29,7 +29,6 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
     
     // MARK: - Private properties
     private var webSocketTask: URLSessionWebSocketTask!
-    private var pingTimer: DispatchSourceTimer?
     
     // MARK: - Public methods
     func openConnection() {
@@ -97,23 +96,25 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
             if let error = error {
                 print("Ping error: \(error.localizedDescription)")
             } else {
-                print("{ ping }")
-                
-                self.pingTimer?.schedule(deadline: .now() + 10)
-                self.pingTimer?.activate()
+                print("{ping}")
             }
         }
     }
     
     private func fetchTradesFrom(data: Data) -> [OnlineTrade] {
         var onlineTrades = [OnlineTrade]()
-        
-        if let trades = try? JSONDecoder().decode(OnlineTrades.self, from: data) {
+        do {
+            let trades = try JSONDecoder().decode(OnlineTrades.self, from: data) 
             
             trades.data.forEach { trade in
                 if !onlineTrades.contains(trade) {
                     onlineTrades.append(trade)
                 }
+            }
+        } catch {
+            if let text = String(data: data, encoding: .utf8) {
+                print("Received \(text)")
+                ping()
             }
         }
         
@@ -129,17 +130,12 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
         }
         initialCompanies.removeAll()
         
-        pingTimer = DispatchSource.makeTimerSource()
-        pingTimer?.setEventHandler { self.ping() }
-        
         ping()
         receive()
     }
     
     func urlSession(_ session: URLSession, webSocketTask: URLSessionWebSocketTask, didCloseWith closeCode: URLSessionWebSocketTask.CloseCode, reason: Data?) {
         print("Web Socket did disconnect")
-        pingTimer?.cancel()
-        pingTimer = nil
     }
     
 }
