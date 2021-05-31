@@ -41,24 +41,16 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: - Public methods
     
+    func close() {
+        coordinator.didFinishClosure?()
+    }
+    
     // MARK: Company details
     func getCandles(withTimeline timeline: CompanyCandles.TimeLine) {
         stocksService.getCandles(for: companyProfile, withTimeline: timeline) { candles in
-            print(candles.openPrices.count)
-            print(candles.closePrices.count)
-            print(candles.highPrices.count)
-            print(candles.lowPrices.count)
-            print(candles.timestamps.count)
-            
-            let formatter = DateFormatter()
-            formatter.dateStyle = .medium
-            formatter.timeStyle = .medium
-            formatter.timeZone = .current
-            
-            let fromDate = Date(timeIntervalSince1970: candles.timestamps.first!)
-            let toDate = Date(timeIntervalSince1970: candles.timestamps.last!)
-            print(formatter.string(from: fromDate))
-            print(formatter.string(from: toDate))
+            DispatchQueue.main.async {
+                self.view?.updateGraph(data: candles)
+            }
         }
     }
     

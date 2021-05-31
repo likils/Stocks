@@ -62,6 +62,11 @@ class StocksCoordinator: StocksCoordination {
                                   cacheService: cacheService,
                                   companyProfile: company)
         let vc = CompanyDetailsVC(viewModel: vm)
+        
+        didFinishClosure = {
+            self.navController.popViewController(animated: true)
+        }
+        
         navController.pushViewController(vc, animated: true)
     }
     

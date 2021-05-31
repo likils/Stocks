@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CompanyDetailsVC: UITableViewController, CompanyDetailsView {
+class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellActionsDelegate {
     
     // MARK: - Dimensions
     static private let inset: CGFloat = 16
@@ -36,10 +36,10 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "\(company.name)"
-        
+        setupNavBar()
         setupTableView()
-        viewModel.getCandles(withTimeline: .day(by: .minutes_5))
+        
+        viewModel.getCandles(withTimeline: .week(by: .minutes_30))
         viewModel.getNews()
         viewModel.fetchLogo()
     }
@@ -54,10 +54,19 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView {
         viewModel.onlineUpdateEnd()
     }
     
+    // MARK: - Actions
+    @objc func close() {
+        viewModel.close()
+    }
+    
+    @objc func cellButtonTapped(_ sender: UIButton) {
+        print(sender.tag)
+    }
+    
     // MARK: - Public methods
     func updateGraph(data: CompanyCandles) {
-//        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
-        
+        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
+        cell.updateGraph(withData: data)
     }
     
     func updateQuotes() {
@@ -80,6 +89,24 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView {
     }
     
     // MARK: - Private methods
+    private func setupNavBar() {
+        navigationItem.largeTitleDisplayMode = .never
+        let label = UILabel()
+        label.numberOfLines = 2
+        label.textAlignment = .center
+        let text1 = NSMutableAttributedString(string: company.ticker, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
+        let text2 = NSAttributedString(string: "\n\(company.name)", attributes: [.font : UIFont.systemFont(ofSize: 14, weight: .semibold),
+                                                                                 .foregroundColor: UIColor.Text.secondaryColor])
+        text1.append(text2)
+        label.attributedText = text1
+        navigationItem.titleView = label
+        
+        let backButton = UIButton()
+        backButton.setImage(UIImage(named: "arrow"), for: .normal)
+        backButton.addTarget(self, action: #selector(close), for: .touchUpInside)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+    }
+    
     private func setupTableView() {
         tableView.backgroundColor = .View.backgroundColor
         tableView.separatorStyle = .none
@@ -107,6 +134,7 @@ extension CompanyDetailsVC {
            let cell = tableView.dequeueReusableCell(withIdentifier: CompanyDetailsTableViewCell.identifier, for: indexPath) as? CompanyDetailsTableViewCell {
             cell.companyProfile = company
             cell.companyQuotes = company.companyQuotes
+            cell.delegate = self
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)

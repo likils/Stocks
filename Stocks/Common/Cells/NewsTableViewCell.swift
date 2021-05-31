@@ -110,18 +110,18 @@ class NewsTableViewCell: UITableViewCell {
             dateLabel.trailingAnchor.constraint(lessThanOrEqualTo: backView.trailingAnchor, constant: -8),
             
             headlineLabel.topAnchor.constraint(equalTo: sourceLabel.bottomAnchor, constant: 8),
-            headlineLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
+            headlineLabel.leadingAnchor.constraint(equalTo: sourceLabel.leadingAnchor),
             headlineLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
             
             summaryLabel.topAnchor.constraint(equalTo: headlineLabel.bottomAnchor, constant: 8),
-            summaryLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
-            summaryLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
+            summaryLabel.leadingAnchor.constraint(equalTo: headlineLabel.leadingAnchor),
+            summaryLabel.trailingAnchor.constraint(equalTo: headlineLabel.trailingAnchor),
             
             thumbnailImageView.topAnchor.constraint(equalTo: summaryLabel.bottomAnchor, constant: 8),
-            thumbnailImageView.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
-            thumbnailImageView.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
+            thumbnailImageView.leadingAnchor.constraint(equalTo: summaryLabel.leadingAnchor),
+            thumbnailImageView.trailingAnchor.constraint(equalTo: summaryLabel.trailingAnchor),
             thumbnailImageView.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -16),
-            thumbnailImageView.heightAnchor.constraint(equalToConstant: 167)
+            thumbnailImageView.heightAnchor.constraint(equalTo: thumbnailImageView.widthAnchor, multiplier: 0.5)
         ])
     }
     

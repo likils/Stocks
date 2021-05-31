@@ -23,7 +23,7 @@ extension UIColor {
             UIColor(rgb: 0x303040)
         }
         
-        static var selectedControlColor: UIColor {
+        static var defaultAppColor: UIColor {
             UIColor(rgb: 0x8D75F2)
         }
         

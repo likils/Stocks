@@ -14,9 +14,10 @@ protocol CompanyDetailsViewModel: AnyObject {
     var news: [News] { get }
     
     func getCandles(withTimeline timeline: CompanyCandles.TimeLine)
+    func fetchLogo()
+    func close()
     func onlineUpdateBegin()
     func onlineUpdateEnd()
-    func fetchLogo()
     
     func getNews()
     func fetchImage(withSize size: Double, for indexPath: IndexPath)
@@ -31,5 +32,12 @@ protocol CompanyDetailsView: AnyObject {
     func showNews()
     func showImage(_ image: UIImage, at indexPath: IndexPath)
     func showLogo(_ logo: UIImage)
+    
+}
+
+@objc
+protocol CompanyCellActionsDelegate: AnyObject {
+    
+    func cellButtonTapped(_ sender: UIButton)
     
 }

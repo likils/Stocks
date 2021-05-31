@@ -16,7 +16,7 @@ class StocksTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 12
+        imageView.layer.cornerRadius = 20
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -123,26 +123,26 @@ class StocksTableViewCell: UITableViewCell {
             backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -4),
-            backView.heightAnchor.constraint(equalToConstant: 56),
+            backView.heightAnchor.constraint(equalToConstant: 64),
             
-            logo.topAnchor.constraint(equalTo: backView.topAnchor, constant: 8),
-            logo.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 8),
-            logo.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -8),
+            logo.centerYAnchor.constraint(equalTo: backView.centerYAnchor),
+            logo.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
+            logo.heightAnchor.constraint(equalToConstant: 40),
             logo.heightAnchor.constraint(equalTo: logo.widthAnchor),
             
-            symbolLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 8),
+            symbolLabel.topAnchor.constraint(equalTo: logo.topAnchor),
             symbolLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 8),
             
-            companyLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 8),
-            companyLabel.bottomAnchor.constraint(equalTo: backView.bottomAnchor, constant: -8),
+            companyLabel.leadingAnchor.constraint(equalTo: symbolLabel.leadingAnchor),
+            companyLabel.bottomAnchor.constraint(equalTo: logo.bottomAnchor),
             
-            stockPriceLabel.centerYAnchor.constraint(equalTo: symbolLabel.centerYAnchor),
+            stockPriceLabel.topAnchor.constraint(equalTo: symbolLabel.topAnchor),
             stockPriceLabel.leadingAnchor.constraint(greaterThanOrEqualTo: symbolLabel.trailingAnchor, constant: 16),
             stockPriceLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
             
-            priceChangeLabel.centerYAnchor.constraint(equalTo: companyLabel.centerYAnchor),
             priceChangeLabel.leadingAnchor.constraint(greaterThanOrEqualTo: companyLabel.trailingAnchor, constant: 16),
-            priceChangeLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16)
+            priceChangeLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
+            priceChangeLabel.bottomAnchor.constraint(equalTo: companyLabel.bottomAnchor)
         ])
     }
 

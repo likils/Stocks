@@ -46,8 +46,8 @@ class NewsCategoryCollectionViewCell: UICollectionViewCell {
     private func selectCell() {
         categoryLabel.textColor = .white
         
-        backView.animationBeginColor = .View.selectedControlColor
-        backView.animationEndColor = .View.selectedControlColor
+        backView.animationBeginColor = .View.defaultAppColor
+        backView.animationEndColor = .View.defaultAppColor
         backView.pressedScale = 1
         backView.animate()
     }
