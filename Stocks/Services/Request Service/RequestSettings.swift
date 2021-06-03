@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RequestSettings {
+enum RequestSettings {
     
     static let baseUrlString = "https://finnhub.io/api/v1"
     static let baseUrlRequest: URLRequest = {

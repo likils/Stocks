@@ -83,6 +83,9 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                 stocksService.getCompanyProfile(for: company) { [weak self] profile in
                     if let self = self {
                         
+                        var profile = profile
+                        profile.inWatchlist = true
+                        
                         self.watchlist.append(profile)
                         self.companyIndexInWatchlist[profile.ticker] = self.watchlist.count-1
                         

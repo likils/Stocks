@@ -12,6 +12,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     // MARK: - Public properties
     weak var view: CompanyDetailsView?
     private(set) var companyProfile: CompanyProfile
+    private(set) var initTimeline: CompanyCandles.TimeLine = .day
     private(set) var news = [News]()
     
     //MARK: - Private properties
@@ -41,19 +42,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: - Public methods
     
-    func close() {
-        coordinator.didFinishClosure?()
-    }
-    
     // MARK: Company details
-    func getCandles(withTimeline timeline: CompanyCandles.TimeLine) {
-        stocksService.getCandles(for: companyProfile, withTimeline: timeline) { candles in
-            DispatchQueue.main.async {
-                self.view?.updateGraph(data: candles)
-            }
-        }
-    }
-    
     func fetchLogo() {
         guard let url = companyProfile.logoUrl else { return }
         
@@ -62,6 +51,24 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
                 self?.view?.showLogo(image)
             }
         }
+    }
+    
+    func getCandles(withTimeline timeline: CompanyCandles.TimeLine) {
+        initTimeline = timeline
+        stocksService.getCandles(for: companyProfile, withTimeline: timeline) { candles in
+            DispatchQueue.main.async {
+                self.view?.updateValues(by: candles, and: timeline)
+            }
+        }
+    }
+    
+    func updateWatchlist() {
+        companyProfile.inWatchlist = !companyProfile.inWatchlist
+    }
+    
+    func close() {
+        // update watchlist
+        coordinator.didFinishClosure?()
     }
     
     func onlineUpdateBegin() {
@@ -111,8 +118,5 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         let url = news[index].sourceUrl
         coordinator.showWebPage(with: url)
     }
-    
-    // MARK: - Private methods
-    
     
 }

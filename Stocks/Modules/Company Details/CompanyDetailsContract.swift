@@ -11,13 +11,15 @@ protocol CompanyDetailsViewModel: AnyObject {
     
     var view: CompanyDetailsView? { get set }
     var companyProfile: CompanyProfile { get }
+    var initTimeline: CompanyCandles.TimeLine { get }
     var news: [News] { get }
     
     func getCandles(withTimeline timeline: CompanyCandles.TimeLine)
     func fetchLogo()
-    func close()
     func onlineUpdateBegin()
     func onlineUpdateEnd()
+    func updateWatchlist()
+    func close()
     
     func getNews()
     func fetchImage(withSize size: Double, for indexPath: IndexPath)
@@ -27,7 +29,7 @@ protocol CompanyDetailsViewModel: AnyObject {
 
 protocol CompanyDetailsView: AnyObject {
     
-    func updateGraph(data: CompanyCandles)
+    func updateValues(by candles: CompanyCandles, and timeline: CompanyCandles.TimeLine)
     func updateQuotes()
     func showNews()
     func showImage(_ image: UIImage, at indexPath: IndexPath)
@@ -35,9 +37,9 @@ protocol CompanyDetailsView: AnyObject {
     
 }
 
-@objc
-protocol CompanyCellActionsDelegate: AnyObject {
+protocol CompanyDetailsCellDelegate: AnyObject {
     
-    func cellButtonTapped(_ sender: UIButton)
+    func updateWatchlist()
+    func updateTimeline(_ timeline: CompanyCandles.TimeLine)
     
 }

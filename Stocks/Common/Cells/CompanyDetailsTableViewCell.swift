@@ -14,7 +14,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
-        imageView.layer.cornerRadius = 20
+        imageView.layer.cornerRadius = CompanyDetailsTableViewCell.largeHeight / 2
         imageView.layer.backgroundColor = UIColor.View.backgroundColor.cgColor
         imageView.clipsToBounds = true
         return imageView
@@ -24,9 +24,6 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setBackgroundImage(UIImage(named: "circle"), for: .normal)
-        button.setImage(UIImage(named: "star"), for: .normal)
-        
-        button.tag = 42
         return button
     }()
     
@@ -34,8 +31,6 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
-        label.textAlignment = .right
-        label.layer.cornerRadius = 4
         return label
     }()
     
@@ -44,26 +39,23 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
         label.textColor = .Text.secondaryColor
-        label.numberOfLines = 2
+        return label
+    }()
+    
+    private let priceChangeLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 14, weight: .medium)
         return label
     }()
     
     private let backView = CellBackgroundView()
     private let graphView = GraphView()
     
-    private let priceChangeLabel: UILabel = {
-        let label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .right
-        return label
-    }()
-    
     private let minPriceLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .left
         return label
     }()
     
@@ -71,33 +63,57 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textAlignment = .left
         return label
     }()
     
     private var timelineButton: UIButton {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
         button.setTitleColor(.Text.secondaryColor, for: .normal)
-        button.setTitleColor(.black, for: .selected)
-        button.setBackgroundImage(UIImage(named: "oval"), for: .selected)
+        button.addTarget(self, action: #selector(timelineButtonTapped), for: .touchUpInside)
         return button
     }
     
-    // MARK: - Public properties
-    weak var delegate: CompanyCellActionsDelegate?
+    private lazy var timelineStack: UIStackView = {
+        let items = CompanyCandles.TimeLine.allCases
+        let stack = UIStackView()
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.alignment = .fill
+        stack.distribution = .fillEqually
+        stack.spacing = Self.largeSpace
+        items.forEach {
+            let button = timelineButton
+            button.setTitle($0.rawValue, for: .normal)
+            stack.addArrangedSubview(button)
+        }
+        return stack
+    }()
     
-    var companyProfile: CompanyProfile! {
+    // MARK: - Dimensions
+    static private let smallSpace: CGFloat = 8
+    static private let standartSpace: CGFloat = 16
+    static private let largeSpace: CGFloat = 24
+    static private let standartHeight: CGFloat = 20
+    static private let largeHeight: CGFloat = 40
+    
+    // MARK: - Private properties
+    private var currencyLogo = ""
+    
+    // MARK: - Public properties
+    weak var delegate: CompanyDetailsCellDelegate?
+    
+    var inWatchlist = false {
         didSet {
-            companyProfile.companyQuotes = nil
-            exchangeLabel.text = companyProfile.exchange
+            toggleWatchlistButton()
         }
     }
     
     var companyQuotes: CompanyQuotes? {
         didSet {
-            if companyQuotes?.currentPrice != oldValue?.currentPrice {
-                updateQuotes()
+            if companyQuotes?.currentPrice != oldValue?.currentPrice,
+               let quotes = companyQuotes {
+                stockPriceLabel.text = quotes.currentPrice.roundForText + " " + currencyLogo
             }
         }
     }
@@ -106,11 +122,26 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
-        setupButtons()
+        watchlistButton.addTarget(self, action: #selector(watchlistButtonTapped), for: .touchUpInside)
+        setTimelineButtonSelected(by: .day)
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Actions
+    @objc func watchlistButtonTapped() {
+        delegate?.updateWatchlist()
+        inWatchlist.toggle()
+    }
+    
+    @objc func timelineButtonTapped(sender: UIButton) {
+        if let title = sender.currentTitle,
+           let timeLine = CompanyCandles.TimeLine(rawValue: title) {
+            delegate?.updateTimeline(timeLine)
+            setTimelineButtonSelected(by: timeLine)
+        }
     }
     
     // MARK: - Public methods
@@ -118,38 +149,70 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         logo.image = image
     }
     
-    func updateGraph(withData data: CompanyCandles) {
-        graphView.candles = data
+    func updateCompanyDetails(by company: CompanyProfile) {
+        currencyLogo = company.currencyLogo
+        exchangeLabel.text = company.exchange
+        inWatchlist = company.inWatchlist
+    }
+    
+    func updateValues(by candles: CompanyCandles, and timeline: CompanyCandles.TimeLine) {
+        guard let firstPrice = candles.openPrices.first else { return }
         
-        let min = NSMutableAttributedString(string: "Min ")
-        let minPriceText = NSAttributedString(string: graphView.minPrice!.roundForText, attributes: [.foregroundColor: UIColor.Text.negativePriceColor])
+        graphView.candles = candles
+        updatePriceDifference(with: firstPrice, in: timeline)
+        updateMinAndMaxLabels(with: graphView.minPrice, and: graphView.maxPrice)
+    }
+    
+    // MARK: - Private methods
+    private func setTimelineButtonSelected(by timeline: CompanyCandles.TimeLine) {
+        timelineStack.arrangedSubviews.forEach {
+            guard let button = $0 as? UIButton else { return }
+            if button.currentTitle == timeline.rawValue {
+                button.setTitleColor(.black, for: .normal)
+                button.setBackgroundImage(UIImage(named: "oval"), for: .normal)
+            } else {
+                button.setTitleColor(.Text.secondaryColor, for: .normal)
+                button.setBackgroundImage(nil, for: .normal)
+            }
+        }
+    }
+
+    private func updatePriceDifference(with firstPrice: Double, in timeline: CompanyCandles.TimeLine) {
+        guard let currentPrice = companyQuotes?.currentPrice else { return }
+        
+        let text = NSMutableAttributedString(string: "Last \(timeline.title): ")
+        
+        let priceDiff = currentPrice - firstPrice
+        let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
+        let diffPercentText = abs((priceDiff * 100) / firstPrice).roundForText + "%"
+        let priceText = diffText + " " + currencyLogo + " (" + diffPercentText + ")"
+        let priceColor: UIColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
+        let attributedPrice = NSAttributedString(string: priceText, attributes: [.foregroundColor: priceColor])
+        
+        text.append(attributedPrice)
+        priceChangeLabel.attributedText = text
+    }
+    
+    private func updateMinAndMaxLabels(with minPrice: Double, and maxPrice: Double) {
+        let attributes: [NSAttributedString.Key : Any] = [.foregroundColor: UIColor.Text.secondaryColor]
+        
+        let min = NSMutableAttributedString(string: "Min | ", attributes: attributes)
+        let max = NSMutableAttributedString(string: "Max | ", attributes: attributes)
+        
+        let minPriceText = NSAttributedString(string: minPrice.roundForText + " " + currencyLogo,
+                                              attributes: [.foregroundColor: UIColor.Text.negativePriceColor])
+        let maxPriceText = NSAttributedString(string: maxPrice.roundForText + " " + currencyLogo,
+                                              attributes: [.foregroundColor: UIColor.Text.positivePriceColor])
         min.append(minPriceText)
-        
-        let max = NSMutableAttributedString(string: "Max ")
-        let maxPriceText = NSAttributedString(string: graphView.maxPrice!.roundForText, attributes: [.foregroundColor: UIColor.Text.positivePriceColor])
         max.append(maxPriceText)
         
         minPriceLabel.attributedText = min
         maxPriceLabel.attributedText = max
     }
-
-    // MARK: - Private methods
-    private func updateQuotes() {
-        guard let quotes = companyQuotes else { return }
-        
-        let priceDiff = quotes.currentPrice - quotes.previousClosePrice
-        let priceDiffPercent = abs((priceDiff * 100) / quotes.previousClosePrice)
-        
-        let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
-        
-        priceChangeLabel.textColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
-        
-        stockPriceLabel.text = quotes.currentPrice.roundForText + " " + companyProfile.currencyLogo
-        priceChangeLabel.text = "\(diffText) \(companyProfile.currencyLogo) (\(priceDiffPercent.roundForText)%)"
-    }
     
-    private func setupButtons() {
-        watchlistButton.addTarget(delegate, action: #selector(delegate?.cellButtonTapped), for: .touchUpInside)
+    private func toggleWatchlistButton() {
+        let pictureName = inWatchlist ? "filledStar" : "star"
+        watchlistButton.setImage(UIImage(named: pictureName), for: .normal)
     }
     
     private func setupView() {
@@ -158,50 +221,59 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         contentView.backgroundColor = .clear
         
         contentView.addSubview(logo)
+        contentView.addSubview(watchlistButton)
         contentView.addSubview(stockPriceLabel)
         contentView.addSubview(exchangeLabel)
-        contentView.addSubview(watchlistButton)
+        contentView.addSubview(priceChangeLabel)
+        contentView.addSubview(timelineStack)
         
         contentView.addSubview(backView)
         backView.addSubview(minPriceLabel)
         backView.addSubview(maxPriceLabel)
-        backView.addSubview(priceChangeLabel)
         backView.addSubview(graphView)
         
         NSLayoutConstraint.activate([
-            logo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16),
-            logo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            logo.heightAnchor.constraint(equalToConstant: 40),
+            logo.topAnchor.constraint(equalTo: contentView.topAnchor, constant: Self.standartSpace),
+            logo.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: Self.standartSpace),
+            logo.heightAnchor.constraint(equalToConstant: Self.largeHeight),
             logo.heightAnchor.constraint(equalTo: logo.widthAnchor),
             
-            stockPriceLabel.topAnchor.constraint(equalTo: logo.topAnchor),
-            stockPriceLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 8),
+            watchlistButton.topAnchor.constraint(equalTo: logo.topAnchor),
+            watchlistButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -Self.standartSpace),
             
-            exchangeLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: 8),
+            stockPriceLabel.topAnchor.constraint(equalTo: logo.topAnchor),
+            stockPriceLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: Self.smallSpace),
+            
+            exchangeLabel.leadingAnchor.constraint(equalTo: logo.trailingAnchor, constant: Self.smallSpace),
             exchangeLabel.bottomAnchor.constraint(equalTo: logo.bottomAnchor),
             
-            watchlistButton.topAnchor.constraint(equalTo: logo.topAnchor),
-            watchlistButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
+            priceChangeLabel.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: Self.standartSpace),
+            priceChangeLabel.leadingAnchor.constraint(equalTo: logo.leadingAnchor),
+            priceChangeLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: Self.standartHeight),
             
-            backView.topAnchor.constraint(equalTo: logo.bottomAnchor, constant: 16),
-            backView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16),
-            backView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16),
-            backView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16),
+            backView.topAnchor.constraint(equalTo: priceChangeLabel.bottomAnchor, constant: Self.smallSpace),
+            backView.leadingAnchor.constraint(equalTo: logo.leadingAnchor),
+            backView.trailingAnchor.constraint(equalTo: watchlistButton.trailingAnchor),
             
-            minPriceLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 16),
-            minPriceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: 16),
+            minPriceLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: Self.standartSpace),
+            minPriceLabel.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: Self.standartSpace),
+            minPriceLabel.heightAnchor.constraint(equalTo: priceChangeLabel.heightAnchor),
             
             maxPriceLabel.topAnchor.constraint(equalTo: minPriceLabel.topAnchor),
-            maxPriceLabel.leadingAnchor.constraint(equalTo: minPriceLabel.trailingAnchor, constant: 16),
+            maxPriceLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -Self.standartSpace),
+            maxPriceLabel.heightAnchor.constraint(equalTo: minPriceLabel.heightAnchor),
             
-            priceChangeLabel.topAnchor.constraint(equalTo: backView.topAnchor, constant: 16),
-            priceChangeLabel.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -16),
-            
-            graphView.topAnchor.constraint(equalTo: priceChangeLabel.bottomAnchor, constant: 8),
+            graphView.topAnchor.constraint(equalTo: minPriceLabel.bottomAnchor, constant: Self.smallSpace),
             graphView.leadingAnchor.constraint(equalTo: backView.leadingAnchor),
             graphView.trailingAnchor.constraint(equalTo: backView.trailingAnchor),
             graphView.bottomAnchor.constraint(equalTo: backView.bottomAnchor),
-            graphView.heightAnchor.constraint(equalTo: graphView.widthAnchor , multiplier: 0.5)
+            graphView.heightAnchor.constraint(equalTo: graphView.widthAnchor , multiplier: 0.5),
+            
+            timelineStack.topAnchor.constraint(equalTo: backView.bottomAnchor, constant: Self.smallSpace),
+            timelineStack.leadingAnchor.constraint(equalTo: backView.leadingAnchor, constant: Self.smallSpace),
+            timelineStack.trailingAnchor.constraint(equalTo: backView.trailingAnchor, constant: -Self.smallSpace),
+            timelineStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            timelineStack.heightAnchor.constraint(equalToConstant: Self.standartHeight)
         ])
     }
 }

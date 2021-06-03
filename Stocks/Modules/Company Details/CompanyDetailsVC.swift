@@ -7,11 +7,26 @@
 
 import UIKit
 
-class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellActionsDelegate {
+class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetailsCellDelegate {
+    
+    private let newsHeaderLabel: UIView = {
+        let view = UIView()
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 22, weight: .bold)
+        label.text = "Company News"
+        view.addSubview(label)
+        NSLayoutConstraint.activate([
+            label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            label.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
+        return view
+    }()
     
     // MARK: - Dimensions
     static private let inset: CGFloat = 16
-    static private let tableContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: inset, right: 0)
+    static private let tableContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: -inset, right: 0)
+    static private let headerHeight: CGFloat = 48
     
     // MARK: - Private properties
     private let viewModel: CompanyDetailsViewModel
@@ -25,7 +40,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellAc
     // MARK: - Init
     init(viewModel: CompanyDetailsViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init(style: .grouped)
         viewModel.view = self
     }
     
@@ -39,13 +54,13 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellAc
         setupNavBar()
         setupTableView()
         
-        viewModel.getCandles(withTimeline: .week(by: .minutes_30))
         viewModel.getNews()
         viewModel.fetchLogo()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateTimeline(viewModel.initTimeline)
         viewModel.onlineUpdateBegin()
     }
     
@@ -59,14 +74,21 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellAc
         viewModel.close()
     }
     
-    @objc func cellButtonTapped(_ sender: UIButton) {
-        print(sender.tag)
+    // MARK: - Public methods
+    
+    // MARK: Company details cell delegate
+    func updateWatchlist() {
+        viewModel.updateWatchlist()
     }
     
-    // MARK: - Public methods
-    func updateGraph(data: CompanyCandles) {
+    func updateTimeline(_ timeline: CompanyCandles.TimeLine) {
+        viewModel.getCandles(withTimeline: timeline)
+    }
+    
+    // MARK: Detail View
+    func updateValues(by candles: CompanyCandles, and timeline: CompanyCandles.TimeLine) {
         guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
-        cell.updateGraph(withData: data)
+        cell.updateValues(by: candles, and: timeline)
     }
     
     func updateQuotes() {
@@ -74,6 +96,12 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellAc
         cell.companyQuotes = company.companyQuotes
     }
     
+    func showLogo(_ logo: UIImage) {
+        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
+        cell.setLogo(logo)
+    }
+    
+    // MARK: News
     func showNews() {
         tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
@@ -83,14 +111,8 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellAc
         cell.setImage(image)
     }
     
-    func showLogo(_ logo: UIImage) {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
-        cell.setLogo(logo)
-    }
-    
     // MARK: - Private methods
     private func setupNavBar() {
-        navigationItem.largeTitleDisplayMode = .never
         let label = UILabel()
         label.numberOfLines = 2
         label.textAlignment = .center
@@ -99,12 +121,14 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyCellAc
                                                                                  .foregroundColor: UIColor.Text.secondaryColor])
         text1.append(text2)
         label.attributedText = text1
-        navigationItem.titleView = label
         
         let backButton = UIButton()
         backButton.setImage(UIImage(named: "arrow"), for: .normal)
         backButton.addTarget(self, action: #selector(close), for: .touchUpInside)
+        
+        navigationItem.titleView = label
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: backButton)
+        navigationItem.largeTitleDisplayMode = .never
     }
     
     private func setupTableView() {
@@ -124,6 +148,14 @@ extension CompanyDetailsVC {
     override func numberOfSections(in tableView: UITableView) -> Int {
         2
     }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        section == 0 ? 0 : Self.headerHeight
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        section == 0 ? nil : newsHeaderLabel
+    }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         section == 0 ? 1 : news.count
@@ -132,7 +164,7 @@ extension CompanyDetailsVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0,
            let cell = tableView.dequeueReusableCell(withIdentifier: CompanyDetailsTableViewCell.identifier, for: indexPath) as? CompanyDetailsTableViewCell {
-            cell.companyProfile = company
+            cell.updateCompanyDetails(by: company)
             cell.companyQuotes = company.companyQuotes
             cell.delegate = self
             return cell

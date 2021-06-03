@@ -9,7 +9,7 @@ import UIKit
 
 extension UIColor {
     // MARK: - Color Scheme
-    struct View {
+    enum View {
         
         static var pressButtonColor: UIColor {
             UIColor(rgb: 0xF1F1F1)
@@ -29,7 +29,7 @@ extension UIColor {
         
     }
     
-    struct Text {
+    enum Text {
         
         static var primaryColor: UIColor {
             UIColor(rgb: 0x373737)

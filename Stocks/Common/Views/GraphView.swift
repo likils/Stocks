@@ -12,23 +12,19 @@ class GraphView: UIView {
     // MARK: - Public properties
     var candles: CompanyCandles! {
         didSet {
-            minPrice = candles.lowPrices.min()
-            maxPrice = candles.highPrices.max()
-            averagePrices = candles.highPrices.enumerated().map { index, highPrice in
-                (highPrice + candles.lowPrices[index]) / 2
-            }
-            
+            minPrice = candles.lowPrices.min() ?? 0
+            maxPrice = candles.highPrices.max() ?? 0
             setNeedsDisplay()
         }
     }
-    
-    private(set) var minPrice: Double?
-    private(set) var maxPrice: Double?
+    private(set) var minPrice: Double = 0
+    private(set) var maxPrice: Double = 0
     
     // MARK: - Private properties
-    private var averagePrices = [Double]()
+    private var maxAveragePrice: Double = 0
+    
     private let graphColor = UIColor.View.defaultAppColor
-    private let cornerRadius = 16
+    private let viewCornerRadius = 16
     
     // MARK: - Init
     init() {
@@ -42,7 +38,7 @@ class GraphView: UIView {
     
     // MARK: - Drawing
     override func draw(_ rect: CGRect) {
-        guard candles != nil, candles.responseStatus == "ok" else { return }
+        guard candles != nil else { return }
         
         clipCorners(in: rect)
         let graphPath = drawGraph(in: rect)
@@ -56,19 +52,30 @@ class GraphView: UIView {
         backgroundColor = .clear
     }
     
+    private func clipCorners(in rect: CGRect) {
+        let cornerPath = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: .allCorners,
+            cornerRadii: CGSize(width: viewCornerRadius, height: viewCornerRadius)
+        )
+        cornerPath.addClip()
+    }
+    
     private func drawGraph(in rect: CGRect) -> UIBezierPath {
         let path = UIBezierPath()
-        var xPoint = rect.minX
-        let xStep = rect.maxX / CGFloat(averagePrices.count - 1)
+        var averagePricePoints = candles.highPrices.enumerated().map { ($1 + candles.lowPrices[$0]) / 2 }
+        maxAveragePrice = averagePricePoints.max() ?? 0
         
-        averagePrices.forEach {
-            let yPoint = yPoint($0, in: rect)
-            if $0 == averagePrices.first {
-                path.move(to: CGPoint(x: xPoint, y: yPoint))
-            } else {
-                xPoint += xStep
-                path.addLine(to: CGPoint(x: xPoint, y: yPoint))
-            }
+        let xStep = rect.maxX / CGFloat(averagePricePoints.count - 1)
+        
+        var xPoint = rect.minX
+        var yPoint = calculateYPoint(averagePricePoints.removeFirst(), in: rect) // remove first point cause it's a start point
+        path.move(to: CGPoint(x: xPoint, y: yPoint))
+        
+        averagePricePoints.forEach {
+            xPoint += xStep
+            yPoint = calculateYPoint($0, in: rect)
+            path.addLine(to: CGPoint(x: xPoint, y: yPoint))
         }
         
         graphColor.setStroke()
@@ -78,20 +85,17 @@ class GraphView: UIView {
         return path
     }
     
-    private func yPoint(_ point: Double, in rect: CGRect) -> CGFloat {
-        let diff = maxPrice! - point
-        let divisor = (maxPrice! - minPrice!) / diff
-        let yPoint = rect.maxY / CGFloat(divisor)
-        return yPoint
-    }
-    
-    private func clipCorners(in rect: CGRect) {
-        let cornerPath = UIBezierPath(
-            roundedRect: rect,
-            byRoundingCorners: .allCorners,
-            cornerRadii: CGSize(width: cornerRadius, height: cornerRadius)
-        )
-        cornerPath.addClip()
+    private func calculateYPoint(_ point: Double, in rect: CGRect) -> CGFloat {
+        if point == minPrice {
+            return rect.maxY
+        } else if point == maxPrice {
+            return rect.minY
+        } else {
+            let diff = maxPrice - point
+            let divisor = (maxPrice - minPrice) / diff
+            let yPoint = rect.maxY / CGFloat(divisor)
+            return yPoint
+        }
     }
     
     private func clipGradient(in rect: CGRect, withPath path: UIBezierPath) {
@@ -116,7 +120,7 @@ class GraphView: UIView {
                 locations: colorLocations)
         else { return }
         
-        let startYPoint = yPoint(averagePrices.max()!, in: rect)
+        let startYPoint = calculateYPoint(maxAveragePrice, in: rect)
         
         let graphStartPoint = CGPoint(x: rect.minX, y: startYPoint)
         let graphEndPoint = CGPoint(x: rect.minX, y: rect.maxY)

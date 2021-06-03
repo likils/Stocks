@@ -7,44 +7,64 @@
 
 import Foundation
 
-struct CompanyCandles: Decodable, CustomStringConvertible {
+struct CompanyCandles: Decodable {
     
     // MARK: - Candles query
-    enum TimeLine {
-        case day(by: Resolution)
-        case week(by: Resolution)
-        case month(by: Resolution)
-        case year(by: Resolution)
+    enum TimeLine: String, CaseIterable, RawRepresentable {
+        case day = "D"
+        case week = "W"
+        case month = "M"
+        case year = "Y"
+        case all = "ALL"
         
         var query: [String: String] {
             let pastDate: Date
-            let resolution: String
+            let resolution: Resolution
             
             switch self {
-                case .day(let res):
-                    resolution = res.rawValue
-                    pastDate = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
-                case .week(let res):
-                    resolution = res.rawValue
+                case .day:
+                    resolution = .minute
+                    pastDate = Calendar.current.startOfDay(for: Date())
+                case .week:
+                    resolution = .minutes_15
                     pastDate = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-                case .month(let res):
-                    resolution = res.rawValue
+                case .month:
+                    resolution = .minutes_60
                     pastDate = Calendar.current.date(byAdding: .month, value: -1, to: Date())!
-                case .year(let res):
-                    resolution = res.rawValue
+                case .year:
+                    resolution = .day
                     pastDate = Calendar.current.date(byAdding: .year, value: -1, to: Date())!
+                case .all:
+                    resolution = .month
+                    pastDate = Calendar.current.date(byAdding: .year, value: -10, to: Date())!
             }
             
             // convert to UNIX timestamp
             let past = Int(pastDate.timeIntervalSince1970)
             let current = Int(Date().timeIntervalSince1970)
             
-            return ["resolution": resolution,
+            return ["resolution": resolution.rawValue,
                     "from": String(past),
                     "to": String(current)]
         }
         
-        enum Resolution: String {
+        /// Title for text
+        var title: String {
+            switch self {
+                case .day:
+                    return "day"
+                case .week:
+                    return "week"
+                case .month:
+                    return "month"
+                case .year:
+                    return "year"
+                case .all:
+                    return "10 years"
+            }
+        }
+        
+        private enum Resolution: String {
             case minute = "1"
             case minutes_5 = "5"
             case minutes_15 = "15"
@@ -64,17 +84,6 @@ struct CompanyCandles: Decodable, CustomStringConvertible {
     let timestamps: [Double]
     let volumeData: [Double]
     let responseStatus: String
-    
-    var description: String {
-        """
-        open: \(openPrices)
-        high: \(highPrices)
-        low: \(lowPrices)
-        close: \(closePrices)
-        time: \(timestamps)
-        volume: \(volumeData)
-        """
-    }
     
     // MARK: - JSON Decoding
     enum CodingKeys: String, CodingKey {
