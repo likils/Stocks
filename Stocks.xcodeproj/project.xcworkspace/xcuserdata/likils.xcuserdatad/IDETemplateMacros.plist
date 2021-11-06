@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>DEVELOPER_FULLNAME</key>
+	<string></string>
+	<key>DEVELOPER_EMAIL</key>
+	<string></string>
+	<key>FILEHEADER</key>
+	<string> ----------------------------------------------------------------------------
+//
+//  ___FILENAME___
+//
+//  @likils &lt;likils@icloud.com&gt;
+//  Copyright (c) ___YEAR___. All rights reserved.
+//
+// ----------------------------------------------------------------------------</string>
+</dict>
+</plist>

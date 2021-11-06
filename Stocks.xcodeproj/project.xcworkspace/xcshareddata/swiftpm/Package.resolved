@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "CodableWrappers",
+        "repositoryURL": "https://github.com/GottaGetSwifty/CodableWrappers.git",
+        "state": {
+          "branch": null,
+          "revision": "c145ef4938ae5da91e6434ad1a0d55af940702fe",
+          "version": "2.0.6"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
