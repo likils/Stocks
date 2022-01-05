@@ -12,7 +12,7 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-public struct Timestamp: StaticCoder {
+public enum Timestamp: StaticCoder {
 
 // MARK: - Methods
 

@@ -12,7 +12,7 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-public struct URLTransform: StaticCoder {
+public enum URLTransform: StaticCoder {
 
 // MARK: - Methods
 
