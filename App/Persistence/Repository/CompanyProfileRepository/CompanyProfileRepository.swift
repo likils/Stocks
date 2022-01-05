@@ -19,11 +19,15 @@ public protocol CompanyProfileRepository: AnyObject {
 
     func getCompanyProfilesPublusher() async -> AnyPublisher<[CompanyProfileModel], Never>
 
-    func putCompanyProfile(_ companyProfile: CompanyProfileModel) async
+    func putCompanyProfile(_ companyProfile: CompanyProfileModel)
 
-    func moveCompanyProfile(_ companyProfile: CompanyProfileModel, to newIndex: Int) async
+    func moveCompanyProfile(_ companyProfile: CompanyProfileModel, to newIndex: Int)
 
-    func removeCompanyProfile(_ companyProfile: CompanyProfileModel) async
+    func moveCompanyProfile(from index: Int, to newIndex: Int)
 
-    func removeAll() async
+    func removeCompanyProfile(_ companyProfile: CompanyProfileModel)
+
+    func removeCompanyProfile(atIndex index: Int)
+
+    func removeAll()
 }

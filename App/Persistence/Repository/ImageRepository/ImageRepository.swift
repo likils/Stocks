@@ -17,10 +17,10 @@ public protocol ImageRepository: AnyObject {
 
     func getImage(forKey: URL) async -> UIImage?
 
-    func putImage(_ image: UIImage, forKey: URL) async
+    func putImage(_ image: UIImage, forKey: URL)
 
     @discardableResult
     func removeImage(forKey: URL) async -> UIImage?
 
-    func removeAll() async
+    func removeAll()
 }

@@ -16,16 +16,20 @@ protocol CacheService {
 class CacheServiceImpl: CacheService {
     
     // MARK: - Private properties
-    private var nsCache = NSCache<NSURL, UIImage>()
+    private let imageRepository: ImageRepository = {
+        let cacheStorage = CacheStorage<URL, UIImage>()
+        let cacheImageRepository = ImageRepositoryImpl(storage: cacheStorage.eraseToAnyStorage())
+        return cacheImageRepository
+    }()
     
     // MARK: - Public Methods
     func fetchImage(from url: URL, withSize size: Double, completion: @escaping (UIImage) -> Void) {
-        if let image = nsCache.object(forKey: url as NSURL) {
-            completion(image)
-        } else {
-            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-                if let image = self?.downsampleImage(at: url, with: CGFloat(size)) {
-                    self?.nsCache.setObject(image, forKey: url as NSURL)
+        Task {
+            if let image = await imageRepository.getImage(forKey: url) {
+                completion(image)
+            } else {
+                if let image = downsampleImage(at: url, with: CGFloat(size)) {
+                    imageRepository.putImage(image, forKey: url)
                     completion(image)
                 }
             }

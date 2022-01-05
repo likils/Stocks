@@ -29,15 +29,19 @@ final class ImageRepositoryImpl: ImageRepository {
         await storage.get(forKey: key)
     }
 
-    func putImage(_ image: UIImage, forKey key: URL) async {
-        await storage.put(image, forKey: key)
+    func putImage(_ image: UIImage, forKey key: URL) {
+        Task {
+            await storage.put(image, forKey: key)
+        }
     }
 
     func removeImage(forKey key: URL) async -> UIImage? {
         await storage.remove(forKey: key)
     }
 
-    func removeAll() async {
-        await storage.removeAll()
+    func removeAll() {
+        Task {
+            await storage.removeAll()
+        }
     }
 }

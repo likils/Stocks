@@ -5,6 +5,7 @@
 //  Created by likils on 01.05.2021.
 //
 
+import Combine
 import Foundation
 
 class StocksVM: StocksViewModel, SearchCompanyViewModel {
@@ -15,7 +16,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     private(set) var internalSearchResults = [CompanyModel]()
     
     weak var view: StocksView?
-    private(set) var watchlist = [CompanyProfileViewModel]() { didSet { save() } }
+    private(set) var watchlist = [CompanyProfileViewModel]()
     
     //MARK: - Private properties
     private let coordinator: StocksCoordination
@@ -25,6 +26,14 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     
     private var companyIndexInWatchlist = [String: Int]()
     private var tradesTimer: Timer?
+
+    private let companyProfileRepository: CompanyProfileRepository = {
+        let storage = DocumentDirectoryStorage<String, [CompanyProfileModel]>(documentName: "\(CompanyProfileRepository.self)")
+        let repository = CompanyProfileRepositoryImpl(storage: storage.eraseToAnyStorage())
+        return repository
+    }()
+
+    private var companyProfilesSubscriber: AnyCancellable?
     
     // MARK: - Construction
     init(coordinator: StocksCoordination,
@@ -37,7 +46,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         self.webSocketService = webSocketService
         self.cacheService = cacheService
         
-        load()
+        subscribeToCompanyProfileChanges()
     }
     
     // MARK: - Public Methods
@@ -80,10 +89,10 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                 let company = externalSearchResults.remove(at: index)
                 internalSearchResults.append(company)
                 
-                stocksService.getCompanyProfile(for: company.ticker) { [weak self] profile in
+                stocksService.getCompanyProfile(for: company.ticker) { [weak self] companyProfile in
                     if let self = self {
                         
-                        let profile = CompanyProfileViewModel(companyProfile: profile, inWatchlist: true)
+                        let profile = CompanyProfileViewModel(companyProfile: companyProfile, inWatchlist: true)
                         
                         self.watchlist.append(profile)
                         self.companyIndexInWatchlist[profile.ticker] = self.watchlist.count-1
@@ -93,6 +102,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                         }
                         
                         self.webSocketService.subscribeTo(companyTicker: profile.ticker)
+                        self.companyProfileRepository.putCompanyProfile(companyProfile)
                     }
                 }
 
@@ -105,6 +115,8 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                     companyIndexInWatchlist[profile.ticker] = index
                 }
                 view?.updateWatchlist(at: index, to: nil, with: action)
+
+                companyProfileRepository.removeCompanyProfile(atIndex: index)
                 
             case .move:
                 guard let newIndex = newIndex else { return }
@@ -115,6 +127,8 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                     companyIndexInWatchlist[profile.ticker] = index
                 }
                 view?.updateWatchlist(at: index, to: newIndex, with: action)
+
+                companyProfileRepository.moveCompanyProfile(from: index, to: newIndex)
         }
     }
     
@@ -179,28 +193,22 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
     
-    // MARK: - Saving for app tests
-    
-    private var url: URL? {
-        try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false).appendingPathComponent("watchlist.json")
-    }
-    
-    private func save() {
-        if let data = try? JSONEncoder().encode(watchlist), let url = url {
-            try? data.write(to: url)
+    private func subscribeToCompanyProfileChanges() {
+        Task {
+            companyProfilesSubscriber = await companyProfileRepository
+                .getCompanyProfilesPublusher()
+                .sink { [weak self] in self?.updateWatchlist(with: $0) }
         }
     }
-    
-    private func load() {
-        if let url = url,
-           let data = try? Data(contentsOf: url), 
-           let watchlist = try? JSONDecoder().decode([CompanyProfileViewModel].self, from: data) {
-            
-            self.watchlist = watchlist
-            watchlist.enumerated().forEach { index, company in
-                companyIndexInWatchlist[company.ticker] = index
-            }
+
+    private func updateWatchlist(with companyProfiles: [CompanyProfileModel]) {
+
+        watchlist = companyProfiles.map {
+            CompanyProfileViewModel(companyProfile: $0, inWatchlist: true)
+        }
+
+        watchlist.enumerated().forEach { index, company in
+            companyIndexInWatchlist[company.ticker] = index
         }
     }
-    
 }

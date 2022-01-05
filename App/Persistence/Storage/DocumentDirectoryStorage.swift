@@ -15,13 +15,13 @@ actor DocumentDirectoryStorage<Key: Hashable, Value>: Storage where Key: Codable
 
 // MARK: - Construction
 
-    init(directoryName: String) {
-        self.directoryName = directoryName
+    init(documentName: String) {
+        self.documentName = documentName
     }
 
 // MARK: - Private Properties
 
-    private let directoryName: String
+    private let documentName: String
     private lazy var temporaryStorage: [Key: Value] = loadFromDocumentDirectory()
     private nonisolated lazy var anyStorage = AnyStorage(storage: self)
 
@@ -68,7 +68,7 @@ actor DocumentDirectoryStorage<Key: Hashable, Value>: Storage where Key: Codable
             appropriateFor: nil,
             create: false
         )
-        .appendingPathComponent("\(directoryName)")
+        .appendingPathComponent("\(documentName)")
         .appendingPathExtension("json")
     }
 

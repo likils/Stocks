@@ -33,39 +33,67 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
 
     func getCompanyProfilesPublusher() async -> AnyPublisher<[CompanyProfileModel], Never> {
 
-        let companies = await getCompanyProfiles()
-        companyProfilesPublisher.value = companies
+        let companyProfiles = await getCompanyProfiles()
+        companyProfilesPublisher.value = companyProfiles
 
         return companyProfilesPublisher.eraseToAnyPublisher()
     }
 
-    func putCompanyProfile(_ company: CompanyProfileModel) async {
+    func putCompanyProfile(_ companyProfile: CompanyProfileModel) {
+        Task {
+            var companyProfiles = await getCompanyProfiles()
+            companyProfiles.append(companyProfile)
 
-        var companies = await getCompanyProfiles()
-        companies.append(company)
-
-        await storage.put(companies, forKey: storageKey)
-        companyProfilesPublisher.value = companies
+            await updateStorage(with: companyProfiles)
+        }
     }
 
-    func moveCompanyProfile(_ company: CompanyProfileModel, to newIndex: Int) async {
+    func moveCompanyProfile(_ companyProfile: CompanyProfileModel, to newIndex: Int) {
+        Task {
+            var companyProfiles = await getCompanyProfiles().filter { companyProfile.ticker != $0.ticker }
+            companyProfiles.insert(companyProfile, at: newIndex)
 
-        var companies = await getCompanyProfiles().filter { company.ticker != $0.ticker }
-        companies.insert(company, at: newIndex)
-
-        await storage.put(companies, forKey: storageKey)
-        companyProfilesPublisher.value = companies
+            await updateStorage(with: companyProfiles)
+        }
     }
 
-    func removeCompanyProfile(_ company: CompanyProfileModel) async {
-        let companies = await getCompanyProfiles().filter { company.ticker != $0.ticker }
+    func moveCompanyProfile(from index: Int, to newIndex: Int) {
+        Task {
+            var companyProfiles = await getCompanyProfiles()
 
-        await storage.put(companies, forKey: storageKey)
-        companyProfilesPublisher.value = companies
+            let companyProfile = companyProfiles.remove(at: index)
+            companyProfiles.insert(companyProfile, at: newIndex)
+
+            await updateStorage(with: companyProfiles)
+        }
     }
 
-    func removeAll() async {
-        await storage.removeAll()
-        companyProfilesPublisher.value = []
+    func removeCompanyProfile(_ companyProfile: CompanyProfileModel) {
+        Task {
+            let companyProfiles = await getCompanyProfiles().filter { companyProfile.ticker != $0.ticker }
+            await updateStorage(with: companyProfiles)
+        }
+    }
+
+    func removeCompanyProfile(atIndex index: Int) {
+        Task {
+            var companyProfiles = await getCompanyProfiles()
+            companyProfiles.remove(at: index)
+            await updateStorage(with: companyProfiles)
+        }
+    }
+
+    func removeAll() {
+        Task {
+            await storage.removeAll()
+            companyProfilesPublisher.value = []
+        }
+    }
+
+// MARK: - Private Methods
+
+    private func updateStorage(with companyProfiles: [CompanyProfileModel]) async {
+        await storage.put(companyProfiles, forKey: storageKey)
+        companyProfilesPublisher.value = companyProfiles
     }
 }
