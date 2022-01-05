@@ -30,6 +30,14 @@
 		B26005E2265D487A00F814D7 /* CandlesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26005E1265D487A00F814D7 /* CandlesModel.swift */; };
 		B26005E6265E7F0000F814D7 /* CompanyDetailsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26005E5265E7F0000F814D7 /* CompanyDetailsTableViewCell.swift */; };
 		B26005E8265FB01100F814D7 /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26005E7265FB01100F814D7 /* GraphView.swift */; };
+		B264960E278498220067CCAC /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264960D278498220067CCAC /* Storage.swift */; };
+		B264961027849DB20067CCAC /* AnyStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264960F27849DB20067CCAC /* AnyStorage.swift */; };
+		B26496122784AD2C0067CCAC /* CacheStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496112784AD2C0067CCAC /* CacheStorage.swift */; };
+		B26496152784C2910067CCAC /* ImageRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496142784C2910067CCAC /* ImageRepositoryImpl.swift */; };
+		B2649618278593430067CCAC /* ImageRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2649617278593430067CCAC /* ImageRepository.swift */; };
+		B264961C2785D08C0067CCAC /* DocumentDirectoryStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264961B2785D08C0067CCAC /* DocumentDirectoryStorage.swift */; };
+		B264961F2785E7420067CCAC /* CompanyProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264961E2785E7420067CCAC /* CompanyProfileRepository.swift */; };
+		B26496212785E8A00067CCAC /* CompanyProfileRepositoryImpl.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496202785E8A00067CCAC /* CompanyProfileRepositoryImpl.swift */; };
 		B271C81C2654F83500012308 /* SearchCompanyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271C81B2654F83500012308 /* SearchCompanyVC.swift */; };
 		B27AF9792736C5EB000AACE0 /* OnlineTradesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AF9782736C5EB000AACE0 /* OnlineTradesModel.swift */; };
 		B27AF97B2736CB1F000AACE0 /* NewsType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AF97A2736CB1F000AACE0 /* NewsType.swift */; };
@@ -99,6 +107,14 @@
 		B26005E1265D487A00F814D7 /* CandlesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlesModel.swift; sourceTree = "<group>"; };
 		B26005E5265E7F0000F814D7 /* CompanyDetailsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyDetailsTableViewCell.swift; sourceTree = "<group>"; };
 		B26005E7265FB01100F814D7 /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
+		B264960D278498220067CCAC /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
+		B264960F27849DB20067CCAC /* AnyStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyStorage.swift; sourceTree = "<group>"; };
+		B26496112784AD2C0067CCAC /* CacheStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheStorage.swift; sourceTree = "<group>"; };
+		B26496142784C2910067CCAC /* ImageRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepositoryImpl.swift; sourceTree = "<group>"; };
+		B2649617278593430067CCAC /* ImageRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRepository.swift; sourceTree = "<group>"; };
+		B264961B2785D08C0067CCAC /* DocumentDirectoryStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DocumentDirectoryStorage.swift; sourceTree = "<group>"; };
+		B264961E2785E7420067CCAC /* CompanyProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileRepository.swift; sourceTree = "<group>"; };
+		B26496202785E8A00067CCAC /* CompanyProfileRepositoryImpl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileRepositoryImpl.swift; sourceTree = "<group>"; };
 		B271C81B2654F83500012308 /* SearchCompanyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompanyVC.swift; sourceTree = "<group>"; };
 		B27AF9782736C5EB000AACE0 /* OnlineTradesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradesModel.swift; sourceTree = "<group>"; };
 		B27AF97A2736CB1F000AACE0 /* NewsType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsType.swift; sourceTree = "<group>"; };
@@ -291,6 +307,53 @@
 			path = CompanyDetails;
 			sourceTree = "<group>";
 		};
+		B264960B278497CA0067CCAC /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				B26496132784BD460067CCAC /* Repository */,
+				B264960C2784980A0067CCAC /* Storage */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		B264960C2784980A0067CCAC /* Storage */ = {
+			isa = PBXGroup;
+			children = (
+				B264960D278498220067CCAC /* Storage.swift */,
+				B264960F27849DB20067CCAC /* AnyStorage.swift */,
+				B26496112784AD2C0067CCAC /* CacheStorage.swift */,
+				B264961B2785D08C0067CCAC /* DocumentDirectoryStorage.swift */,
+			);
+			path = Storage;
+			sourceTree = "<group>";
+		};
+		B26496132784BD460067CCAC /* Repository */ = {
+			isa = PBXGroup;
+			children = (
+				B2649616278593230067CCAC /* ImageRepository */,
+				B264961D2785E71C0067CCAC /* CompanyProfileRepository */,
+			);
+			path = Repository;
+			sourceTree = "<group>";
+		};
+		B2649616278593230067CCAC /* ImageRepository */ = {
+			isa = PBXGroup;
+			children = (
+				B2649617278593430067CCAC /* ImageRepository.swift */,
+				B26496142784C2910067CCAC /* ImageRepositoryImpl.swift */,
+			);
+			path = ImageRepository;
+			sourceTree = "<group>";
+		};
+		B264961D2785E71C0067CCAC /* CompanyProfileRepository */ = {
+			isa = PBXGroup;
+			children = (
+				B264961E2785E7420067CCAC /* CompanyProfileRepository.swift */,
+				B26496202785E8A00067CCAC /* CompanyProfileRepositoryImpl.swift */,
+			);
+			path = CompanyProfileRepository;
+			sourceTree = "<group>";
+		};
 		B2802B2C2624487C00B6AADA /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -465,6 +528,7 @@
 				B2BFBFB82636BF4A004F40B0 /* Coordination */,
 				B28230FE27353DFE004CA0B9 /* UI */,
 				B2802B2C2624487C00B6AADA /* Services */,
+				B264960B278497CA0067CCAC /* Persistence */,
 				B28230FF27353F0A004CA0B9 /* Models */,
 			);
 			path = App;
@@ -545,6 +609,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B264961027849DB20067CCAC /* AnyStorage.swift in Sources */,
 				B2C2EE092736718B00ED8BC1 /* CompanyProfileViewModel.swift in Sources */,
 				B2BFBFBB2636BF86004F40B0 /* Coordination.swift in Sources */,
 				B2A55B4F2636DAFC0036AB01 /* MainCoordinator.swift in Sources */,
@@ -560,6 +625,7 @@
 				B2B0D8752637F46800A59015 /* LoginVC.swift in Sources */,
 				B256DF26265BADE100870576 /* UICollectionViewCell+identifier.swift in Sources */,
 				B27AF97D2736F1AB000AACE0 /* URLTransform.swift in Sources */,
+				B26496212785E8A00067CCAC /* CompanyProfileRepositoryImpl.swift in Sources */,
 				B2A55B662636F3960036AB01 /* NewsVC.swift in Sources */,
 				B2802B2E26244E9600B6AADA /* NewsModel.swift in Sources */,
 				B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */,
@@ -585,20 +651,26 @@
 				B2B0D883263828A600A59015 /* SettingsVM.swift in Sources */,
 				B2C0AF00263B00EA00A7E8BA /* ServiceContainer.swift in Sources */,
 				B23D155C263D91DE0010AB57 /* StocksContract.swift in Sources */,
+				B264961F2785E7420067CCAC /* CompanyProfileRepository.swift in Sources */,
+				B264960E278498220067CCAC /* Storage.swift in Sources */,
 				B23D1566263DA7EB0010AB57 /* CompanyQuotesModel.swift in Sources */,
 				B2B0D87B2637F56400A59015 /* LoginContract.swift in Sources */,
 				B2968D9526569BEB009AA143 /* OnlineTradeModel.swift in Sources */,
+				B2649618278593430067CCAC /* ImageRepository.swift in Sources */,
 				B2A55B622636F37A0036AB01 /* NewsVM.swift in Sources */,
 				B2DEC14D26209D3600C13589 /* AppDelegate.swift in Sources */,
+				B264961C2785D08C0067CCAC /* DocumentDirectoryStorage.swift in Sources */,
 				B256DF24265BAD8200870576 /* NewsCategoryCollectionViewCell.swift in Sources */,
 				B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */,
 				B22D09C8263C2CDA0032380F /* SocialButton.swift in Sources */,
 				B23D1560263D92400010AB57 /* StocksVC.swift in Sources */,
 				B2A55B5A2636ECB40036AB01 /* SettingsCoordinator.swift in Sources */,
 				B23D1568263FF3580010AB57 /* CompanyModel.swift in Sources */,
+				B26496152784C2910067CCAC /* ImageRepositoryImpl.swift in Sources */,
 				B26005DC265D2D3900F814D7 /* CompanyDetailsContract.swift in Sources */,
 				B2C0AF02263B052A00A7E8BA /* NewsService.swift in Sources */,
 				B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */,
+				B26496122784AD2C0067CCAC /* CacheStorage.swift in Sources */,
 				B2B0D8782637F4DD00A59015 /* LoginVM.swift in Sources */,
 				B282310827357FB0004CA0B9 /* CompanyProfileModel.swift in Sources */,
 				B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */,
