@@ -19,9 +19,6 @@ protocol WebSocketService: AnyObject {
 }
 
 class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDelegate {
-    private enum MessageType: String {
-        case subscribe, unsubscribe
-    }
     
     // MARK: - Public properties
     var initialCompanies = [String]()
@@ -52,13 +49,13 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
     // MARK: - Private Methods
     private func createWebSocketTask() {
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
-        let url = URL(string: "wss://ws.finnhub.io?token=c1o6ggq37fkqrr9safcg")!
+        let url = RequestSettings.webSocketLink!
         webSocketTask = session.webSocketTask(with: url)
     }
     
-    private func request(type: MessageType, for companyTicker: String) {
-        let message = ["type": type.rawValue, "symbol": companyTicker]
-        guard let data = try? JSONEncoder().encode(message) else { return }
+    private func request(type: MessageType, for companySymbol: String) {
+        let requestModel = OnlineTradeRequestModel(companySymbol: companySymbol, messageType: type)
+        guard let data = try? JSONEncoder().encode(requestModel) else { return }
         
         webSocketTask.send(.data(data)) { error in
             if let error = error {

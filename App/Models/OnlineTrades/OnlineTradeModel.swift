@@ -11,9 +11,9 @@ public struct OnlineTradeModel: Codable {
 
 // MARK: - Properties
     
-    public var price: Double
+    public let price: Double
     
-    public var ticker: String
+    public let ticker: String
 
 // MARK: - Coding Keys
     

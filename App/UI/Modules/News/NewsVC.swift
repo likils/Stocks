@@ -49,7 +49,7 @@ class NewsVC: UITableViewController, NewsView {
     private var news: [NewsModel] {
         viewModel.news
     }
-    private var categories: [NewsType] {
+    private var categories: [LegacyNewsType] {
         viewModel.newsCategories
     }
     
@@ -193,7 +193,7 @@ extension NewsVC: UICollectionViewDelegateFlowLayout {
         Self.collectionCellSpacing
     }
 
-    private func cellWidthForCategory(_ category: NewsType) -> CGFloat {
+    private func cellWidthForCategory(_ category: LegacyNewsType) -> CGFloat {
         let cellWidth: CGFloat
 
         switch category {

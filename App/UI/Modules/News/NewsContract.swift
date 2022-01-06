@@ -11,9 +11,9 @@ protocol NewsViewModel: AnyObject {
     
     var view: NewsView? { get set }
     var news: [NewsModel] { get }
-    var newsCategories: [NewsType] { get }
+    var newsCategories: [LegacyNewsType] { get }
     
-    func getNews(category: NewsType)
+    func getNews(category: LegacyNewsType)
     func fetchImage(withSize size: Double, for indexPath: IndexPath)
     func cellTapped(at index: Int)
     
