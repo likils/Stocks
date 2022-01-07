@@ -11,5 +11,5 @@ public struct NewsRequestModel: Codable {
 
 // MARK: - Properties
 
-    let category: NewsType
+    let category: NewsCategory
 }

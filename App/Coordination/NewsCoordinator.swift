@@ -21,19 +21,17 @@ class NewsCoordinator: NewsCoordination {
     var didFinishClosure: (() -> ())?
     
     // MARK: - Private properties
-    private let newsService: NewsService
     private let cacheService: CacheService
     
     // MARK: - Construction
-    init(navController: UINavigationController, newsService: NewsService, cacheService: CacheService) {
+    init(navController: UINavigationController, cacheService: CacheService) {
         self.navController = navController
-        self.newsService = newsService
         self.cacheService = cacheService
     }
     
     // MARK: - Public Methods
     func start() {
-        let vm = NewsVM(coordinator: self, newsService: newsService, cacheService: cacheService)
+        let vm = NewsVM(coordinator: self, cacheService: cacheService)
         let vc = NewsVC(viewModel: vm)
         navController.viewControllers = [vc]
     }

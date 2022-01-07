@@ -49,12 +49,17 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
     // MARK: - Private Methods
     private func createWebSocketTask() {
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
-        let url = RequestSettings.webSocketLink!
-        webSocketTask = session.webSocketTask(with: url)
+
+        let requestModel = OnlineTradeRequestModel(token: RequestSettings.token)
+        let requestEntity = try! RequestEntity(requestModel: requestModel)
+        let requestProvider = WebSocketRequestProvider()
+        let request = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
+
+        webSocketTask = session.webSocketTask(with: request)
     }
     
     private func request(type: MessageType, for companySymbol: String) {
-        let requestModel = OnlineTradeRequestModel(companySymbol: companySymbol, messageType: type)
+        let requestModel = OnlineTradeMessageModel(companySymbol: companySymbol, messageType: type)
         guard let data = try? JSONEncoder().encode(requestModel) else { return }
         
         webSocketTask.send(.data(data)) { error in

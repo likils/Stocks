@@ -61,8 +61,8 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         guard !text.isEmpty else { return }
         
         watchlist.forEach {
-            if $0.name.lowercased().contains(text) || $0.ticker.lowercased().contains(text) {
-                internalSearchResults.append(CompanyModel(name: $0.name, ticker: $0.ticker))
+            if $0.name.lowercased().contains(text) || $0.tickerSymbol.lowercased().contains(text) {
+                internalSearchResults.append(CompanyModel(name: $0.name, ticker: $0.tickerSymbol))
             }
         }
         
@@ -95,24 +95,24 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                         let profile = CompanyProfileViewModel(companyProfile: companyProfile, inWatchlist: true)
                         
                         self.watchlist.append(profile)
-                        self.companyIndexInWatchlist[profile.ticker] = self.watchlist.count-1
+                        self.companyIndexInWatchlist[profile.tickerSymbol] = self.watchlist.count-1
                         
                         DispatchQueue.main.async {
                             self.view?.updateWatchlist(at: self.watchlist.count - 1, to: nil, with: action)
                         }
                         
-                        self.webSocketService.subscribeTo(companyTicker: profile.ticker)
+                        self.webSocketService.subscribeTo(companyTicker: profile.tickerSymbol)
                         self.companyProfileRepository.putCompanyProfile(companyProfile)
                     }
                 }
 
             case .delete:
                 let profile = watchlist.remove(at: index)
-                webSocketService.unsubscribeFrom(companyTicker: profile.ticker)
+                webSocketService.unsubscribeFrom(companyTicker: profile.tickerSymbol)
                 companyIndexInWatchlist.removeAll()
                 
                 watchlist.enumerated().forEach { index, profile in
-                    companyIndexInWatchlist[profile.ticker] = index
+                    companyIndexInWatchlist[profile.tickerSymbol] = index
                 }
                 view?.updateWatchlist(at: index, to: nil, with: action)
 
@@ -124,7 +124,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
                 watchlist.insert(profile, at: newIndex)
                 
                 watchlist.enumerated().forEach { index, profile in
-                    companyIndexInWatchlist[profile.ticker] = index
+                    companyIndexInWatchlist[profile.tickerSymbol] = index
                 }
                 view?.updateWatchlist(at: index, to: newIndex, with: action)
 
@@ -143,7 +143,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     }
     
     func fetchQuotes(for company: CompanyProfileViewModel, at indexPath: IndexPath) {
-        stocksService.getQuotes(for: company.ticker) { quotes in
+        stocksService.getQuotes(for: company.tickerSymbol) { quotes in
             guard let quotes = quotes else { return }
             
             DispatchQueue.main.async { [self] in
@@ -155,7 +155,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     }
     
     func onlineUpdateBegin() {
-        webSocketService.initialCompanies = watchlist.map { $0.ticker }
+        webSocketService.initialCompanies = watchlist.map { $0.tickerSymbol }
         webSocketService.openConnection()
         webSocketService.receivedData = { [weak self] trades in
             trades.forEach {
@@ -208,7 +208,7 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
 
         watchlist.enumerated().forEach { index, company in
-            companyIndexInWatchlist[company.ticker] = index
+            companyIndexInWatchlist[company.tickerSymbol] = index
         }
     }
 }

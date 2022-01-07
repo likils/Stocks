@@ -29,7 +29,7 @@ struct CompanyProfileViewModel: Codable {
 
     let name: String
 
-    let ticker: String
+    let tickerSymbol: String
 
     let websiteLink: URL
 
@@ -51,7 +51,7 @@ extension CompanyProfileViewModel {
             logoLink: companyProfile.logoLink,
             marketCapitalization: companyProfile.marketCapitalization,
             name: companyProfile.name,
-            ticker: companyProfile.ticker,
+            tickerSymbol: companyProfile.tickerSymbol,
             websiteLink: companyProfile.websiteLink,
             companyQuotes: nil,
             inWatchlist: inWatchlist
@@ -70,7 +70,7 @@ extension CompanyProfileViewModel {
             logoLink: self.logoLink,
             marketCapitalization: self.marketCapitalization,
             name: self.name,
-            ticker: self.ticker,
+            tickerSymbol: self.tickerSymbol,
             websiteLink: self.websiteLink,
             companyQuotes: companyQuotes,
             inWatchlist: self.inWatchlist

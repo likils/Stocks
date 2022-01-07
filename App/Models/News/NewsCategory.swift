@@ -1,14 +1,13 @@
 // ----------------------------------------------------------------------------
 //
-//  LegacyNewsType.swift
+//  NewsCategory.swift
 //
 //  @likils <likils@icloud.com>
-//  Copyright (c) 2021. All rights reserved.
+//  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
-public enum LegacyNewsType {
-    case company(ticker: String)
+public enum NewsCategory: String, Codable {
     case crypto
     case forex
     case general

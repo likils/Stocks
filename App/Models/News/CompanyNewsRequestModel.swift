@@ -16,7 +16,7 @@ public struct CompanyNewsRequestModel: Codable {
 
 // MARK: - Properties
 
-    public let companySymbol: String
+    public let tickerSymbol: String
 
     @Immutable @DateCoding
     public var fromDate: Date
@@ -27,7 +27,7 @@ public struct CompanyNewsRequestModel: Codable {
 // MARK: - Coding Keys
 
     private enum CodingKeys: String, CodingKey {
-        case companySymbol = "symbol"
+        case tickerSymbol = "symbol"
         case fromDate = "from"
         case toDate = "to"
     }

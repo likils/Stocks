@@ -22,7 +22,6 @@ class StocksCoordinator: StocksCoordination {
     var didFinishClosure: (() -> ())?
     
     // MARK: - Private properties
-    private let newsService: NewsService
     private let currencyService: CurrencyService
     private let cacheService: CacheService
     private let stocksService: StocksService
@@ -30,14 +29,12 @@ class StocksCoordinator: StocksCoordination {
     
     // MARK: - Construction
     init(navController: UINavigationController,
-         newsService: NewsService,
          currencyService: CurrencyService,
          cacheService: CacheService,
          stocksService: StocksService,
          webSocketService: WebSocketService) {
         
         self.navController = navController
-        self.newsService = newsService
         self.currencyService = currencyService
         self.cacheService = cacheService
         self.stocksService = stocksService
@@ -56,7 +53,6 @@ class StocksCoordinator: StocksCoordination {
     
     func showCompanyDetails(_ company: CompanyProfileViewModel) {
         let vm = CompanyDetailsVM(coordinator: self,
-                                  newsService: newsService,
                                   stocksService: stocksService,
                                   webSocketService: webSocketService,
                                   cacheService: cacheService,

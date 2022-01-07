@@ -1,15 +1,17 @@
 // ----------------------------------------------------------------------------
 //
-//  OnlineTradeRequestModel.swift
+//  RequestTask.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
-public struct OnlineTradeRequestModel: Codable {
+protocol RequestTask {
 
-// MARK: - Properties
+    associatedtype Value: Codable
 
-    let token: String
+// MARK: - Methods
+
+    func execute(with completion: @escaping RequestCompletion<Value>)
 }

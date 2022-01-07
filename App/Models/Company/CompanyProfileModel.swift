@@ -29,7 +29,7 @@ public struct CompanyProfileModel: Codable {
 
     public let name: String
 
-    public let ticker: String
+    public let tickerSymbol: String
 
     public let websiteLink: URL
 
@@ -43,7 +43,7 @@ public struct CompanyProfileModel: Codable {
         case logoLink = "logo"
         case marketCapitalization
         case name
-        case ticker
+        case tickerSymbol = "ticker"
         case websiteLink = "weburl"
     }
 }

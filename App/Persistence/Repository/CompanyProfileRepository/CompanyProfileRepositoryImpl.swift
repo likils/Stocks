@@ -50,7 +50,7 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
 
     func moveCompanyProfile(_ companyProfile: CompanyProfileModel, to newIndex: Int) {
         Task {
-            var companyProfiles = await getCompanyProfiles().filter { companyProfile.ticker != $0.ticker }
+            var companyProfiles = await getCompanyProfiles().filter { companyProfile.tickerSymbol != $0.tickerSymbol }
             companyProfiles.insert(companyProfile, at: newIndex)
 
             await updateStorage(with: companyProfiles)
@@ -70,7 +70,7 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
 
     func removeCompanyProfile(_ companyProfile: CompanyProfileModel) {
         Task {
-            let companyProfiles = await getCompanyProfiles().filter { companyProfile.ticker != $0.ticker }
+            let companyProfiles = await getCompanyProfiles().filter { companyProfile.tickerSymbol != $0.tickerSymbol }
             await updateStorage(with: companyProfiles)
         }
     }

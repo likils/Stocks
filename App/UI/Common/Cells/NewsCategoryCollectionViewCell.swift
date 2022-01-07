@@ -38,7 +38,7 @@ class NewsCategoryCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     // MARK: - Public Methods
-    func set(category: LegacyNewsType) {
+    func set(category: NewsCategory) {
         let text: String
 
         switch category {
@@ -50,8 +50,6 @@ class NewsCategoryCollectionViewCell: UICollectionViewCell {
                 text = "💰Crypto"
             case .merger:
                 text = "👔Merger"
-            case .company:
-                text = "Some Company"
         }
         
         categoryLabel.text = text

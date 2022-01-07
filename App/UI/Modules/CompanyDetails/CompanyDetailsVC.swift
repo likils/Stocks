@@ -116,7 +116,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         let label = UILabel()
         label.numberOfLines = 2
         label.textAlignment = .center
-        let text1 = NSMutableAttributedString(string: company.ticker, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
+        let text1 = NSMutableAttributedString(string: company.tickerSymbol, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
         let text2 = NSAttributedString(string: "\n\(company.name)", attributes: [.font : UIFont.systemFont(ofSize: 14, weight: .semibold),
                                                                                  .foregroundColor: UIColor.Text.secondaryColor])
         text1.append(text2)

@@ -23,13 +23,11 @@ class AppCoordinator {
         self.window = window
         
         let loginService = AppleLoginService()
-        let newsService = NewsServiceImpl()
         let stocksService = StocksServiceImpl()
         let webSocketService = WebSocketServiceImpl()
         let currencyService = CurrencyServiceImpl()
         let cacheService = CacheServiceImpl()
         serviceContainer = ServiceContainerImpl(loginService: loginService,
-                                                newsService: newsService,
                                                 stocksService: stocksService,
                                                 webSocketService: webSocketService,
                                                 currencyService: currencyService,

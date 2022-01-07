@@ -49,7 +49,7 @@ class NewsVC: UITableViewController, NewsView {
     private var news: [NewsModel] {
         viewModel.news
     }
-    private var categories: [LegacyNewsType] {
+    private var categories: [NewsCategory] {
         viewModel.newsCategories
     }
     
@@ -81,7 +81,7 @@ class NewsVC: UITableViewController, NewsView {
     @objc func refresh() {
         guard let index = collectionOfCategories.indexPathsForSelectedItems?.first?.row else { return }
         let category = categories[index]
-        viewModel.getNews(category: category)
+        viewModel.updateNews(with: category)
     }
     
     // MARK: - Public Methods
@@ -193,7 +193,7 @@ extension NewsVC: UICollectionViewDelegateFlowLayout {
         Self.collectionCellSpacing
     }
 
-    private func cellWidthForCategory(_ category: LegacyNewsType) -> CGFloat {
+    private func cellWidthForCategory(_ category: NewsCategory) -> CGFloat {
         let cellWidth: CGFloat
 
         switch category {
@@ -205,8 +205,6 @@ extension NewsVC: UICollectionViewDelegateFlowLayout {
                 cellWidth = 86
             case .merger:
                 cellWidth = 90
-            case .company:
-                cellWidth = 80
         }
 
         return cellWidth

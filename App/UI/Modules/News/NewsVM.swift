@@ -18,29 +18,23 @@ class NewsVM: NewsViewModel {
             }
         }
     }
-    private(set) var newsCategories: [LegacyNewsType]
+    private(set) var newsCategories: [NewsCategory]
     
     //MARK: - Private properties
     private let coordinator: NewsCoordination
-    private let newsService: NewsService
     private let cacheService: CacheService
     
     // MARK: - Construction
-    init(coordinator: NewsCoordination, newsService: NewsService, cacheService: CacheService) {
+    init(coordinator: NewsCoordination, cacheService: CacheService) {
         self.coordinator = coordinator
-        self.newsService = newsService
         self.cacheService = cacheService
-        self.newsCategories = [LegacyNewsType.general,
-                               LegacyNewsType.forex,
-                               LegacyNewsType.crypto,
-                               LegacyNewsType.merger]
+        self.newsCategories = [.general, .forex, .crypto, .merger]
     }
     
-    // MARK: - Public properties
-    func getNews(category: LegacyNewsType) {
-        newsService.getNews(category: category) { [weak self] news in
-            self?.news = news
-        }
+// MARK: - Public Methods
+
+    func updateNews(with category: NewsCategory) {
+        requestNews(with: category)
     }
     
     func fetchImage(withSize size: Double, for indexPath: IndexPath) {
@@ -57,5 +51,31 @@ class NewsVM: NewsViewModel {
         let url = news[index].sourceLink
         coordinator.showWebPage(with: url)
     }
-    
+
+// MARK: - Private Methods
+
+    private func requestNews(with category: NewsCategory) {
+        do {
+            try NewsRequestFactory
+                .createRequest(newsCategory: category)
+                .perform { [weak self] in self?.handleNewsResult($0) }
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func handleNewsResult(_ requestResult: RequestResult<[NewsModel]>) {
+        do {
+            news = try requestResult.get()
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func handleError(_ error: Error) {
+        // TODO: Negative scenario
+        print(error)
+    }
 }

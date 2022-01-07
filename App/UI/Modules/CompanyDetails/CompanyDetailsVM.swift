@@ -17,7 +17,6 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     //MARK: - Private properties
     private let coordinator: StocksCoordination
-    private let newsService: NewsService
     private let stocksService: StocksService
     private let webSocketService: WebSocketService
     private let cacheService: CacheService
@@ -26,13 +25,11 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: - Construction
     init(coordinator: StocksCoordination,
-         newsService: NewsService,
          stocksService: StocksService,
          webSocketService: WebSocketService,
          cacheService: CacheService,
          companyProfile: CompanyProfileViewModel) {
         
-        self.newsService = newsService
         self.coordinator = coordinator
         self.stocksService = stocksService
         self.webSocketService = webSocketService
@@ -55,7 +52,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     func getCandles(withTimeline timeline: CandlesTimelineType) {
         initTimeline = timeline
-        stocksService.getCandles(for: companyProfile.ticker, withTimeline: timeline) { candles in
+        stocksService.getCandles(for: companyProfile.tickerSymbol, withTimeline: timeline) { candles in
             DispatchQueue.main.async {
                 self.view?.updateValues(by: candles, and: timeline)
             }
@@ -72,7 +69,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     }
     
     func onlineUpdateBegin() {
-        webSocketService.initialCompanies = [companyProfile.ticker]
+        webSocketService.initialCompanies = [companyProfile.tickerSymbol]
         webSocketService.openConnection()
         webSocketService.receivedData = { [weak self] trades in
 
@@ -100,13 +97,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: Company news
     func getNews() {
-        newsService.getNews(category: .company(ticker: companyProfile.ticker)) { [weak self] news in
-            self?.news = news
-            
-            DispatchQueue.main.async {
-                self?.view?.showNews()
-            }
-        }
+        requestNews(withTickerSymbol: companyProfile.tickerSymbol, forPeriodInDays: 10)
     }
     
     func fetchImage(withSize size: Double, for indexPath: IndexPath) {
@@ -123,5 +114,35 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         let url = news[index].sourceLink
         coordinator.showWebPage(with: url)
     }
-    
+
+// MARK: - Private Methods
+
+    private func requestNews(withTickerSymbol tickerSymbol: String, forPeriodInDays periodInDays: Int) {
+        do {
+            try NewsRequestFactory
+                .createRequest(tickerSymbol: tickerSymbol, periodInDays: periodInDays)
+                .perform { [weak self] in self?.handleNewsResult($0) }
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func handleNewsResult(_ requestResult: RequestResult<[NewsModel]>) {
+        do {
+            news = try requestResult.get()
+
+            DispatchQueue.main.async {
+                self.view?.showNews()
+            }
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func handleError(_ error: Error) {
+        // TODO: Negative scenario
+        print(error)
+    }
 }

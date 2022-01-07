@@ -29,7 +29,6 @@ class MainCoordinator: Coordination {
         newsNC.tabBarItem.image = UIImage(systemName: "newspaper")
         newsNC.navigationBar.prefersLargeTitles = true
         newsCoordinator = NewsCoordinator(navController: newsNC,
-                                          newsService: serviceContainer.newsService,
                                           cacheService: serviceContainer.cacheService)
         
         let stocksNC = UINavigationController()
@@ -37,7 +36,6 @@ class MainCoordinator: Coordination {
         stocksNC.tabBarItem.image = UIImage(systemName: "briefcase")
         stocksNC.navigationBar.prefersLargeTitles = true
         stocksCoordinator = StocksCoordinator(navController: stocksNC,
-                                              newsService: serviceContainer.newsService,
                                               currencyService: serviceContainer.currencyService,
                                               cacheService: serviceContainer.cacheService,
                                               stocksService: serviceContainer.stocksService,
