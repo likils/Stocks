@@ -36,9 +36,7 @@ class MainCoordinator: Coordination {
         stocksNC.tabBarItem.image = UIImage(systemName: "briefcase")
         stocksNC.navigationBar.prefersLargeTitles = true
         stocksCoordinator = StocksCoordinator(navController: stocksNC,
-                                              currencyService: serviceContainer.currencyService,
                                               cacheService: serviceContainer.cacheService,
-                                              stocksService: serviceContainer.stocksService,
                                               webSocketService: serviceContainer.webSocketService)
         
         let settingsNC = UINavigationController()

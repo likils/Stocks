@@ -1,13 +1,13 @@
 // ----------------------------------------------------------------------------
 //
-//  CandlesModel.swift
+//  CompanyCandlesModel.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
-public struct CandlesModel: Decodable {
+public struct CompanyCandlesModel: Codable {
     
 // MARK: - Properties
 

@@ -76,7 +76,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     }
     
     private lazy var timelineStack: UIStackView = {
-        let items = CandlesTimelineType.allCases
+        let items = CompanyCandlesTimeline.allCases
         let stack = UIStackView()
         stack.translatesAutoresizingMaskIntoConstraints = false
         stack.alignment = .fill
@@ -138,7 +138,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     
     @objc func timelineButtonTapped(sender: UIButton) {
         if let title = sender.currentTitle,
-           let timeLine = CandlesTimelineType(rawValue: title) {
+           let timeLine = CompanyCandlesTimeline(rawValue: title) {
             delegate?.updateTimeline(timeLine)
             setTimelineButtonSelected(by: timeLine)
         }
@@ -155,7 +155,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         inWatchlist = company.inWatchlist
     }
     
-    func updateValues(by candles: CandlesModel, and timeline: CandlesTimelineType) {
+    func updateValues(by candles: CompanyCandlesModel, and timeline: CompanyCandlesTimeline) {
         guard let firstPrice = candles.openPrices.first else { return }
         
         graphView.candles = candles
@@ -164,7 +164,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     }
     
     // MARK: - Private Methods
-    private func setTimelineButtonSelected(by timeline: CandlesTimelineType) {
+    private func setTimelineButtonSelected(by timeline: CompanyCandlesTimeline) {
         timelineStack.arrangedSubviews.forEach {
             guard let button = $0 as? UIButton else { return }
             if button.currentTitle == timeline.rawValue {
@@ -177,7 +177,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         }
     }
 
-    private func updatePriceDifference(with firstPrice: Double, in timeline: CandlesTimelineType) {
+    private func updatePriceDifference(with firstPrice: Double, in timeline: CompanyCandlesTimeline) {
         guard let currentPrice = companyQuotes?.currentPrice else { return }
         
         let text = NSMutableAttributedString(string: "Last \(timeline.description): ")

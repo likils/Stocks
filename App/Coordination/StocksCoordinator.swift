@@ -22,29 +22,22 @@ class StocksCoordinator: StocksCoordination {
     var didFinishClosure: (() -> ())?
     
     // MARK: - Private properties
-    private let currencyService: CurrencyService
     private let cacheService: CacheService
-    private let stocksService: StocksService
     private let webSocketService: WebSocketService
     
     // MARK: - Construction
     init(navController: UINavigationController,
-         currencyService: CurrencyService,
          cacheService: CacheService,
-         stocksService: StocksService,
          webSocketService: WebSocketService) {
         
         self.navController = navController
-        self.currencyService = currencyService
         self.cacheService = cacheService
-        self.stocksService = stocksService
         self.webSocketService = webSocketService
     }
     
     // MARK: - Public Methods
     func start() {
         let vm = StocksVM(coordinator: self,
-                          stocksService: stocksService,
                           webSocketService: webSocketService,
                           cacheService: cacheService)
         let vc = StocksVC(viewModel: vm)
@@ -53,7 +46,6 @@ class StocksCoordinator: StocksCoordination {
     
     func showCompanyDetails(_ company: CompanyProfileViewModel) {
         let vm = CompanyDetailsVM(coordinator: self,
-                                  stocksService: stocksService,
                                   webSocketService: webSocketService,
                                   cacheService: cacheService,
                                   companyProfile: company)

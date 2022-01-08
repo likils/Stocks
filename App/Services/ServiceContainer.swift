@@ -8,33 +8,21 @@
 import Foundation
 
 protocol ServiceContainer {
-    
-    var loginService: LoginService { get }
-    var stocksService: StocksService { get }
+
     var webSocketService: WebSocketService { get }
-    var currencyService: CurrencyService { get }
     var cacheService: CacheService { get }
     
 }
 
 class ServiceContainerImpl: ServiceContainer {
-    
-    let loginService: LoginService
-    let stocksService: StocksService
+
     let webSocketService: WebSocketService
-    let currencyService: CurrencyService
     let cacheService: CacheService
     
-    init(loginService: LoginService,
-         stocksService: StocksService,
-         webSocketService: WebSocketService,
-         currencyService: CurrencyService,
+    init(webSocketService: WebSocketService,
          cacheService: CacheService) {
-        
-        self.loginService = loginService
-        self.stocksService = stocksService
+
         self.webSocketService = webSocketService
-        self.currencyService = currencyService
         self.cacheService = cacheService
     }
     

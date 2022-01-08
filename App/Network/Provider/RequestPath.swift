@@ -8,10 +8,10 @@
 // ----------------------------------------------------------------------------
 
 enum RequestPath: String {
-    case candle = "stock/candle"
+    case companyCandles = "stock/candle"
     case companyNews = "company-news"
     case companyProfile = "stock/profile2"
+    case companyQuotes = "quote"
+    case companySearch = "search"
     case news
-    case quote
-    case search
 }

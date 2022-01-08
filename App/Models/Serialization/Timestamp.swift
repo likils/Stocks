@@ -17,12 +17,12 @@ public enum Timestamp: StaticCoder {
 // MARK: - Methods
 
     public static func decode(from decoder: Decoder) throws -> Date {
-        let timestamp = try Double(from: decoder)
+        let timestamp = try TimeInterval(from: decoder)
         return Date(timeIntervalSince1970: timestamp)
     }
 
     public static func encode(value: Date, to encoder: Encoder) throws {
-        let timestamp = value.timeIntervalSince1970
+        let timestamp = String(Int(value.timeIntervalSince1970))
         return try timestamp.encode(to: encoder)
     }
 }

@@ -11,10 +11,10 @@ protocol CompanyDetailsViewModel: AnyObject {
     
     var view: CompanyDetailsView? { get set }
     var companyProfile: CompanyProfileViewModel { get }
-    var initTimeline: CandlesTimelineType { get }
+    var initTimeline: CompanyCandlesTimeline { get }
     var news: [NewsModel] { get }
     
-    func getCandles(withTimeline timeline: CandlesTimelineType)
+    func getCandles(withTimeline timeline: CompanyCandlesTimeline)
     func fetchLogo()
     func onlineUpdateBegin()
     func onlineUpdateEnd()
@@ -29,7 +29,7 @@ protocol CompanyDetailsViewModel: AnyObject {
 
 protocol CompanyDetailsView: AnyObject {
     
-    func updateValues(by candles: CandlesModel, and timeline: CandlesTimelineType)
+    func updateValues(by candles: CompanyCandlesModel, and timeline: CompanyCandlesTimeline)
     func updateQuotes()
     func showNews()
     func showImage(_ image: UIImage, at indexPath: IndexPath)
@@ -40,6 +40,6 @@ protocol CompanyDetailsView: AnyObject {
 protocol CompanyDetailsCellDelegate: AnyObject {
     
     func updateWatchlist()
-    func updateTimeline(_ timeline: CandlesTimelineType)
+    func updateTimeline(_ timeline: CompanyCandlesTimeline)
     
 }

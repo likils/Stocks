@@ -81,12 +81,12 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         viewModel.updateWatchlist()
     }
     
-    func updateTimeline(_ timeline: CandlesTimelineType) {
+    func updateTimeline(_ timeline: CompanyCandlesTimeline) {
         viewModel.getCandles(withTimeline: timeline)
     }
     
     // MARK: Detail View
-    func updateValues(by candles: CandlesModel, and timeline: CandlesTimelineType) {
+    func updateValues(by candles: CompanyCandlesModel, and timeline: CompanyCandlesTimeline) {
         guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
         cell.updateValues(by: candles, and: timeline)
     }

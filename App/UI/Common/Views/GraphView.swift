@@ -10,7 +10,7 @@ import UIKit
 class GraphView: UIView {
     
     // MARK: - Public properties
-    var candles: CandlesModel! {
+    var candles: CompanyCandlesModel! {
         didSet {
             minPrice = candles.lowPrices.min() ?? 0
             maxPrice = candles.highPrices.max() ?? 0

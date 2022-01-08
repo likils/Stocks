@@ -15,23 +15,14 @@ class AppCoordinator {
     private let mainCoordinator: Coordination
     private let tabController: UITabBarController
     private let serviceContainer: ServiceContainer
-    // TODO: Add login service
-    private var isLoggedIn = true
     
     // MARK: - Construction
     init(window: UIWindow) {
         self.window = window
-        
-        let loginService = AppleLoginService()
-        let stocksService = StocksServiceImpl()
+
         let webSocketService = WebSocketServiceImpl()
-        let currencyService = CurrencyServiceImpl()
         let cacheService = CacheServiceImpl()
-        serviceContainer = ServiceContainerImpl(loginService: loginService,
-                                                stocksService: stocksService,
-                                                webSocketService: webSocketService,
-                                                currencyService: currencyService,
-                                                cacheService: cacheService)
+        serviceContainer = ServiceContainerImpl(webSocketService: webSocketService, cacheService: cacheService)
         
         tabController = UITabBarController()
         mainCoordinator = MainCoordinator(tabController: tabController, serviceContainer: serviceContainer)
@@ -44,34 +35,14 @@ class AppCoordinator {
         window.rootViewController = launchController
         window.makeKeyAndVisible()
         
-        logIn()
+        showMain()
     }
     
     // MARK: - Private Methods
-    private func logIn() {
-        isLoggedIn ? showMain() : showRegistration()
-    }
     
     private func showMain() {
-        mainCoordinator.didFinishClosure = { [unowned self] in
-            self.isLoggedIn = false
-            self.logIn()
-        }
         window.rootViewController = tabController
         mainCoordinator.start()
-    }
-    
-    private func showRegistration() {
-        let navController = UINavigationController()
-        authCoordinator = AuthCoordinator(navController: navController, loginService: serviceContainer.loginService)
-        authCoordinator?.didFinishClosure = { [unowned self] in
-            self.authCoordinator = nil
-            self.isLoggedIn = true
-            self.logIn()
-        }
-        
-        window.rootViewController = navController
-        authCoordinator?.start()
     }
     
 }

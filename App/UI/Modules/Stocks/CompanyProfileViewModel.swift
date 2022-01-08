@@ -13,7 +13,7 @@ import Foundation
 
 struct CompanyProfileViewModel: Codable {
 
-// MARK: - Properties
+    // MARK: - Properties
 
     let currency: CurrencyType
 
@@ -40,7 +40,7 @@ struct CompanyProfileViewModel: Codable {
 
 extension CompanyProfileViewModel {
 
-// MARK: - Construction
+    // MARK: - Construction
 
     init(companyProfile: CompanyProfileModel, inWatchlist: Bool) {
         self.init(
@@ -58,7 +58,7 @@ extension CompanyProfileViewModel {
         )
     }
 
-// MARK: - Public Methods
+    // MARK: - Public Methods
 
     func copy(with companyQuotes: CompanyQuotesModel?) -> Self {
 

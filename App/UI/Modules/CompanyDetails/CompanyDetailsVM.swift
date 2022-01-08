@@ -12,12 +12,11 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     // MARK: - Public properties
     weak var view: CompanyDetailsView?
     private(set) var companyProfile: CompanyProfileViewModel
-    private(set) var initTimeline: CandlesTimelineType = .day
+    private(set) var initTimeline: CompanyCandlesTimeline = .day
     private(set) var news = [NewsModel]()
     
     //MARK: - Private properties
     private let coordinator: StocksCoordination
-    private let stocksService: StocksService
     private let webSocketService: WebSocketService
     private let cacheService: CacheService
     
@@ -25,13 +24,11 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: - Construction
     init(coordinator: StocksCoordination,
-         stocksService: StocksService,
          webSocketService: WebSocketService,
          cacheService: CacheService,
          companyProfile: CompanyProfileViewModel) {
         
         self.coordinator = coordinator
-        self.stocksService = stocksService
         self.webSocketService = webSocketService
         self.cacheService = cacheService
         self.companyProfile = companyProfile
@@ -50,13 +47,9 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         }
     }
     
-    func getCandles(withTimeline timeline: CandlesTimelineType) {
+    func getCandles(withTimeline timeline: CompanyCandlesTimeline) {
         initTimeline = timeline
-        stocksService.getCandles(for: companyProfile.tickerSymbol, withTimeline: timeline) { candles in
-            DispatchQueue.main.async {
-                self.view?.updateValues(by: candles, and: timeline)
-            }
-        }
+        requestCompanyCandles(tickerSymbol: companyProfile.tickerSymbol, timeline: timeline)
     }
     
     func updateWatchlist() {
@@ -97,7 +90,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: Company news
     func getNews() {
-        requestNews(withTickerSymbol: companyProfile.tickerSymbol, forPeriodInDays: 10)
+        requestNews(tickerSymbol: companyProfile.tickerSymbol, periodInDays: 10)
     }
     
     func fetchImage(withSize size: Double, for indexPath: IndexPath) {
@@ -115,9 +108,9 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         coordinator.showWebPage(with: url)
     }
 
-// MARK: - Private Methods
+    // MARK: - Private Methods
 
-    private func requestNews(withTickerSymbol tickerSymbol: String, forPeriodInDays periodInDays: Int) {
+    private func requestNews(tickerSymbol: String, periodInDays: Int) {
         do {
             try NewsRequestFactory
                 .createRequest(tickerSymbol: tickerSymbol, periodInDays: periodInDays)
@@ -134,6 +127,33 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
 
             DispatchQueue.main.async {
                 self.view?.showNews()
+            }
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func requestCompanyCandles(tickerSymbol: String, timeline: CompanyCandlesTimeline) {
+        do {
+            try CompanyCandlesRequestFactory
+                .createRequest(tickerSymbol: tickerSymbol, timeline: timeline)
+                .perform { [weak self] in self?.handleCompanyCandlesResult($0, timeline) }
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func handleCompanyCandlesResult(
+        _ requestResult: RequestResult<CompanyCandlesModel>,
+        _ timeline: CompanyCandlesTimeline
+    ) {
+        do {
+            let companyCandles = try requestResult.get()
+
+            DispatchQueue.main.async {
+                self.view?.updateValues(by: companyCandles, and: timeline)
             }
         }
         catch {

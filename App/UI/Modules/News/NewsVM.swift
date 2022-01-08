@@ -31,7 +31,7 @@ class NewsVM: NewsViewModel {
         self.newsCategories = [.general, .forex, .crypto, .merger]
     }
     
-// MARK: - Public Methods
+    // MARK: - Public Methods
 
     func updateNews(with category: NewsCategory) {
         requestNews(with: category)
@@ -52,7 +52,7 @@ class NewsVM: NewsViewModel {
         coordinator.showWebPage(with: url)
     }
 
-// MARK: - Private Methods
+    // MARK: - Private Methods
 
     private func requestNews(with category: NewsCategory) {
         do {
