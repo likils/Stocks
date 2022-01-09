@@ -1,34 +1,46 @@
+// ----------------------------------------------------------------------------
 //
 //  SettingsCoordinator.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
 import UIKit
 
-protocol SettingsCoordination: NavCoordination {
-    
+// ----------------------------------------------------------------------------
+
+protocol SettingsCoordination: Coordination {
+    // does nothing
 }
 
-class SettingsCoordinator: SettingsCoordination {
+// ----------------------------------------------------------------------------
+
+final class SettingsCoordinator: SettingsCoordination {
     
-    // MARK: - Public properties
-    var navController: UINavigationController
+// MARK: - Properties
+
     var didFinishClosure: (() -> ())?
     
-    // MARK: - Private properties
-    
-    // MARK: - Construction
+// MARK: - Private properties
+
+    private let navController: UINavigationController
+
+// MARK: - Construction
+
     init(navController: UINavigationController) {
         self.navController = navController
+
+        showSettings()
     }
     
-    // MARK: - Public Methods
-    func start() {
+// MARK: - Private Methods
+
+    private func showSettings() {
         let vm = SettingsVM(coordinator: self)
         let vc = SettingsVC(viewModel: vm)
+
         navController.viewControllers = [vc]
     }
-    
 }

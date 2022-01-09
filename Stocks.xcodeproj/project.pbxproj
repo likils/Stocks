@@ -347,28 +347,28 @@
 		B26496132784BD460067CCAC /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				B2649616278593230067CCAC /* ImageRepository */,
-				B264961D2785E71C0067CCAC /* CompanyProfileRepository */,
+				B2649616278593230067CCAC /* Image */,
+				B264961D2785E71C0067CCAC /* CompanyProfile */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
 		};
-		B2649616278593230067CCAC /* ImageRepository */ = {
+		B2649616278593230067CCAC /* Image */ = {
 			isa = PBXGroup;
 			children = (
 				B2649617278593430067CCAC /* ImageRepository.swift */,
 				B26496142784C2910067CCAC /* ImageRepositoryImpl.swift */,
 			);
-			path = ImageRepository;
+			path = Image;
 			sourceTree = "<group>";
 		};
-		B264961D2785E71C0067CCAC /* CompanyProfileRepository */ = {
+		B264961D2785E71C0067CCAC /* CompanyProfile */ = {
 			isa = PBXGroup;
 			children = (
 				B264961E2785E7420067CCAC /* CompanyProfileRepository.swift */,
 				B26496202785E8A00067CCAC /* CompanyProfileRepositoryImpl.swift */,
 			);
-			path = CompanyProfileRepository;
+			path = CompanyProfile;
 			sourceTree = "<group>";
 		};
 		B2649622278707AA0067CCAC /* Network */ = {
@@ -500,6 +500,13 @@
 				B26496772789CBA10067CCAC /* CompanyCandlesRequest.swift */,
 			);
 			path = CompanyCandles;
+			sourceTree = "<group>";
+		};
+		B264967D278AEB1C0067CCAC /* UseCase */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = UseCase;
 			sourceTree = "<group>";
 		};
 		B2802B2C2624487C00B6AADA /* Services */ = {
@@ -655,6 +662,7 @@
 				B2BFBFB82636BF4A004F40B0 /* Coordination */,
 				B28230FE27353DFE004CA0B9 /* UI */,
 				B2802B2C2624487C00B6AADA /* Services */,
+				B264967D278AEB1C0067CCAC /* UseCase */,
 				B2649622278707AA0067CCAC /* Network */,
 				B264960B278497CA0067CCAC /* Persistence */,
 				B28230FF27353F0A004CA0B9 /* Models */,

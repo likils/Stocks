@@ -1,62 +1,87 @@
+// ----------------------------------------------------------------------------
 //
 //  MainCoordinator.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
 import UIKit
 
-class MainCoordinator: Coordination {
-    
-    // MARK: - Public properties
+// ----------------------------------------------------------------------------
+
+final class MainCoordinator: Coordination {
+
+// MARK: - Properties
+
     var didFinishClosure: (() -> ())?
-    
-    // MARK: - Private properties
-    private let newsCoordinator: NewsCoordination
-    private let stocksCoordinator: StocksCoordination
-    private let settingsCoordinator: SettingsCoordination
+
+// MARK: - Private properties
+
     private let tabController: UITabBarController
     private let serviceContainer: ServiceContainer
-    
-    // MARK: - Construction
+
+    private var newsCoordinator: Coordination?
+    private var stocksCoordinator: Coordination?
+    private var settingsCoordinator: Coordination?
+
+// MARK: - Construction
+
     init(tabController: UITabBarController, serviceContainer: ServiceContainer) {
         self.tabController = tabController
         self.serviceContainer = serviceContainer
-        
+
+        setupNewsCoordinator()
+        setupStocksCoordinator()
+        setupSettingsCoordinator()
+    }
+
+// MARK: - Private Methods
+
+    private func setupNewsCoordinator() {
+
         let newsNC = UINavigationController()
         newsNC.tabBarItem.title = "News"
         newsNC.tabBarItem.image = UIImage(systemName: "newspaper")
         newsNC.navigationBar.prefersLargeTitles = true
-        newsCoordinator = NewsCoordinator(navController: newsNC,
-                                          cacheService: serviceContainer.cacheService)
-        
+
+        tabController.viewControllers = [newsNC]
+
+        newsCoordinator = NewsCoordinator(
+            navController: newsNC,
+            cacheService: serviceContainer.cacheService
+        )
+    }
+
+    private func setupStocksCoordinator() {
+
         let stocksNC = UINavigationController()
         stocksNC.tabBarItem.title = "Stocks"
         stocksNC.tabBarItem.image = UIImage(systemName: "briefcase")
         stocksNC.navigationBar.prefersLargeTitles = true
-        stocksCoordinator = StocksCoordinator(navController: stocksNC,
-                                              cacheService: serviceContainer.cacheService,
-                                              webSocketService: serviceContainer.webSocketService)
-        
+
+        tabController.viewControllers?.append(stocksNC)
+
+        stocksCoordinator = StocksCoordinator(
+            navController: stocksNC,
+            cacheService: serviceContainer.cacheService,
+            webSocketService: serviceContainer.webSocketService
+        )
+    }
+
+    private func setupSettingsCoordinator() {
+
         let settingsNC = UINavigationController()
         settingsNC.tabBarItem.title = "Settings"
         settingsNC.tabBarItem.image = UIImage(systemName: "arrow.2.squarepath")
         settingsNC.navigationBar.prefersLargeTitles = true
+
+        tabController.viewControllers?.append(settingsNC)
+
         settingsCoordinator = SettingsCoordinator(navController: settingsNC)
-        
-        tabController.viewControllers = [newsNC, stocksNC, settingsNC]
-    }
-    
-    // MARK: - Public Methods
-    func start() {
-        newsCoordinator.start()
-        stocksCoordinator.start()
-        settingsCoordinator.start()
-        settingsCoordinator.didFinishClosure = { [unowned self] in
-            self.didFinishClosure?()
+        settingsCoordinator?.didFinishClosure = { [weak self] in
+            self?.didFinishClosure?()
         }
-        tabController.selectedIndex = 0
     }
-    
 }

@@ -1,22 +1,19 @@
+// ----------------------------------------------------------------------------
 //
 //  Coordination.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
 import UIKit
 
-protocol Coordination: AnyObject {
-    
-    var didFinishClosure: (() -> ())? { get set }
-    
-    func start()
-    
-}
+// ----------------------------------------------------------------------------
 
-protocol NavCoordination: Coordination {
-    
-    var navController: UINavigationController { get set }
-    
+protocol Coordination: AnyObject {
+
+// MARK: - Properties
+
+    var didFinishClosure: (() -> ())? { get set }
 }

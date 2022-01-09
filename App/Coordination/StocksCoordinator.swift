@@ -1,60 +1,68 @@
+// ----------------------------------------------------------------------------
 //
 //  StocksCoordinator.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
-import UIKit
 import SafariServices
+import UIKit
 
-protocol StocksCoordination: NavCoordination {
-    
+// ----------------------------------------------------------------------------
+
+protocol StocksCoordination: Coordination {
+
+// MARK: - Methods
+
     func showCompanyDetails(_ company: CompanyProfileViewModel)
     func showWebPage(with url: URL)
-    
 }
 
-class StocksCoordinator: StocksCoordination {
+// ----------------------------------------------------------------------------
+
+final class StocksCoordinator: StocksCoordination {
     
-    // MARK: - Public properties
-    var navController: UINavigationController
+// MARK: - Properties
+
     var didFinishClosure: (() -> ())?
     
-    // MARK: - Private properties
+// MARK: - Private Properties
+
+    private let navController: UINavigationController
     private let cacheService: CacheService
     private let webSocketService: WebSocketService
     
-    // MARK: - Construction
-    init(navController: UINavigationController,
-         cacheService: CacheService,
-         webSocketService: WebSocketService) {
-        
+// MARK: - Construction
+
+    init(
+        navController: UINavigationController,
+        cacheService: CacheService,
+        webSocketService: WebSocketService
+    ) {
         self.navController = navController
         self.cacheService = cacheService
         self.webSocketService = webSocketService
+
+        showStocks()
     }
     
-    // MARK: - Public Methods
-    func start() {
-        let vm = StocksVM(coordinator: self,
-                          webSocketService: webSocketService,
-                          cacheService: cacheService)
-        let vc = StocksVC(viewModel: vm)
-        navController.viewControllers = [vc]
-    }
+// MARK: - Methods
     
     func showCompanyDetails(_ company: CompanyProfileViewModel) {
-        let vm = CompanyDetailsVM(coordinator: self,
-                                  webSocketService: webSocketService,
-                                  cacheService: cacheService,
-                                  companyProfile: company)
+        let vm = CompanyDetailsVM(
+            coordinator: self,
+            webSocketService: webSocketService,
+            cacheService: cacheService,
+            companyProfile: company
+        )
         let vc = CompanyDetailsVC(viewModel: vm)
-        
+
         didFinishClosure = {
             self.navController.popViewController(animated: true)
         }
-        
+
         navController.pushViewController(vc, animated: true)
     }
     
@@ -62,5 +70,17 @@ class StocksCoordinator: StocksCoordination {
         let vc = SFSafariViewController(url: url)
         navController.present(vc, animated: true)
     }
-    
+
+// MARK: - Private Methods
+
+    private func showStocks() {
+        let vm = StocksVM(
+            coordinator: self,
+            webSocketService: webSocketService,
+            cacheService: cacheService
+        )
+        let vc = StocksVC(viewModel: vm)
+
+        navController.viewControllers = [vc]
+    }
 }

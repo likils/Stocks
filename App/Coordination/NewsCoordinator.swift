@@ -1,44 +1,59 @@
+// ----------------------------------------------------------------------------
 //
 //  NewsCoordinator.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
-import UIKit
 import SafariServices
+import UIKit
 
-protocol NewsCoordination: NavCoordination {
-    
+// ----------------------------------------------------------------------------
+
+protocol NewsCoordination: Coordination {
+
+// MARK: - Methods
+
     func showWebPage(with url: URL)
-    
 }
 
-class NewsCoordinator: NewsCoordination {
-    
-    // MARK: - Public properties
-    var navController: UINavigationController
+// ----------------------------------------------------------------------------
+
+final class NewsCoordinator: NewsCoordination {
+
+// MARK: - Properties
+
     var didFinishClosure: (() -> ())?
-    
-    // MARK: - Private properties
+
+// MARK: - Private Properties
+
+    private let navController: UINavigationController
     private let cacheService: CacheService
-    
-    // MARK: - Construction
+
+// MARK: - Construction
+
     init(navController: UINavigationController, cacheService: CacheService) {
         self.navController = navController
         self.cacheService = cacheService
+
+        showNews()
     }
     
-    // MARK: - Public Methods
-    func start() {
-        let vm = NewsVM(coordinator: self, cacheService: cacheService)
-        let vc = NewsVC(viewModel: vm)
-        navController.viewControllers = [vc]
-    }
-    
+// MARK: - Methods
+
     func showWebPage(with url: URL) {
         let vc = SFSafariViewController(url: url)
         navController.present(vc, animated: true)
     }
-    
+
+// MARK: - Private Methods
+
+    private func showNews() {
+        let vm = NewsVM(coordinator: self, cacheService: cacheService)
+        let vc = NewsVC(viewModel: vm)
+
+        navController.viewControllers = [vc]
+    }
 }

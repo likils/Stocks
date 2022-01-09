@@ -1,48 +1,49 @@
+// ----------------------------------------------------------------------------
 //
 //  AppCoordinator.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
 import UIKit
 
-class AppCoordinator {
-    
-    // MARK: - Private properties
+// ----------------------------------------------------------------------------
+
+final class AppCoordinator {
+
+// MARK: - Private Properties
+
     private let window: UIWindow
-    private var authCoordinator: NavCoordination?
-    private let mainCoordinator: Coordination
-    private let tabController: UITabBarController
-    private let serviceContainer: ServiceContainer
+
+    private var mainCoordinator: Coordination?
     
-    // MARK: - Construction
+// MARK: - Construction
+
     init(window: UIWindow) {
         self.window = window
+        
+        setupMainCoordinator()
+    }
 
-        let webSocketService = WebSocketServiceImpl()
-        let cacheService = CacheServiceImpl()
-        serviceContainer = ServiceContainerImpl(webSocketService: webSocketService, cacheService: cacheService)
-        
-        tabController = UITabBarController()
-        mainCoordinator = MainCoordinator(tabController: tabController, serviceContainer: serviceContainer)
-    }
-    
-    // MARK: - Public Methods
-    func start() {
-        let storyboard = UIStoryboard(name: "LaunchScreen", bundle: nil)
-        let launchController = storyboard.instantiateInitialViewController()
-        window.rootViewController = launchController
-        window.makeKeyAndVisible()
-        
-        showMain()
-    }
-    
-    // MARK: - Private Methods
-    
-    private func showMain() {
+// MARK: - Private Methods
+
+    private func setupMainCoordinator() {
+
+        let tabController = UITabBarController()
         window.rootViewController = tabController
-        mainCoordinator.start()
+        window.makeKeyAndVisible()
+
+        let serviceContainer = createServiceContainer()
+
+        mainCoordinator = MainCoordinator(tabController: tabController, serviceContainer: serviceContainer)
+        mainCoordinator?.didFinishClosure = { [weak self] in
+            self?.setupMainCoordinator()
+        }
     }
-    
+
+    private func createServiceContainer() -> ServiceContainer {
+        return ServiceContainerImpl(webSocketService: WebSocketServiceImpl(), cacheService: CacheServiceImpl())
+    }
 }
