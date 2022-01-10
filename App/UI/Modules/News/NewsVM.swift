@@ -34,7 +34,9 @@ class NewsVM: NewsViewModel {
     // MARK: - Public Methods
 
     func updateNews(with category: NewsCategory) {
-        requestNews(with: category)
+        Task {
+            await requestNews(with: category)
+        }
     }
     
     func fetchImage(withSize size: Double, for indexPath: IndexPath) {
@@ -54,20 +56,11 @@ class NewsVM: NewsViewModel {
 
     // MARK: - Private Methods
 
-    private func requestNews(with category: NewsCategory) {
+    private func requestNews(with category: NewsCategory) async {
         do {
-            try NewsRequestFactory
+            news = try await NewsRequestFactory
                 .createRequest(newsCategory: category)
-                .perform { [weak self] in self?.handleNewsResult($0) }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func handleNewsResult(_ requestResult: RequestResult<[NewsModel]>) {
-        do {
-            news = try requestResult.get()
+                .execute()
         }
         catch {
             handleError(error)

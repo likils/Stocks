@@ -49,7 +49,10 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     func getCandles(withTimeline timeline: CompanyCandlesTimeline) {
         initTimeline = timeline
-        requestCompanyCandles(tickerSymbol: companyProfile.tickerSymbol, timeline: timeline)
+
+        Task {
+            await requestCompanyCandles(tickerSymbol: companyProfile.tickerSymbol, timeline: timeline)
+        }
     }
     
     func updateWatchlist() {
@@ -90,7 +93,9 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: Company news
     func getNews() {
-        requestNews(tickerSymbol: companyProfile.tickerSymbol, periodInDays: 10)
+        Task {
+            await requestNews(tickerSymbol: companyProfile.tickerSymbol, periodInDays: 10)
+        }
     }
     
     func fetchImage(withSize size: Double, for indexPath: IndexPath) {
@@ -110,20 +115,11 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
 
     // MARK: - Private Methods
 
-    private func requestNews(tickerSymbol: String, periodInDays: Int) {
+    private func requestNews(tickerSymbol: String, periodInDays: Int) async {
         do {
-            try NewsRequestFactory
+            news = try await NewsRequestFactory
                 .createRequest(tickerSymbol: tickerSymbol, periodInDays: periodInDays)
-                .perform { [weak self] in self?.handleNewsResult($0) }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func handleNewsResult(_ requestResult: RequestResult<[NewsModel]>) {
-        do {
-            news = try requestResult.get()
+                .execute()
 
             DispatchQueue.main.async {
                 self.view?.showNews()
@@ -134,23 +130,11 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         }
     }
 
-    private func requestCompanyCandles(tickerSymbol: String, timeline: CompanyCandlesTimeline) {
+    private func requestCompanyCandles(tickerSymbol: String, timeline: CompanyCandlesTimeline) async {
         do {
-            try CompanyCandlesRequestFactory
+            let companyCandles = try await CompanyCandlesRequestFactory
                 .createRequest(tickerSymbol: tickerSymbol, timeline: timeline)
-                .perform { [weak self] in self?.handleCompanyCandlesResult($0, timeline) }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func handleCompanyCandlesResult(
-        _ requestResult: RequestResult<CompanyCandlesModel>,
-        _ timeline: CompanyCandlesTimeline
-    ) {
-        do {
-            let companyCandles = try requestResult.get()
+                .execute()
 
             DispatchQueue.main.async {
                 self.view?.updateValues(by: companyCandles, and: timeline)

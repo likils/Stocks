@@ -19,11 +19,11 @@ struct AnyRequestTask<Value: Codable>: RequestTask {
 // MARK: - Private Properties
 
     private let _requestTask: AnyObject
-    private let _execute: (@escaping RequestCompletion<Value>) -> Void
+    private let _execute: () async throws -> (Value)
 
 // MARK: - Methods
 
-    func execute(with completion: @escaping RequestCompletion<Value>) {
-        _execute(completion)
+    func execute() async throws -> Value {
+        try await _execute()
     }
 }

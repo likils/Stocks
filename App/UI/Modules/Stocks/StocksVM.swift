@@ -63,7 +63,9 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
             }
         }
 
-        requestCompanySearch(with: symbol)
+        Task {
+            await requestCompanySearch(with: symbol)
+        }
     }
     
     func updateSearchList(at index: Int) {
@@ -76,8 +78,10 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
             case .insert:
                 let company = externalSearchResults.remove(at: index)
                 internalSearchResults.append(company)
-                
-                requestCompanyProfile(with: company.ticker)
+
+                Task {
+                    await requestCompanyProfile(with: company.ticker)
+                }
 
             case .delete:
                 let profile = watchlist.remove(at: index)
@@ -116,7 +120,9 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     }
     
     func fetchQuotes(for company: CompanyProfileViewModel, at indexPath: IndexPath) {
-        requestCompanyQuotes(with: company.tickerSymbol, forIndexPath: indexPath)
+        Task {
+            await requestCompanyQuotes(with: company.tickerSymbol, forIndexPath: indexPath)
+        }
     }
     
     func onlineUpdateBegin() {
@@ -177,25 +183,16 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
 
-    private func requestCompanySearch(with symbol: String) {
+    private func requestCompanySearch(with symbol: String) async {
         do {
-            try CompanySearchRequestFactory
+            let companiesModel = try await CompanySearchRequestFactory
                 .createRequest(searchSymbol: symbol)
-                .perform { [weak self] in self?.handleCompanySearchResult($0) }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func handleCompanySearchResult(_ requestResult: RequestResult<CompaniesModel>) {
-        do {
-            let companies = try requestResult.get().companies
+                .execute()
 
             let internalSearchResults = internalSearchResults.map({$0.ticker})
             let result = Set(internalSearchResults)
 
-            externalSearchResults = companies.filter { !result.contains($0.ticker) }
+            externalSearchResults = companiesModel.companies.filter { !result.contains($0.ticker) }
 
             DispatchQueue.main.async {
                 self.searchView?.updateSearchlist()
@@ -206,20 +203,12 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
 
-    private func requestCompanyProfile(with tickerSymbol: String) {
+    private func requestCompanyProfile(with tickerSymbol: String) async {
         do {
-            try CompanyProfileRequestFactory
+            let companyProfile = try await CompanyProfileRequestFactory
                 .createRequest(tickerSymbol: tickerSymbol)
-                .perform { [weak self] in self?.handleCompanyProfileResult($0) }
-        }
-        catch {
-            handleError(error)
-        }
-    }
+                .execute()
 
-    private func handleCompanyProfileResult(_ requestResult: RequestResult<CompanyProfileModel>) {
-        do {
-            let companyProfile = try requestResult.get()
             let profile = CompanyProfileViewModel(companyProfile: companyProfile, inWatchlist: true)
 
             watchlist.append(profile)
@@ -237,25 +226,16 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
 
-    private func requestCompanyQuotes(with tickerSymbol: String, forIndexPath indexPath: IndexPath) {
+    private func requestCompanyQuotes(with tickerSymbol: String, forIndexPath indexPath: IndexPath) async {
         do {
-            try CompanyQuotesRequestFactory
+            let companyQuotes = try await CompanyQuotesRequestFactory
                 .createRequest(tickerSymbol: tickerSymbol)
-                .perform { [weak self] in self?.handleCompanyQuotesResult($0, indexPath) }
-        }
-        catch {
-            handleError(error)
-        }
-    }
+                .execute()
 
-    private func handleCompanyQuotesResult(_ requestResult: RequestResult<CompanyQuotesModel>, _ indexPath: IndexPath) {
-        do {
-            let companyQuotes = try requestResult.get()
+            self.watchlist[indexPath.row] = self.watchlist[indexPath.row].copy(with: companyQuotes)
 
             DispatchQueue.main.async {
                 self.view?.updateQuotes(companyQuotes, at: indexPath)
-
-                self.watchlist[indexPath.row] = self.watchlist[indexPath.row].copy(with: companyQuotes)
             }
         }
         catch {

@@ -69,6 +69,7 @@
 		B26496782789CBA10067CCAC /* CompanyCandlesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496772789CBA10067CCAC /* CompanyCandlesRequest.swift */; };
 		B264967A2789CC1F0067CCAC /* CompanyCandlesRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496792789CC1F0067CCAC /* CompanyCandlesRequestModel.swift */; };
 		B264967C2789D6860067CCAC /* CandlesResolution.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264967B2789D6860067CCAC /* CandlesResolution.swift */; };
+		B2649686278C65C40067CCAC /* URLSession+async_await.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2649685278C65C40067CCAC /* URLSession+async_await.swift */; };
 		B271C81C2654F83500012308 /* SearchCompanyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B271C81B2654F83500012308 /* SearchCompanyVC.swift */; };
 		B27AF9792736C5EB000AACE0 /* OnlineTradesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AF9782736C5EB000AACE0 /* OnlineTradesModel.swift */; };
 		B27AF97D2736F1AB000AACE0 /* URLTransform.swift in Sources */ = {isa = PBXBuildFile; fileRef = B27AF97C2736F1AB000AACE0 /* URLTransform.swift */; };
@@ -170,6 +171,7 @@
 		B26496772789CBA10067CCAC /* CompanyCandlesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCandlesRequest.swift; sourceTree = "<group>"; };
 		B26496792789CC1F0067CCAC /* CompanyCandlesRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCandlesRequestModel.swift; sourceTree = "<group>"; };
 		B264967B2789D6860067CCAC /* CandlesResolution.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CandlesResolution.swift; sourceTree = "<group>"; };
+		B2649685278C65C40067CCAC /* URLSession+async_await.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+async_await.swift"; sourceTree = "<group>"; };
 		B271C81B2654F83500012308 /* SearchCompanyVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchCompanyVC.swift; sourceTree = "<group>"; };
 		B27AF9782736C5EB000AACE0 /* OnlineTradesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradesModel.swift; sourceTree = "<group>"; };
 		B27AF97C2736F1AB000AACE0 /* URLTransform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTransform.swift; sourceTree = "<group>"; };
@@ -374,6 +376,7 @@
 		B2649622278707AA0067CCAC /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				B2C9505E278CA4FC00667872 /* Extension */,
 				B26496572788A7240067CCAC /* Request */,
 				B26496562788A6FD0067CCAC /* Factory */,
 				B264963D27884F8D0067CCAC /* Provider */,
@@ -638,6 +641,14 @@
 			path = Serialization;
 			sourceTree = "<group>";
 		};
+		B2C9505E278CA4FC00667872 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				B2649685278C65C40067CCAC /* URLSession+async_await.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
 		B2DEC14026209D3600C13589 = {
 			isa = PBXGroup;
 			children = (
@@ -826,6 +837,7 @@
 				B2A55B5A2636ECB40036AB01 /* SettingsCoordinator.swift in Sources */,
 				B23D1568263FF3580010AB57 /* CompanyModel.swift in Sources */,
 				B26496152784C2910067CCAC /* ImageRepositoryImpl.swift in Sources */,
+				B2649686278C65C40067CCAC /* URLSession+async_await.swift in Sources */,
 				B26005DC265D2D3900F814D7 /* CompanyDetailsContract.swift in Sources */,
 				B26496672789C1180067CCAC /* CompanyProfileRequestModel.swift in Sources */,
 				B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */,

@@ -13,5 +13,5 @@ public protocol Request {
 
 // MARK: - Methods
 
-    func perform(with completion: @escaping RequestCompletion<Value>)
+    func execute() async throws -> Value
 }

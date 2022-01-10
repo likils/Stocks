@@ -8,5 +8,3 @@
 // ----------------------------------------------------------------------------
 
 public typealias RequestResult<Value> = Result<Value, RequestError>
-
-public typealias RequestCompletion<Value> = (RequestResult<Value>) -> Void

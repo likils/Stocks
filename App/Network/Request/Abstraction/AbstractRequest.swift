@@ -21,7 +21,7 @@ public class AbstractRequest<Value>: Request where Value: Codable {
 
 // MARK: - Methods
 
-    public func perform(with completion: @escaping RequestCompletion<Value>) {
-        requestTask.execute(with: completion)
+    public func execute() async throws -> Value {
+        try await requestTask.execute()
     }
 }
