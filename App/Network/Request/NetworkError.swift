@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  RequestError.swift
+//  NetworkError.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -11,10 +11,11 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-public enum RequestError: Error {
+public enum NetworkError: Error {
 
-    case dataTaskBadResponse(URLResponse?)
+    case badResponseError(URLResponse?)
+
     case dataTaskError(Error)
 
-    case serializationError(Error)
+    case requestEntitySerializationError(Error)
 }

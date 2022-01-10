@@ -27,9 +27,15 @@ class RequestDataTask<Value: Codable>: RequestTask {
 // MARK: - Methods
 
     func execute() async throws -> Value {
-        let (data, _) = try await URLSession.shared.data(for: urlRequest)
-        let value = try JSONDecoder().decode(Value.self, from: data)
-        return value
+        do {
+            let data = try await URLSession.shared.data(for: urlRequest)
+            let value = try JSONDecoder().decode(Value.self, from: data)
+
+            return value
+        }
+        catch {
+            throw (error as? NetworkError) ?? NetworkError.dataTaskError(error)
+        }
     }
 
     func eraseToAnyRequestTask() -> AnyRequestTask<Value> {

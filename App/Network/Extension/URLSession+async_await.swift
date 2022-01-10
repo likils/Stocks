@@ -14,20 +14,21 @@ import Foundation
 extension URLSession {
 
     @available(iOS, deprecated: 15.0, message: "This extension is no longer necessary. Use API built into SDK")
-    func data(for urlRequest: URLRequest) async throws -> (Data, URLResponse) {
+    func data(for urlRequest: URLRequest) async throws -> Data {
 
         try await withCheckedThrowingContinuation { continuation in
 
-            let task = self.dataTask(with: urlRequest) { data, response, error in
-                guard let data = data, let response = response else {
+            self.dataTask(with: urlRequest) { data, response, error in
 
-                    let error = error ?? URLError(.badServerResponse)
+                if let data = data {
+                    continuation.resume(returning: data)
+                }
+                else {
+                    let error = error.map { NetworkError.dataTaskError($0) } ?? NetworkError.badResponseError(response)
                     return continuation.resume(throwing: error)
                 }
-
-                continuation.resume(returning: (data, response))
             }
-            task.resume()
+            .resume()
         }
     }
 }

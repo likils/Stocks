@@ -53,8 +53,7 @@
 		B2649649278876090067CCAC /* RequestPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2649648278876090067CCAC /* RequestPath.swift */; };
 		B264964B27887A900067CCAC /* OnlineTradeRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964A27887A900067CCAC /* OnlineTradeRequestModel.swift */; };
 		B264964E27887B360067CCAC /* RequestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964D27887B360067CCAC /* RequestEntity.swift */; };
-		B264965027889F0E0067CCAC /* RequestError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964F27889F0E0067CCAC /* RequestError.swift */; };
-		B26496522788A1B60067CCAC /* RequestResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496512788A1B60067CCAC /* RequestResult.swift */; };
+		B264965027889F0E0067CCAC /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964F27889F0E0067CCAC /* NetworkError.swift */; };
 		B26496552788A68D0067CCAC /* NewsRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496542788A68D0067CCAC /* NewsRequestFactory.swift */; };
 		B264965A2788A8BC0067CCAC /* NewsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496592788A8BC0067CCAC /* NewsRequest.swift */; };
 		B26496612789BC980067CCAC /* CompanySearchRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496602789BC980067CCAC /* CompanySearchRequestFactory.swift */; };
@@ -155,8 +154,7 @@
 		B2649648278876090067CCAC /* RequestPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestPath.swift; sourceTree = "<group>"; };
 		B264964A27887A900067CCAC /* OnlineTradeRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradeRequestModel.swift; sourceTree = "<group>"; };
 		B264964D27887B360067CCAC /* RequestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestEntity.swift; sourceTree = "<group>"; };
-		B264964F27889F0E0067CCAC /* RequestError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestError.swift; sourceTree = "<group>"; };
-		B26496512788A1B60067CCAC /* RequestResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestResult.swift; sourceTree = "<group>"; };
+		B264964F27889F0E0067CCAC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		B26496542788A68D0067CCAC /* NewsRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRequestFactory.swift; sourceTree = "<group>"; };
 		B26496592788A8BC0067CCAC /* NewsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRequest.swift; sourceTree = "<group>"; };
 		B26496602789BC980067CCAC /* CompanySearchRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanySearchRequestFactory.swift; sourceTree = "<group>"; };
@@ -447,8 +445,7 @@
 		B26496572788A7240067CCAC /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				B26496512788A1B60067CCAC /* RequestResult.swift */,
-				B264964F27889F0E0067CCAC /* RequestError.swift */,
+				B264964F27889F0E0067CCAC /* NetworkError.swift */,
 				B2CE57132621CD5700C5722D /* RequestSettings.swift */,
 				B26496582788A73D0067CCAC /* Abstraction */,
 				B26496742789CB6D0067CCAC /* CompanyCandles */,
@@ -762,7 +759,6 @@
 				B2A55B4F2636DAFC0036AB01 /* MainCoordinator.swift in Sources */,
 				B264967C2789D6860067CCAC /* CandlesResolution.swift in Sources */,
 				B2B460BD2653CA2C007B2877 /* URL+withQueries.swift in Sources */,
-				B26496522788A1B60067CCAC /* RequestResult.swift in Sources */,
 				B23D155E263D921C0010AB57 /* StocksVM.swift in Sources */,
 				B2C2EE0F2736C06500ED8BC1 /* Timestamp.swift in Sources */,
 				B2A55B74263717A70036AB01 /* NewsTableViewCell.swift in Sources */,
@@ -790,7 +786,7 @@
 				B264962C278729D10067CCAC /* DateTransform.swift in Sources */,
 				B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */,
 				B264966C2789C1CE0067CCAC /* CompanyProfileRequest.swift in Sources */,
-				B264965027889F0E0067CCAC /* RequestError.swift in Sources */,
+				B264965027889F0E0067CCAC /* NetworkError.swift in Sources */,
 				B26005E6265E7F0000F814D7 /* CompanyDetailsTableViewCell.swift in Sources */,
 				B2B0D8802638287E00A59015 /* SettingsContract.swift in Sources */,
 				B2535274264C4E22005CEB74 /* Double+roundForText.swift in Sources */,
