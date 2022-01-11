@@ -31,18 +31,15 @@ final class StocksCoordinator: StocksCoordination {
 // MARK: - Private Properties
 
     private let navController: UINavigationController
-    private let cacheService: CacheService
     private let webSocketService: WebSocketService
     
 // MARK: - Construction
 
     init(
         navController: UINavigationController,
-        cacheService: CacheService,
         webSocketService: WebSocketService
     ) {
         self.navController = navController
-        self.cacheService = cacheService
         self.webSocketService = webSocketService
 
         showStocks()
@@ -54,7 +51,6 @@ final class StocksCoordinator: StocksCoordination {
         let vm = CompanyDetailsVM(
             coordinator: self,
             webSocketService: webSocketService,
-            cacheService: cacheService,
             companyProfile: company
         )
         let vc = CompanyDetailsVC(viewModel: vm)
@@ -76,8 +72,7 @@ final class StocksCoordinator: StocksCoordination {
     private func showStocks() {
         let vm = StocksVM(
             coordinator: self,
-            webSocketService: webSocketService,
-            cacheService: cacheService
+            webSocketService: webSocketService
         )
         let vc = StocksVC(viewModel: vm)
 

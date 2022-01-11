@@ -48,10 +48,7 @@ final class MainCoordinator: Coordination {
 
         tabController.viewControllers = [newsNC]
 
-        newsCoordinator = NewsCoordinator(
-            navController: newsNC,
-            cacheService: serviceContainer.cacheService
-        )
+        newsCoordinator = NewsCoordinator(navController: newsNC)
     }
 
     private func setupStocksCoordinator() {
@@ -65,7 +62,6 @@ final class MainCoordinator: Coordination {
 
         stocksCoordinator = StocksCoordinator(
             navController: stocksNC,
-            cacheService: serviceContainer.cacheService,
             webSocketService: serviceContainer.webSocketService
         )
     }

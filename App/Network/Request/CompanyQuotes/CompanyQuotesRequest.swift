@@ -16,7 +16,7 @@ public final class CompanyQuotesRequest: AbstractRequest<CompanyQuotesModel> {
         let requestEntity = try RequestEntity(requestModel: requestModel)
         let urlRequest = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
 
-        let requestTask = RequestDataTask<CompanyQuotesModel>(urlRequest: urlRequest)
+        let requestTask = RequestValueTask<CompanyQuotesModel>(urlRequest: urlRequest)
         super.init(requestTask.eraseToAnyRequestTask())
     }
 }

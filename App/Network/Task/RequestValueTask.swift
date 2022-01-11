@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  RequestDataTask.swift
+//  RequestValueTask.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -11,7 +11,7 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-class RequestDataTask: RequestTask {
+class RequestValueTask<Value: Codable>: RequestTask {
 
 // MARK: - Construction
 
@@ -26,9 +26,16 @@ class RequestDataTask: RequestTask {
 
 // MARK: - Methods
 
-    func execute() async throws -> Data {
-        let data = try await URLSession.shared.data(for: urlRequest)
-        return data
+    func execute() async throws -> Value {
+        do {
+            let data = try await URLSession.shared.data(for: urlRequest)
+            let value = try JSONDecoder().decode(Value.self, from: data)
+
+            return value
+        }
+        catch {
+            throw (error as? NetworkError) ?? NetworkError.valueTaskError(error)
+        }
     }
 
     func eraseToAnyRequestTask() -> AnyRequestTask<Value> {

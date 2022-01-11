@@ -94,13 +94,15 @@
 		B2B460BD2653CA2C007B2877 /* URL+withQueries.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */; };
 		B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */; };
 		B2BFBFBB2636BF86004F40B0 /* Coordination.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFBA2636BF86004F40B0 /* Coordination.swift */; };
-		B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0AEFD263AC41F00A7E8BA /* CacheService.swift */; };
 		B2C0AF00263B00EA00A7E8BA /* ServiceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C0AEFF263B00EA00A7E8BA /* ServiceContainer.swift */; };
 		B2C2EE0727366CF900ED8BC1 /* CurrencyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C2EE0627366CF900ED8BC1 /* CurrencyType.swift */; };
 		B2C2EE092736718B00ED8BC1 /* CompanyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C2EE082736718B00ED8BC1 /* CompanyProfileViewModel.swift */; };
 		B2C2EE0C2736B34300ED8BC1 /* CodableWrappers in Frameworks */ = {isa = PBXBuildFile; productRef = B2C2EE0B2736B34300ED8BC1 /* CodableWrappers */; };
 		B2C2EE0F2736C06500ED8BC1 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C2EE0E2736C06500ED8BC1 /* Timestamp.swift */; };
 		B2CE57142621CD5700C5722D /* RequestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CE57132621CD5700C5722D /* RequestSettings.swift */; };
+		B2D83CA8278D76E900A9716B /* ImageRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D83CA7278D76E900A9716B /* ImageRequestFactory.swift */; };
+		B2D83CAA278D773C00A9716B /* ImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D83CA9278D773C00A9716B /* ImageRequest.swift */; };
+		B2D83CAC278D91E100A9716B /* RequestValueTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D83CAB278D91E100A9716B /* RequestValueTask.swift */; };
 		B2DEC14D26209D3600C13589 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14C26209D3600C13589 /* AppDelegate.swift */; };
 		B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14E26209D3600C13589 /* SceneDelegate.swift */; };
 		B2DEC15626209D3600C13589 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2DEC15526209D3600C13589 /* Assets.xcassets */; };
@@ -195,12 +197,14 @@
 		B2B460BC2653CA2C007B2877 /* URL+withQueries.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URL+withQueries.swift"; sourceTree = "<group>"; };
 		B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		B2BFBFBA2636BF86004F40B0 /* Coordination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordination.swift; sourceTree = "<group>"; };
-		B2C0AEFD263AC41F00A7E8BA /* CacheService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheService.swift; sourceTree = "<group>"; };
 		B2C0AEFF263B00EA00A7E8BA /* ServiceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceContainer.swift; sourceTree = "<group>"; };
 		B2C2EE0627366CF900ED8BC1 /* CurrencyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyType.swift; sourceTree = "<group>"; };
 		B2C2EE082736718B00ED8BC1 /* CompanyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileViewModel.swift; sourceTree = "<group>"; };
 		B2C2EE0E2736C06500ED8BC1 /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
 		B2CE57132621CD5700C5722D /* RequestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSettings.swift; sourceTree = "<group>"; };
+		B2D83CA7278D76E900A9716B /* ImageRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRequestFactory.swift; sourceTree = "<group>"; };
+		B2D83CA9278D773C00A9716B /* ImageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRequest.swift; sourceTree = "<group>"; };
+		B2D83CAB278D91E100A9716B /* RequestValueTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestValueTask.swift; sourceTree = "<group>"; };
 		B2DEC14926209D3600C13589 /* Stocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2DEC14C26209D3600C13589 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2DEC14E26209D3600C13589 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -401,6 +405,7 @@
 				B264963E278850AC0067CCAC /* RequestTask.swift */,
 				B2649640278850F50067CCAC /* AnyRequestTask.swift */,
 				B2649642278853C80067CCAC /* RequestDataTask.swift */,
+				B2D83CAB278D91E100A9716B /* RequestValueTask.swift */,
 			);
 			path = Task;
 			sourceTree = "<group>";
@@ -452,6 +457,7 @@
 				B26496682789C1810067CCAC /* CompanyProfile */,
 				B264966D2789C5020067CCAC /* CompanyQuotes */,
 				B264965F2789BC7E0067CCAC /* CompanySearch */,
+				B2D83CA5278D6FCE00A9716B /* Image */,
 				B26496532788A6730067CCAC /* News */,
 			);
 			path = Request;
@@ -512,7 +518,6 @@
 		B2802B2C2624487C00B6AADA /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				B2C0AEFC263AC40800A7E8BA /* Cache Service */,
 				B2034AC026579C70006611E6 /* Web Socket Service */,
 				B2C0AEFF263B00EA00A7E8BA /* ServiceContainer.swift */,
 			);
@@ -620,14 +625,6 @@
 			path = Coordination;
 			sourceTree = "<group>";
 		};
-		B2C0AEFC263AC40800A7E8BA /* Cache Service */ = {
-			isa = PBXGroup;
-			children = (
-				B2C0AEFD263AC41F00A7E8BA /* CacheService.swift */,
-			);
-			path = "Cache Service";
-			sourceTree = "<group>";
-		};
 		B2C2EE0D2736C04D00ED8BC1 /* Serialization */ = {
 			isa = PBXGroup;
 			children = (
@@ -644,6 +641,15 @@
 				B2649685278C65C40067CCAC /* URLSession+async_await.swift */,
 			);
 			path = Extension;
+			sourceTree = "<group>";
+		};
+		B2D83CA5278D6FCE00A9716B /* Image */ = {
+			isa = PBXGroup;
+			children = (
+				B2D83CA7278D76E900A9716B /* ImageRequestFactory.swift */,
+				B2D83CA9278D773C00A9716B /* ImageRequest.swift */,
+			);
+			path = Image;
 			sourceTree = "<group>";
 		};
 		B2DEC14026209D3600C13589 = {
@@ -759,6 +765,7 @@
 				B2A55B4F2636DAFC0036AB01 /* MainCoordinator.swift in Sources */,
 				B264967C2789D6860067CCAC /* CandlesResolution.swift in Sources */,
 				B2B460BD2653CA2C007B2877 /* URL+withQueries.swift in Sources */,
+				B2D83CAC278D91E100A9716B /* RequestValueTask.swift in Sources */,
 				B23D155E263D921C0010AB57 /* StocksVM.swift in Sources */,
 				B2C2EE0F2736C06500ED8BC1 /* Timestamp.swift in Sources */,
 				B2A55B74263717A70036AB01 /* NewsTableViewCell.swift in Sources */,
@@ -777,6 +784,7 @@
 				B2802B2E26244E9600B6AADA /* NewsModel.swift in Sources */,
 				B2168B15265516EE00AA0C72 /* UIView+backgroundColorAnimation.swift in Sources */,
 				B264962E278734CA0067CCAC /* OnlineTradeMessageModel.swift in Sources */,
+				B2D83CA8278D76E900A9716B /* ImageRequestFactory.swift in Sources */,
 				B26005DE265D2D5000F814D7 /* CompanyDetailsVM.swift in Sources */,
 				B2649641278850F50067CCAC /* AnyRequestTask.swift in Sources */,
 				B264962A278727850067CCAC /* NewsCategory.swift in Sources */,
@@ -836,7 +844,7 @@
 				B2649686278C65C40067CCAC /* URLSession+async_await.swift in Sources */,
 				B26005DC265D2D3900F814D7 /* CompanyDetailsContract.swift in Sources */,
 				B26496672789C1180067CCAC /* CompanyProfileRequestModel.swift in Sources */,
-				B2C0AEFE263AC41F00A7E8BA /* CacheService.swift in Sources */,
+				B2D83CAA278D773C00A9716B /* ImageRequest.swift in Sources */,
 				B26496122784AD2C0067CCAC /* CacheStorage.swift in Sources */,
 				B282310827357FB0004CA0B9 /* CompanyProfileModel.swift in Sources */,
 				B264965A2788A8BC0067CCAC /* NewsRequest.swift in Sources */,

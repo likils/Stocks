@@ -17,5 +17,9 @@ public enum NetworkError: Error {
 
     case dataTaskError(Error)
 
+    case imageConversionError(String)
+
     case requestEntitySerializationError(Error)
+
+    case valueTaskError(Error)
 }

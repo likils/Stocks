@@ -16,7 +16,7 @@ public final class CompanyProfileRequest: AbstractRequest<CompanyProfileModel> {
         let requestEntity = try RequestEntity(requestModel: requestModel)
         let urlRequest = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
 
-        let requestTask = RequestDataTask<CompanyProfileModel>(urlRequest: urlRequest)
+        let requestTask = RequestValueTask<CompanyProfileModel>(urlRequest: urlRequest)
         super.init(requestTask.eraseToAnyRequestTask())
     }
 }

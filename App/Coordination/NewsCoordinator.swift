@@ -30,13 +30,11 @@ final class NewsCoordinator: NewsCoordination {
 // MARK: - Private Properties
 
     private let navController: UINavigationController
-    private let cacheService: CacheService
 
 // MARK: - Construction
 
-    init(navController: UINavigationController, cacheService: CacheService) {
+    init(navController: UINavigationController) {
         self.navController = navController
-        self.cacheService = cacheService
 
         showNews()
     }
@@ -51,7 +49,7 @@ final class NewsCoordinator: NewsCoordination {
 // MARK: - Private Methods
 
     private func showNews() {
-        let vm = NewsVM(coordinator: self, cacheService: cacheService)
+        let vm = NewsVM(coordinator: self)
         let vc = NewsVC(viewModel: vm)
 
         navController.viewControllers = [vc]

@@ -44,6 +44,6 @@ final class AppCoordinator {
     }
 
     private func createServiceContainer() -> ServiceContainer {
-        return ServiceContainerImpl(webSocketService: WebSocketServiceImpl(), cacheService: CacheServiceImpl())
+        return ServiceContainerImpl(webSocketService: WebSocketServiceImpl())
     }
 }

@@ -10,20 +10,14 @@ import Foundation
 protocol ServiceContainer {
 
     var webSocketService: WebSocketService { get }
-    var cacheService: CacheService { get }
-    
+
 }
 
 class ServiceContainerImpl: ServiceContainer {
 
     let webSocketService: WebSocketService
-    let cacheService: CacheService
-    
-    init(webSocketService: WebSocketService,
-         cacheService: CacheService) {
 
+    init(webSocketService: WebSocketService) {
         self.webSocketService = webSocketService
-        self.cacheService = cacheService
     }
-    
 }

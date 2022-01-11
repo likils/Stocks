@@ -16,7 +16,7 @@ public final class CompanyCandlesRequest: AbstractRequest<CompanyCandlesModel> {
         let requestEntity = try RequestEntity(requestModel: requestModel)
         let urlRequest = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
 
-        let requestTask = RequestDataTask<CompanyCandlesModel>(urlRequest: urlRequest)
+        let requestTask = RequestValueTask<CompanyCandlesModel>(urlRequest: urlRequest)
         super.init(requestTask.eraseToAnyRequestTask())
     }
 }

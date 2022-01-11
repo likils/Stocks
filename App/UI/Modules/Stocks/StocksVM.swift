@@ -6,7 +6,7 @@
 //
 
 import Combine
-import Foundation
+import UIKit
 
 class StocksVM: StocksViewModel, SearchCompanyViewModel {
     
@@ -21,7 +21,6 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     //MARK: - Private properties
     private let coordinator: StocksCoordination
     private let webSocketService: WebSocketService
-    private let cacheService: CacheService
     
     private var companyIndexInWatchlist = [String: Int]()
     private var tradesTimer: Timer?
@@ -35,13 +34,9 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     private var companyProfilesSubscriber: AnyCancellable?
     
     // MARK: - Construction
-    init(coordinator: StocksCoordination,
-         webSocketService: WebSocketService,
-         cacheService: CacheService) {
-        
+    init(coordinator: StocksCoordination, webSocketService: WebSocketService) {
         self.coordinator = coordinator
         self.webSocketService = webSocketService
-        self.cacheService = cacheService
         
         subscribeToCompanyProfileChanges()
     }
@@ -112,10 +107,8 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
     func fetchLogo(withSize size: Double, for indexPath: IndexPath) {
         let url = watchlist[indexPath.row].logoLink
         
-        cacheService.fetchImage(from: url, withSize: size) { [weak self] image in
-            DispatchQueue.main.async {
-                self?.view?.showLogo(image, at: indexPath)
-            }
+        Task {
+            await requestImage(imageLink: url, imageSize: size, indexPath: indexPath)
         }
     }
     
@@ -236,6 +229,21 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
 
             DispatchQueue.main.async {
                 self.view?.updateQuotes(companyQuotes, at: indexPath)
+            }
+        }
+        catch {
+            handleError(error)
+        }
+    }
+
+    private func requestImage(imageLink: URL, imageSize: Double, indexPath: IndexPath) async {
+        do {
+            let image = try await ImageRequestFactory
+                .createRequest(imageLink: imageLink, imageSize: CGFloat(imageSize))
+                .execute()
+
+            DispatchQueue.main.async {
+                self.view?.showLogo(image, at: indexPath)
             }
         }
         catch {

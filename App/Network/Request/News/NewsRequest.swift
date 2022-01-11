@@ -16,7 +16,7 @@ public final class NewsRequest: AbstractRequest<[NewsModel]> {
         let requestEntity = try RequestEntity(requestModel: requestModel)
         let urlRequest = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
 
-        let requestTask = RequestDataTask<[NewsModel]>(urlRequest: urlRequest)
+        let requestTask = RequestValueTask<[NewsModel]>(urlRequest: urlRequest)
         super.init(requestTask.eraseToAnyRequestTask())
     }
 }
