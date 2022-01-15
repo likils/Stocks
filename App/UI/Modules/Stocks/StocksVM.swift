@@ -104,12 +104,12 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
         }
     }
     
-    func fetchLogo(withSize size: Double, for indexPath: IndexPath) {
-        let url = watchlist[indexPath.row].logoLink
+    func requestLogoImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher? {
+        let logoLink = watchlist[indexPath.row].logoLink
         
-        Task {
-            await requestImage(imageLink: url, imageSize: size, indexPath: indexPath)
-        }
+        return ImageRequestFactory
+            .createRequest(imageLink: logoLink, imageSize: imageSize)
+            .prepareImage()
     }
     
     func fetchQuotes(for company: CompanyProfileViewModel, at indexPath: IndexPath) {
@@ -229,21 +229,6 @@ class StocksVM: StocksViewModel, SearchCompanyViewModel {
 
             DispatchQueue.main.async {
                 self.view?.updateQuotes(companyQuotes, at: indexPath)
-            }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func requestImage(imageLink: URL, imageSize: Double, indexPath: IndexPath) async {
-        do {
-            let image = try await ImageRequestFactory
-                .createRequest(imageLink: imageLink, imageSize: CGFloat(imageSize))
-                .execute()
-
-            DispatchQueue.main.async {
-                self.view?.showLogo(image, at: indexPath)
             }
         }
         catch {

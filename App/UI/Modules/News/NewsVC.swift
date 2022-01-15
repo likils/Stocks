@@ -1,13 +1,18 @@
+// ----------------------------------------------------------------------------
 //
-//  NewsVC.swift
-//  Stocks
+//  NewsVM.swift
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
+import Combine
 import UIKit
 
-class NewsVC: UITableViewController, NewsView {
+// ----------------------------------------------------------------------------
+
+final class NewsVC: UITableViewController, NewsView {
     
     // MARK: - Subviews
     private let collectionOfCategories: UICollectionView = {
@@ -92,11 +97,6 @@ class NewsVC: UITableViewController, NewsView {
         }
     }
     
-    func showImage(_ image: UIImage, at indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return }
-        cell.setImage(image)
-    }
-    
     // MARK: - Private Methods
     private func setupTableView() {
         tableView.backgroundColor = .View.backgroundColor
@@ -132,11 +132,14 @@ extension NewsVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
         if let cell = cell as? NewsTableViewCell {
+
             let news = news[indexPath.row]
             cell.setNews(news)
-            
+
             let maxImageSize = Double(cell.frame.size.width)
-            viewModel.fetchImage(withSize: maxImageSize, for: indexPath)
+            let publisher = viewModel.requestNewsImage(withSize: maxImageSize, for: indexPath)
+
+            cell.subscribeToImageChanges(with: publisher)
         }
         return cell
     }

@@ -7,7 +7,12 @@
 //
 // ----------------------------------------------------------------------------
 
+import Combine
 import UIKit
+
+// ----------------------------------------------------------------------------
+
+public typealias ImagePublisher = AnyPublisher<UIImage, Never>
 
 // ----------------------------------------------------------------------------
 
@@ -15,14 +20,15 @@ public final class ImageRequest: AbstractRequest<Data> {
 
 // MARK: - Private Properties
 
-    private let cacheImageRepository: ImageRepository
+    private let cachedImageRepository: ImageRepository
     private let imageLink: URL
     private let imageSize: CGFloat?
+    private var imagePublisher = PassthroughSubject<UIImage?, Never>()
 
 // MARK: - Construction
 
-    init(cacheImageRepository: ImageRepository, imageLink: URL, imageSize: CGFloat?) {
-        self.cacheImageRepository = cacheImageRepository
+    init(cachedImageRepository: ImageRepository, imageLink: URL, imageSize: CGFloat?) {
+        self.cachedImageRepository = cachedImageRepository
         self.imageLink = imageLink
         self.imageSize = imageSize
 
@@ -34,37 +40,39 @@ public final class ImageRequest: AbstractRequest<Data> {
 
 // MARK: - Methods
 
-    public func execute() async throws -> UIImage {
-        let image: UIImage
-
-        if let cachedImage = await cacheImageRepository.getImage(forKey: imageLink) {
-            image = cachedImage
-        }
-        else {
-            let imageData = try await super.execute()
-            image = try createImage(from: imageData, with: imageSize)
-
-            cacheImageRepository.putImage(image, forKey: imageLink)
+    public func prepareImage() -> ImagePublisher {
+        Task {
+            await requestImage()
         }
 
-        return image
+        return imagePublisher
+            .compactMap { $0 }
+            .flatMap { Just($0) }
+            .eraseToAnyPublisher()
     }
 
 // MARK: - Private Methods
 
-    private func createImage(from imageData: Data, with imageSize: CGFloat?) throws -> UIImage {
+    private func requestImage() async {
 
-        if let imageSize = imageSize,
-           let image = createDownsampledImage(from: imageData, with: imageSize) ?? UIImage(data: imageData) {
+        if let cachedImage = await cachedImageRepository.getImage(forKey: imageLink) {
+            imagePublisher.send(cachedImage)
+        }
+        else if let imageData = try? await execute(),
+                let image = createImage(from: imageData, with: imageSize) {
 
-            return image
+            cachedImageRepository.putImage(image, forKey: imageLink)
+            imagePublisher.send(image)
         }
-        else if let image = UIImage(data: imageData) {
-            return image
+    }
+
+    private func createImage(from imageData: Data, with imageSize: CGFloat?) -> UIImage? {
+
+        let image = imageSize.map { size in
+            createDownsampledImage(from: imageData, with: size)
         }
-        else {
-            throw NetworkError.imageConversionError(imageLink.absoluteString)
-        }
+
+        return image ?? UIImage(data: imageData)
     }
 
     // used from https://swiftsenpai.com/development/reduce-uiimage-memory-footprint/
@@ -81,13 +89,14 @@ public final class ImageRequest: AbstractRequest<Data> {
         ] as CFDictionary
 
 
+        var image: UIImage?
+
         if let imageSource = CGImageSourceCreateWithData(imageData as CFData, imageSourceOptions),
            let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions) {
 
-            return UIImage(cgImage: downsampledImage)
+            image = UIImage(cgImage: downsampledImage)
         }
-        else {
-            return nil
-        }
+
+        return image
     }
 }

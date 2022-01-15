@@ -34,12 +34,13 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     // MARK: - Public Methods
     
     // MARK: Company details
-    func fetchLogo() {
-        let url = companyProfile.logoLink
+
+    func requestLogoImage() -> ImagePublisher? {
+        let logoLink = companyProfile.logoLink
         
-        Task {
-            await requestLogoImage(imageLink: url)
-        }
+        return ImageRequestFactory
+            .createRequest(imageLink: logoLink)
+            .prepareImage()
     }
     
     func getCandles(withTimeline timeline: CompanyCandlesTimeline) {
@@ -93,12 +94,13 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         }
     }
     
-    func fetchImage(withSize size: Double, for indexPath: IndexPath) {
-        guard let url = news[indexPath.row].imageLink else { return }
-        
-        Task {
-            await requestImage(imageLink: url, imageSize: size, indexPath: indexPath)
-        }
+    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher? {
+
+        guard let imageLink = news[indexPath.row].imageLink else { return nil }
+
+        return ImageRequestFactory
+            .createRequest(imageLink: imageLink, imageSize: imageSize)
+            .prepareImage()
     }
     
     func cellTapped(at index: Int) {
@@ -131,36 +133,6 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
 
             DispatchQueue.main.async {
                 self.view?.updateValues(by: companyCandles, and: timeline)
-            }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func requestImage(imageLink: URL, imageSize: Double, indexPath: IndexPath) async {
-        do {
-            let image = try await ImageRequestFactory
-                .createRequest(imageLink: imageLink, imageSize: CGFloat(imageSize))
-                .execute()
-
-            DispatchQueue.main.async {
-                self.view?.showImage(image, at: indexPath)
-            }
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func requestLogoImage(imageLink: URL) async {
-        do {
-            let image = try await ImageRequestFactory
-                .createRequest(imageLink: imageLink)
-                .execute()
-
-            DispatchQueue.main.async {
-                self.view?.showLogo(image)
             }
         }
         catch {

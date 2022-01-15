@@ -5,6 +5,7 @@
 //  Created by likils on 01.05.2021.
 //
 
+import Combine
 import UIKit
 
 class StocksTableViewCell: UITableViewCell {
@@ -53,6 +54,10 @@ class StocksTableViewCell: UITableViewCell {
         label.textAlignment = .right
         return label
     }()
+
+// MARK: - Private Properties
+
+    private var logoImageSubscriber: AnyCancellable?
     
     // MARK: - Public properties
     var companyProfile: CompanyProfileViewModel? {
@@ -95,8 +100,19 @@ class StocksTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public Methods
-    func setLogo(_ image: UIImage) {
-        logo.image = image
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        logoImageSubscriber?.cancel()
+    }
+
+    func subscribeToImageChanges(with imagePublisher: ImagePublisher?) {
+        logoImageSubscriber?.cancel()
+
+        logoImageSubscriber = imagePublisher?
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.logo.image = $0 }
     }
     
     func animate(completion: (() -> Void)? = nil) {

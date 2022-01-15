@@ -15,15 +15,14 @@ public enum ImageRequestFactory {
 
 // MARK: - Private properties
 
-    private static let cacheImageRepository: ImageRepository = {
+    private static let cachedImageRepository: ImageRepository = {
         let cacheStorage = CacheStorage<URL, UIImage>()
-        let cacheImageRepository = ImageRepositoryImpl(storage: cacheStorage.eraseToAnyStorage())
-        return cacheImageRepository
+        return ImageRepositoryImpl(storage: cacheStorage.eraseToAnyStorage())
     }()
 
 // MARK: - Methods
 
     public static func createRequest(imageLink: URL, imageSize: CGFloat? = nil) -> ImageRequest {
-        return ImageRequest(cacheImageRepository: cacheImageRepository, imageLink: imageLink, imageSize: imageSize)
+        return ImageRequest(cachedImageRepository: cachedImageRepository, imageLink: imageLink, imageSize: imageSize)
     }
 }

@@ -1,10 +1,13 @@
+// ----------------------------------------------------------------------------
 //
 //  NewsVM.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
+import Combine
 import UIKit
 
 class NewsVM: NewsViewModel {
@@ -20,10 +23,12 @@ class NewsVM: NewsViewModel {
     }
     private(set) var newsCategories: [NewsCategory]
     
-    //MARK: - Private properties
+//MARK: - Private properties
+
     private let coordinator: NewsCoordination
     
-    // MARK: - Construction
+// MARK: - Construction
+
     init(coordinator: NewsCoordination) {
         self.coordinator = coordinator
         self.newsCategories = [.general, .forex, .crypto, .merger]
@@ -37,12 +42,13 @@ class NewsVM: NewsViewModel {
         }
     }
     
-    func fetchImage(withSize size: Double, for indexPath: IndexPath) {
-        guard let url = news[indexPath.row].imageLink else { return }
-        
-        Task {
-            await requestImage(imageLink: url, imageSize: size, indexPath: indexPath)
-        }
+    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher? {
+
+        guard let imageLink = news[indexPath.row].imageLink else { return nil }
+
+        return ImageRequestFactory
+            .createRequest(imageLink: imageLink, imageSize: imageSize)
+            .prepareImage()
     }
     
     func cellTapped(at index: Int) {
@@ -50,28 +56,13 @@ class NewsVM: NewsViewModel {
         coordinator.showWebPage(with: url)
     }
 
-    // MARK: - Private Methods
+// MARK: - Private Methods
 
     private func requestNews(with category: NewsCategory) async {
         do {
             news = try await NewsRequestFactory
                 .createRequest(newsCategory: category)
                 .execute()
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func requestImage(imageLink: URL, imageSize: Double, indexPath: IndexPath) async {
-        do {
-            let image = try await ImageRequestFactory
-                .createRequest(imageLink: imageLink, imageSize: CGFloat(imageSize))
-                .execute()
-
-            DispatchQueue.main.async {
-                self.view?.showImage(image, at: indexPath)
-            }
         }
         catch {
             handleError(error)

@@ -1,15 +1,21 @@
+// ----------------------------------------------------------------------------
 //
 //  NewsTableViewCell.swift
-//  Stocks
 //
-//  Created by likils on 26.04.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
+import Combine
 import UIKit
 
-class NewsTableViewCell: UITableViewCell {
+// ----------------------------------------------------------------------------
+
+final class NewsTableViewCell: UITableViewCell {
     
-    // MARK: - Subviews
+// MARK: - Subviews
+
     private let backView = CellBackgroundView()
     
     private let sourceLabel: UILabel = {
@@ -53,6 +59,11 @@ class NewsTableViewCell: UITableViewCell {
         imageView.layer.cornerRadius = 12
         return imageView
     }()
+
+// MARK: - Private Properties
+
+    private let relativeDateFormatter = RelativeDateTimeFormatter()
+    private var thumbnailImageSubscriber: AnyCancellable?
     
     // MARK: - Construction
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -65,17 +76,27 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     // MARK: - Public Methods
+
+    override func prepareForReuse() {
+        super.prepareForReuse()
+
+        thumbnailImageSubscriber?.cancel()
+    }
+
     func setNews(_ news: NewsModel) {
-        let formatter = RelativeDateTimeFormatter()
-        dateLabel.text = formatter.localizedString(for: news.date, relativeTo: Date())
+        dateLabel.text = relativeDateFormatter.localizedString(for: news.date, relativeTo: Date())
         sourceLabel.text = news.source
         headlineLabel.text = news.headline
         summaryLabel.text = news.summary
         thumbnailImageView.image = UIImage()
     }
     
-    func setImage(_ image: UIImage) {
-        thumbnailImageView.image = image
+    func subscribeToImageChanges(with imagePublisher: ImagePublisher?) {
+        thumbnailImageSubscriber?.cancel()
+
+        thumbnailImageSubscriber = imagePublisher?
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.thumbnailImageView.image = $0 }
     }
     
     func animate(completion: (() -> Void)? = nil) {
@@ -83,6 +104,7 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     // MARK: - Private Methods
+
     private func setupView() {
         selectionStyle = .none
         backgroundColor = .clear

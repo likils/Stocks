@@ -14,7 +14,7 @@ protocol NewsViewModel: AnyObject {
     var newsCategories: [NewsCategory] { get }
     
     func updateNews(with category: NewsCategory)
-    func fetchImage(withSize size: Double, for indexPath: IndexPath)
+    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher?
     func cellTapped(at index: Int)
     
 }
@@ -22,6 +22,5 @@ protocol NewsViewModel: AnyObject {
 protocol NewsView: AnyObject {
     
     func reloadNews(if isUpdated: Bool)
-    func showImage(_ image: UIImage, at indexPath: IndexPath)
     
 }

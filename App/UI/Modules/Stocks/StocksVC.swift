@@ -56,11 +56,6 @@ class StocksVC: UITableViewController, StocksView {
         }
     }
     
-    func showLogo(_ image: UIImage, at indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
-        cell.setLogo(image)
-    }
-    
     func updateQuotes(_ quotes: CompanyQuotesModel?, at indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return }
         cell.companyQuotes = quotes
@@ -106,7 +101,8 @@ extension StocksVC {
             cell.companyProfile = company
             
             let maxLogoSize = Double(cell.bounds.height)
-            viewModel.fetchLogo(withSize: maxLogoSize, for: indexPath)
+            let publisher = viewModel.requestLogoImage(withSize: maxLogoSize, for: indexPath)
+            cell.subscribeToImageChanges(with: publisher)
             
             if let quotes = company.companyQuotes, quotes.date.isRelevant {
                 cell.companyQuotes = quotes

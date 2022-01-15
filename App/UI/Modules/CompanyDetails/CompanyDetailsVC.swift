@@ -55,7 +55,6 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         setupTableView()
         
         viewModel.getNews()
-        viewModel.fetchLogo()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -96,19 +95,9 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         cell.companyQuotes = company.companyQuotes
     }
     
-    func showLogo(_ logo: UIImage) {
-        guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
-        cell.setLogo(logo)
-    }
-    
     // MARK: News
     func showNews() {
         tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
-    }
-    
-    func showImage(_ image: UIImage, at indexPath: IndexPath) {
-        guard let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell else { return }
-        cell.setImage(image)
     }
     
     // MARK: - Private Methods
@@ -167,6 +156,8 @@ extension CompanyDetailsVC {
             cell.updateCompanyDetails(by: company)
             cell.companyQuotes = company.companyQuotes
             cell.delegate = self
+            let publisher = viewModel.requestLogoImage()
+            cell.subscribeToImageChanges(with: publisher)
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
@@ -175,7 +166,8 @@ extension CompanyDetailsVC {
                 cell.setNews(news)
                 
                 let maxImageSize = Double(cell.frame.size.width)
-                viewModel.fetchImage(withSize: maxImageSize, for: indexPath)
+                let publisher = viewModel.requestNewsImage(withSize: maxImageSize, for: indexPath)
+                cell.subscribeToImageChanges(with: publisher)
             }
             return cell
         }
