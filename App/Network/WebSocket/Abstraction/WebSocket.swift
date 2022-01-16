@@ -1,25 +1,23 @@
 // ----------------------------------------------------------------------------
 //
-//  NetworkError.swift
+//  WebSocket.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
-import Foundation
+import Combine
 
 // ----------------------------------------------------------------------------
 
-public enum NetworkError: Error {
+public protocol WebSocket {
 
-    case badResponseError(URLResponse?)
+    associatedtype Value: Codable
 
-    case dataTaskError(Error)
+// MARK: - Methods
 
-    case imageConversionError(String)
+    func getPublisher() -> AnyPublisher<Value, NetworkError>
 
-    case requestEntitySerializationError(Error)
-
-    case valueTaskError(Error)
+    func sendMessage<Message: Encodable>(_ message: Message) throws
 }

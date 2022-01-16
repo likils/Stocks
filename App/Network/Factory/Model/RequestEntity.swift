@@ -15,9 +15,11 @@ struct RequestEntity {
 
 // MARK: - Construction
 
-    init<RequestModel: Codable>(requestModel: RequestModel) throws {
+    init<RequestModel: Encodable>(requestModel: RequestModel) throws {
         do {
             let requestModelData = try JSONEncoder().encode(requestModel)
+
+            data = requestModelData
             queryItems = try JSONDecoder().decode([String: String].self, from: requestModelData)
         }
         catch {
@@ -27,5 +29,6 @@ struct RequestEntity {
 
 // MARK: - Properties
 
+    let data: Data
     let queryItems: [String: String]
 }

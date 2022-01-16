@@ -11,7 +11,7 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-class RequestDataTask: RequestTask {
+final class RequestDataTask: RequestTask {
 
 // MARK: - Construction
 

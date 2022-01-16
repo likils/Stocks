@@ -11,7 +11,7 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-class RequestValueTask<Value: Codable>: RequestTask {
+final class RequestValueTask<Value: Codable>: RequestTask {
 
 // MARK: - Construction
 

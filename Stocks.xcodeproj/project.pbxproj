@@ -51,7 +51,7 @@
 		B26496452788754A0067CCAC /* WebSocketRequestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496442788754A0067CCAC /* WebSocketRequestProvider.swift */; };
 		B2649647278875600067CCAC /* HttpRequestProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2649646278875600067CCAC /* HttpRequestProvider.swift */; };
 		B2649649278876090067CCAC /* RequestPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2649648278876090067CCAC /* RequestPath.swift */; };
-		B264964B27887A900067CCAC /* OnlineTradeRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964A27887A900067CCAC /* OnlineTradeRequestModel.swift */; };
+		B264964B27887A900067CCAC /* OnlineTradesRequestModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964A27887A900067CCAC /* OnlineTradesRequestModel.swift */; };
 		B264964E27887B360067CCAC /* RequestEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964D27887B360067CCAC /* RequestEntity.swift */; };
 		B264965027889F0E0067CCAC /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = B264964F27889F0E0067CCAC /* NetworkError.swift */; };
 		B26496552788A68D0067CCAC /* NewsRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B26496542788A68D0067CCAC /* NewsRequestFactory.swift */; };
@@ -77,6 +77,13 @@
 		B282310127354177004CA0B9 /* CompaniesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B282310027354177004CA0B9 /* CompaniesModel.swift */; };
 		B282310827357FB0004CA0B9 /* CompanyProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B282310727357FB0004CA0B9 /* CompanyProfileModel.swift */; };
 		B282310B2735821D004CA0B9 /* CompanyCandlesTimeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = B282310A2735821D004CA0B9 /* CompanyCandlesTimeline.swift */; };
+		B28F2DDD27933DEF00F9AA3F /* WebSocketTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DDC27933DEF00F9AA3F /* WebSocketTask.swift */; };
+		B28F2DE027933FAE00F9AA3F /* AnyWebSocketTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DDF27933FAE00F9AA3F /* AnyWebSocketTask.swift */; };
+		B28F2DE22793408F00F9AA3F /* WebSocketValueTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DE12793408F00F9AA3F /* WebSocketValueTask.swift */; };
+		B28F2DEA27944D5000F9AA3F /* OnlineTradesWebSocketFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DE927944D5000F9AA3F /* OnlineTradesWebSocketFactory.swift */; };
+		B28F2DEC27944E5500F9AA3F /* WebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DEB27944E5500F9AA3F /* WebSocket.swift */; };
+		B28F2DEE27944E7D00F9AA3F /* AbstractWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DED27944E7D00F9AA3F /* AbstractWebSocket.swift */; };
+		B28F2DF027944F7400F9AA3F /* OnlineTradesWebSocket.swift in Sources */ = {isa = PBXBuildFile; fileRef = B28F2DEF27944F7400F9AA3F /* OnlineTradesWebSocket.swift */; };
 		B2968D912656759E009AA143 /* Date+isRelevant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2968D902656759E009AA143 /* Date+isRelevant.swift */; };
 		B2968D9326567E09009AA143 /* WebSocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2968D9226567E08009AA143 /* WebSocketService.swift */; };
 		B2968D9526569BEB009AA143 /* OnlineTradeModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2968D9426569BEB009AA143 /* OnlineTradeModel.swift */; };
@@ -99,7 +106,7 @@
 		B2C2EE092736718B00ED8BC1 /* CompanyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C2EE082736718B00ED8BC1 /* CompanyProfileViewModel.swift */; };
 		B2C2EE0C2736B34300ED8BC1 /* CodableWrappers in Frameworks */ = {isa = PBXBuildFile; productRef = B2C2EE0B2736B34300ED8BC1 /* CodableWrappers */; };
 		B2C2EE0F2736C06500ED8BC1 /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C2EE0E2736C06500ED8BC1 /* Timestamp.swift */; };
-		B2CE57142621CD5700C5722D /* RequestSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CE57132621CD5700C5722D /* RequestSettings.swift */; };
+		B2CE57142621CD5700C5722D /* NetworkSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2CE57132621CD5700C5722D /* NetworkSettings.swift */; };
 		B2D83CA8278D76E900A9716B /* ImageRequestFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D83CA7278D76E900A9716B /* ImageRequestFactory.swift */; };
 		B2D83CAA278D773C00A9716B /* ImageRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D83CA9278D773C00A9716B /* ImageRequest.swift */; };
 		B2D83CAC278D91E100A9716B /* RequestValueTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D83CAB278D91E100A9716B /* RequestValueTask.swift */; };
@@ -154,7 +161,7 @@
 		B26496442788754A0067CCAC /* WebSocketRequestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketRequestProvider.swift; sourceTree = "<group>"; };
 		B2649646278875600067CCAC /* HttpRequestProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HttpRequestProvider.swift; sourceTree = "<group>"; };
 		B2649648278876090067CCAC /* RequestPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestPath.swift; sourceTree = "<group>"; };
-		B264964A27887A900067CCAC /* OnlineTradeRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradeRequestModel.swift; sourceTree = "<group>"; };
+		B264964A27887A900067CCAC /* OnlineTradesRequestModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradesRequestModel.swift; sourceTree = "<group>"; };
 		B264964D27887B360067CCAC /* RequestEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestEntity.swift; sourceTree = "<group>"; };
 		B264964F27889F0E0067CCAC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		B26496542788A68D0067CCAC /* NewsRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRequestFactory.swift; sourceTree = "<group>"; };
@@ -180,6 +187,14 @@
 		B282310027354177004CA0B9 /* CompaniesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompaniesModel.swift; sourceTree = "<group>"; };
 		B282310727357FB0004CA0B9 /* CompanyProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileModel.swift; sourceTree = "<group>"; };
 		B282310A2735821D004CA0B9 /* CompanyCandlesTimeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyCandlesTimeline.swift; sourceTree = "<group>"; };
+		B28F2DDC27933DEF00F9AA3F /* WebSocketTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketTask.swift; sourceTree = "<group>"; };
+		B28F2DDF27933FAE00F9AA3F /* AnyWebSocketTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyWebSocketTask.swift; sourceTree = "<group>"; };
+		B28F2DE12793408F00F9AA3F /* WebSocketValueTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketValueTask.swift; sourceTree = "<group>"; };
+		B28F2DE927944D5000F9AA3F /* OnlineTradesWebSocketFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradesWebSocketFactory.swift; sourceTree = "<group>"; };
+		B28F2DEB27944E5500F9AA3F /* WebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocket.swift; sourceTree = "<group>"; };
+		B28F2DED27944E7D00F9AA3F /* AbstractWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbstractWebSocket.swift; sourceTree = "<group>"; };
+		B28F2DEF27944F7400F9AA3F /* OnlineTradesWebSocket.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradesWebSocket.swift; sourceTree = "<group>"; };
+		B28F2DF12794520200F9AA3F /* TODO.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = TODO.md; sourceTree = "<group>"; };
 		B2968D902656759E009AA143 /* Date+isRelevant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+isRelevant.swift"; sourceTree = "<group>"; };
 		B2968D9226567E08009AA143 /* WebSocketService.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WebSocketService.swift; sourceTree = "<group>"; };
 		B2968D9426569BEB009AA143 /* OnlineTradeModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnlineTradeModel.swift; sourceTree = "<group>"; };
@@ -201,7 +216,7 @@
 		B2C2EE0627366CF900ED8BC1 /* CurrencyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyType.swift; sourceTree = "<group>"; };
 		B2C2EE082736718B00ED8BC1 /* CompanyProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileViewModel.swift; sourceTree = "<group>"; };
 		B2C2EE0E2736C06500ED8BC1 /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
-		B2CE57132621CD5700C5722D /* RequestSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestSettings.swift; sourceTree = "<group>"; };
+		B2CE57132621CD5700C5722D /* NetworkSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSettings.swift; sourceTree = "<group>"; };
 		B2D83CA7278D76E900A9716B /* ImageRequestFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRequestFactory.swift; sourceTree = "<group>"; };
 		B2D83CA9278D773C00A9716B /* ImageRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRequest.swift; sourceTree = "<group>"; };
 		B2D83CAB278D91E100A9716B /* RequestValueTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestValueTask.swift; sourceTree = "<group>"; };
@@ -378,11 +393,15 @@
 		B2649622278707AA0067CCAC /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				B264964F27889F0E0067CCAC /* NetworkError.swift */,
+				B2CE57132621CD5700C5722D /* NetworkSettings.swift */,
 				B2C9505E278CA4FC00667872 /* Extension */,
-				B26496572788A7240067CCAC /* Request */,
 				B26496562788A6FD0067CCAC /* Factory */,
 				B264963D27884F8D0067CCAC /* Provider */,
-				B264963C27884F640067CCAC /* Task */,
+				B26496572788A7240067CCAC /* Request */,
+				B264963C27884F640067CCAC /* RequestTask */,
+				B28F2DE827944A3700F9AA3F /* WebSocket */,
+				B28F2DDE27933E5C00F9AA3F /* WebSocketTask */,
 			);
 			path = Network;
 			sourceTree = "<group>";
@@ -391,15 +410,15 @@
 			isa = PBXGroup;
 			children = (
 				B2649630278735AE0067CCAC /* MessageType.swift */,
-				B264964A27887A900067CCAC /* OnlineTradeRequestModel.swift */,
 				B264962D278734CA0067CCAC /* OnlineTradeMessageModel.swift */,
 				B2968D9426569BEB009AA143 /* OnlineTradeModel.swift */,
 				B27AF9782736C5EB000AACE0 /* OnlineTradesModel.swift */,
+				B264964A27887A900067CCAC /* OnlineTradesRequestModel.swift */,
 			);
 			path = OnlineTrades;
 			sourceTree = "<group>";
 		};
-		B264963C27884F640067CCAC /* Task */ = {
+		B264963C27884F640067CCAC /* RequestTask */ = {
 			isa = PBXGroup;
 			children = (
 				B264963E278850AC0067CCAC /* RequestTask.swift */,
@@ -407,16 +426,16 @@
 				B2649642278853C80067CCAC /* RequestDataTask.swift */,
 				B2D83CAB278D91E100A9716B /* RequestValueTask.swift */,
 			);
-			path = Task;
+			path = RequestTask;
 			sourceTree = "<group>";
 		};
 		B264963D27884F8D0067CCAC /* Provider */ = {
 			isa = PBXGroup;
 			children = (
+				B2649648278876090067CCAC /* RequestPath.swift */,
 				B26496342788464D0067CCAC /* RequestProvider.swift */,
 				B2649646278875600067CCAC /* HttpRequestProvider.swift */,
 				B26496442788754A0067CCAC /* WebSocketRequestProvider.swift */,
-				B2649648278876090067CCAC /* RequestPath.swift */,
 			);
 			path = Provider;
 			sourceTree = "<group>";
@@ -450,8 +469,6 @@
 		B26496572788A7240067CCAC /* Request */ = {
 			isa = PBXGroup;
 			children = (
-				B264964F27889F0E0067CCAC /* NetworkError.swift */,
-				B2CE57132621CD5700C5722D /* RequestSettings.swift */,
 				B26496582788A73D0067CCAC /* Abstraction */,
 				B26496742789CB6D0067CCAC /* CompanyCandles */,
 				B26496682789C1810067CCAC /* CompanyProfile */,
@@ -562,12 +579,50 @@
 			path = Company;
 			sourceTree = "<group>";
 		};
+		B28F2DDE27933E5C00F9AA3F /* WebSocketTask */ = {
+			isa = PBXGroup;
+			children = (
+				B28F2DDC27933DEF00F9AA3F /* WebSocketTask.swift */,
+				B28F2DDF27933FAE00F9AA3F /* AnyWebSocketTask.swift */,
+				B28F2DE12793408F00F9AA3F /* WebSocketValueTask.swift */,
+			);
+			path = WebSocketTask;
+			sourceTree = "<group>";
+		};
+		B28F2DE827944A3700F9AA3F /* WebSocket */ = {
+			isa = PBXGroup;
+			children = (
+				B28F2DF2279461F900F9AA3F /* Abstraction */,
+				B28F2DF32794620D00F9AA3F /* OnlineTrades */,
+			);
+			path = WebSocket;
+			sourceTree = "<group>";
+		};
+		B28F2DF2279461F900F9AA3F /* Abstraction */ = {
+			isa = PBXGroup;
+			children = (
+				B28F2DEB27944E5500F9AA3F /* WebSocket.swift */,
+				B28F2DED27944E7D00F9AA3F /* AbstractWebSocket.swift */,
+			);
+			path = Abstraction;
+			sourceTree = "<group>";
+		};
+		B28F2DF32794620D00F9AA3F /* OnlineTrades */ = {
+			isa = PBXGroup;
+			children = (
+				B28F2DE927944D5000F9AA3F /* OnlineTradesWebSocketFactory.swift */,
+				B28F2DEF27944F7400F9AA3F /* OnlineTradesWebSocket.swift */,
+			);
+			path = OnlineTrades;
+			sourceTree = "<group>";
+		};
 		B2A55B4B2636D96D0036AB01 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
 				B2DEC15526209D3600C13589 /* Assets.xcassets */,
 				B2DEC15726209D3600C13589 /* LaunchScreen.storyboard */,
 				B2DEC15A26209D3600C13589 /* Info.plist */,
+				B28F2DF12794520200F9AA3F /* TODO.md */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -759,6 +814,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B28F2DEA27944D5000F9AA3F /* OnlineTradesWebSocketFactory.swift in Sources */,
 				B264961027849DB20067CCAC /* AnyStorage.swift in Sources */,
 				B2C2EE092736718B00ED8BC1 /* CompanyProfileViewModel.swift in Sources */,
 				B2BFBFBB2636BF86004F40B0 /* Coordination.swift in Sources */,
@@ -769,6 +825,7 @@
 				B23D155E263D921C0010AB57 /* StocksVM.swift in Sources */,
 				B2C2EE0F2736C06500ED8BC1 /* Timestamp.swift in Sources */,
 				B2A55B74263717A70036AB01 /* NewsTableViewCell.swift in Sources */,
+				B28F2DE22793408F00F9AA3F /* WebSocketValueTask.swift in Sources */,
 				B26496612789BC980067CCAC /* CompanySearchRequestFactory.swift in Sources */,
 				B26005E2265D487A00F814D7 /* CompanyCandlesModel.swift in Sources */,
 				B23D1564263DA52F0010AB57 /* StocksTableViewCell.swift in Sources */,
@@ -794,18 +851,20 @@
 				B264962C278729D10067CCAC /* DateTransform.swift in Sources */,
 				B2535271264C0D65005CEB74 /* UITableViewCell+identifier.swift in Sources */,
 				B264966C2789C1CE0067CCAC /* CompanyProfileRequest.swift in Sources */,
+				B28F2DEC27944E5500F9AA3F /* WebSocket.swift in Sources */,
 				B264965027889F0E0067CCAC /* NetworkError.swift in Sources */,
 				B26005E6265E7F0000F814D7 /* CompanyDetailsTableViewCell.swift in Sources */,
 				B2B0D8802638287E00A59015 /* SettingsContract.swift in Sources */,
 				B2535274264C4E22005CEB74 /* Double+roundForText.swift in Sources */,
 				B282310127354177004CA0B9 /* CompaniesModel.swift in Sources */,
 				B26496652789BD3E0067CCAC /* CompanySearchRequestModel.swift in Sources */,
-				B2CE57142621CD5700C5722D /* RequestSettings.swift in Sources */,
+				B2CE57142621CD5700C5722D /* NetworkSettings.swift in Sources */,
 				B2649631278735AE0067CCAC /* MessageType.swift in Sources */,
 				B271C81C2654F83500012308 /* SearchCompanyVC.swift in Sources */,
 				B264963F278850AC0067CCAC /* RequestTask.swift in Sources */,
 				B2C2EE0727366CF900ED8BC1 /* CurrencyType.swift in Sources */,
 				B26496352788464D0067CCAC /* RequestProvider.swift in Sources */,
+				B28F2DEE27944E7D00F9AA3F /* AbstractWebSocket.swift in Sources */,
 				B26005E8265FB01100F814D7 /* GraphView.swift in Sources */,
 				B282310B2735821D004CA0B9 /* CompanyCandlesTimeline.swift in Sources */,
 				B22799BC2639B95A0088A8B2 /* ColorScheme.swift in Sources */,
@@ -817,11 +876,14 @@
 				B2B0D886263828B600A59015 /* SettingsVC.swift in Sources */,
 				B26496452788754A0067CCAC /* WebSocketRequestProvider.swift in Sources */,
 				B2B0D883263828A600A59015 /* SettingsVM.swift in Sources */,
+				B28F2DDD27933DEF00F9AA3F /* WebSocketTask.swift in Sources */,
+				B28F2DE027933FAE00F9AA3F /* AnyWebSocketTask.swift in Sources */,
 				B26496782789CBA10067CCAC /* CompanyCandlesRequest.swift in Sources */,
 				B2C0AF00263B00EA00A7E8BA /* ServiceContainer.swift in Sources */,
 				B23D155C263D91DE0010AB57 /* StocksContract.swift in Sources */,
 				B26496392788481D0067CCAC /* Request.swift in Sources */,
 				B264961F2785E7420067CCAC /* CompanyProfileRepository.swift in Sources */,
+				B28F2DF027944F7400F9AA3F /* OnlineTradesWebSocket.swift in Sources */,
 				B264966A2789C1A50067CCAC /* CompanyProfileRequestFactory.swift in Sources */,
 				B264960E278498220067CCAC /* Storage.swift in Sources */,
 				B23D1566263DA7EB0010AB57 /* CompanyQuotesModel.swift in Sources */,
@@ -855,7 +917,7 @@
 				B2649628278727100067CCAC /* CompanyNewsRequestModel.swift in Sources */,
 				B264966F2789C5850067CCAC /* CompanyQuotesRequestFactory.swift in Sources */,
 				B2A55B562636EC380036AB01 /* StocksCoordinator.swift in Sources */,
-				B264964B27887A900067CCAC /* OnlineTradeRequestModel.swift in Sources */,
+				B264964B27887A900067CCAC /* OnlineTradesRequestModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

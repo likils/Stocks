@@ -50,7 +50,7 @@ class WebSocketServiceImpl: NSObject, WebSocketService, URLSessionWebSocketDeleg
     private func createWebSocketTask() {
         let session = URLSession(configuration: .default, delegate: self, delegateQueue: OperationQueue())
 
-        let requestModel = OnlineTradeRequestModel(token: RequestSettings.token)
+        let requestModel = OnlineTradesRequestModel(token: NetworkSettings.token)
         let requestEntity = try! RequestEntity(requestModel: requestModel)
         let requestProvider = WebSocketRequestProvider()
         let request = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)

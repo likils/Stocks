@@ -1,29 +1,28 @@
 // ----------------------------------------------------------------------------
 //
-//  HttpRequestProvider.swift
+//  WebSocketTask.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
+import Combine
 import Foundation
 
 // ----------------------------------------------------------------------------
 
-struct HttpRequestProvider: RequestProvider {
+protocol WebSocketTask {
 
-// MARK: - Construction
+    associatedtype Value: Codable
 
-    init(requestPath: RequestPath) {
-        path = requestPath.rawValue
-    }
+// MARK: - Methods
 
-// MARK: - Properties
+    func getPublisher() -> AnyPublisher<Value, NetworkError>
 
-    let link = URL(string:"https://finnhub.io/api/v1/")!
+    func openConnection()
 
-    let headerFields = ["X-Finnhub-Token": NetworkSettings.token]
+    func closeConnection()
 
-    let path: String
+    func sendMessage(_ message: RequestEntity)
 }
