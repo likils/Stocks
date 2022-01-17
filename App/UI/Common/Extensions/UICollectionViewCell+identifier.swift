@@ -1,16 +1,21 @@
+// ----------------------------------------------------------------------------
 //
-//  UICollectionViewCell+identifier.swift
-//  Stocks
+//  UICollectionViewCell.swift
 //
-//  Created by likils on 21.05.2021.
+//  @likils <likils@icloud.com>
+//  Copyright (c) 2021. All rights reserved.
 //
+// ----------------------------------------------------------------------------
 
 import UIKit
 
+// ----------------------------------------------------------------------------
+
 extension UICollectionViewCell {
-    
+
+// MARK: - Properties
+
     static var identifier: String {
         "\(Self.self)"
     }
-    
 }

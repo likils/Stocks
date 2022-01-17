@@ -38,7 +38,7 @@ class NewsCategoryCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     // MARK: - Public Methods
-    func set(category: NewsCategory) {
+    func updateView(with category: NewsCategory) {
         let text: String
 
         switch category {
