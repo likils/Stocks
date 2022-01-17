@@ -27,6 +27,12 @@ final class AppCoordinator {
         setupMainCoordinator()
     }
 
+// MARK: - Methods
+
+    func start() {
+        mainCoordinator?.start()
+    }
+
 // MARK: - Private Methods
 
     private func setupMainCoordinator() {
@@ -40,6 +46,7 @@ final class AppCoordinator {
         mainCoordinator = MainCoordinator(tabController: tabController, serviceContainer: serviceContainer)
         mainCoordinator?.didFinishClosure = { [weak self] in
             self?.setupMainCoordinator()
+            self?.mainCoordinator?.start()
         }
     }
 

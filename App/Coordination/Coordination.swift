@@ -16,4 +16,8 @@ protocol Coordination: AnyObject {
 // MARK: - Properties
 
     var didFinishClosure: (() -> ())? { get set }
+
+// MARK: - Methods
+
+    func start()
 }

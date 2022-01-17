@@ -35,7 +35,11 @@ final class NewsCoordinator: NewsCoordination {
 
     init(navController: UINavigationController) {
         self.navController = navController
+    }
 
+// MARK: - Methods
+
+    func start() {
         showNews()
     }
     
@@ -49,6 +53,7 @@ final class NewsCoordinator: NewsCoordination {
 // MARK: - Private Methods
 
     private func showNews() {
+
         let vm = NewsVM(coordinator: self)
         let vc = NewsVC(viewModel: vm)
 

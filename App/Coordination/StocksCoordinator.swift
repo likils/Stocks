@@ -41,11 +41,13 @@ final class StocksCoordinator: StocksCoordination {
     ) {
         self.navController = navController
         self.webSocketService = webSocketService
-
-        showStocks()
     }
     
 // MARK: - Methods
+
+    func start() {
+        showStocks()
+    }
     
     func showCompanyDetails(_ company: CompanyProfileViewModel) {
         let vm = CompanyDetailsVM(
@@ -70,10 +72,8 @@ final class StocksCoordinator: StocksCoordination {
 // MARK: - Private Methods
 
     private func showStocks() {
-        let vm = StocksVM(
-            coordinator: self,
-            webSocketService: webSocketService
-        )
+
+        let vm = StocksVM(coordinator: self, webSocketService: webSocketService)
         let vc = StocksVC(viewModel: vm)
 
         navController.viewControllers = [vc]

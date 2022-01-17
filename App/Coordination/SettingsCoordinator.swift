@@ -31,13 +31,18 @@ final class SettingsCoordinator: SettingsCoordination {
 
     init(navController: UINavigationController) {
         self.navController = navController
+    }
 
+// MARK: - Methods
+
+    func start() {
         showSettings()
     }
     
 // MARK: - Private Methods
 
     private func showSettings() {
+
         let vm = SettingsVM(coordinator: self)
         let vc = SettingsVC(viewModel: vm)
 

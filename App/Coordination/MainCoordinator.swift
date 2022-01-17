@@ -37,6 +37,14 @@ final class MainCoordinator: Coordination {
         setupSettingsCoordinator()
     }
 
+// MARK: - Methods
+
+    func start() {
+        newsCoordinator?.start()
+        stocksCoordinator?.start()
+        settingsCoordinator?.start()
+    }
+
 // MARK: - Private Methods
 
     private func setupNewsCoordinator() {
