@@ -1,11 +1,13 @@
 // ----------------------------------------------------------------------------
 //
-//  LeftAssignmentPrecedence.swift
+//  Precedence.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
+
+// MARK: - LeftAssignmentPrecedence
 
 precedencegroup LeftAssignmentPrecedence {
     associativity: left
@@ -17,11 +19,7 @@ infix operator <- : LeftAssignmentPrecedence
 
 @discardableResult
 public func <- <T>(lhs: T, rhs: (inout T) throws -> Void) rethrows -> T {
-
-    guard var value = Optional(lhs) else {
-        return lhs
-    }
-
+    var value = lhs
     try rhs(&value)
     return value
 }

@@ -12,7 +12,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-public typealias ImagePublisher = AnyPublisher<UIImage, Never>
+public typealias ImagePublisher = AnyPublisher<UIImage?, Never>
 
 // ----------------------------------------------------------------------------
 
@@ -46,8 +46,6 @@ public final class ImageRequest: AbstractRequest<Data> {
         }
 
         return imagePublisher
-            .compactMap { $0 }
-            .flatMap { Just($0) }
             .eraseToAnyPublisher()
     }
 

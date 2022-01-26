@@ -16,7 +16,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = CompanyDetailsTableViewCell.largeHeight / 2
-        imageView.layer.backgroundColor = UIColor.View.backgroundColor.cgColor
+        imageView.layer.backgroundColor = Color.background.cgColor
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -39,7 +39,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .Text.secondaryColor
+        label.textColor = Color.secondary
         return label
     }()
     
@@ -50,7 +50,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         return label
     }()
     
-    private let backView = CellBackgroundView()
+    private let backView = DefaultBackgroundView()
     private let graphView = GraphView()
     
     private let minPriceLabel: UILabel = {
@@ -71,7 +71,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        button.setTitleColor(.Text.secondaryColor, for: .normal)
+        button.setTitleColor(Color.secondary, for: .normal)
         button.addTarget(self, action: #selector(timelineButtonTapped), for: .touchUpInside)
         return button
     }
@@ -116,7 +116,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         didSet {
             if companyQuotes?.currentPrice != oldValue?.currentPrice,
                let quotes = companyQuotes {
-                stockPriceLabel.text = quotes.currentPrice.roundForText + " " + currencySymbol
+                stockPriceLabel.text = quotes.currentPrice.textRepresentation + " " + currencySymbol
             }
         }
     }
@@ -185,7 +185,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
                 button.setTitleColor(.black, for: .normal)
                 button.setBackgroundImage(UIImage(named: "oval"), for: .normal)
             } else {
-                button.setTitleColor(.Text.secondaryColor, for: .normal)
+                button.setTitleColor(Color.secondary, for: .normal)
                 button.setBackgroundImage(nil, for: .normal)
             }
         }
@@ -197,10 +197,10 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let text = NSMutableAttributedString(string: "Last \(timeline.description): ")
         
         let priceDiff = currentPrice - firstPrice
-        let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
-        let diffPercentText = abs((priceDiff * 100) / firstPrice).roundForText + "%"
+        let diffText = priceDiff > 0 ? ("+" + priceDiff.textRepresentation) : priceDiff.textRepresentation
+        let diffPercentText = abs((priceDiff * 100) / firstPrice).textRepresentation + "%"
         let priceText = diffText + " " + currencySymbol + " (" + diffPercentText + ")"
-        let priceColor: UIColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
+        let priceColor: UIColor = priceDiff < 0 ? Color.negativePrice : Color.positivePrice
         let attributedPrice = NSAttributedString(string: priceText, attributes: [.foregroundColor: priceColor])
         
         text.append(attributedPrice)
@@ -208,15 +208,15 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     }
     
     private func updateMinAndMaxLabels(with minPrice: Double, and maxPrice: Double) {
-        let attributes: [NSAttributedString.Key : Any] = [.foregroundColor: UIColor.Text.secondaryColor]
+        let attributes: [NSAttributedString.Key : Any] = [.foregroundColor: Color.secondary]
         
         let min = NSMutableAttributedString(string: "Min | ", attributes: attributes)
         let max = NSMutableAttributedString(string: "Max | ", attributes: attributes)
         
-        let minPriceText = NSAttributedString(string: minPrice.roundForText + " " + currencySymbol,
-                                              attributes: [.foregroundColor: UIColor.Text.negativePriceColor])
-        let maxPriceText = NSAttributedString(string: maxPrice.roundForText + " " + currencySymbol,
-                                              attributes: [.foregroundColor: UIColor.Text.positivePriceColor])
+        let minPriceText = NSAttributedString(string: minPrice.textRepresentation + " " + currencySymbol,
+                                              attributes: [.foregroundColor: Color.negativePrice])
+        let maxPriceText = NSAttributedString(string: maxPrice.textRepresentation + " " + currencySymbol,
+                                              attributes: [.foregroundColor: Color.positivePrice])
         min.append(minPriceText)
         max.append(maxPriceText)
         

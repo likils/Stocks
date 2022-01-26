@@ -107,7 +107,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         label.textAlignment = .center
         let text1 = NSMutableAttributedString(string: company.tickerSymbol, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
         let text2 = NSAttributedString(string: "\n\(company.name)", attributes: [.font : UIFont.systemFont(ofSize: 14, weight: .semibold),
-                                                                                 .foregroundColor: UIColor.Text.secondaryColor])
+                                                                                 .foregroundColor: Color.secondary])
         text1.append(text2)
         label.attributedText = text1
         
@@ -121,7 +121,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
     }
     
     private func setupTableView() {
-        tableView.backgroundColor = .View.backgroundColor
+        tableView.backgroundColor = Color.background
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.contentInset = Self.tableContentInsets
@@ -163,7 +163,7 @@ extension CompanyDetailsVC {
             let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
             if let cell = cell as? NewsTableViewCell {
                 let news = news[indexPath.row]
-                cell.setNews(news)
+                cell.updateView(with: news)
                 
                 let maxImageSize = Double(cell.frame.size.width)
                 let publisher = viewModel.requestNewsImage(withSize: maxImageSize, for: indexPath)
@@ -174,13 +174,9 @@ extension CompanyDetailsVC {
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard indexPath.section == 1,
-              let cell = tableView.cellForRow(at: indexPath) as? NewsTableViewCell
-        else { return nil }
-        
-        cell.animate { [weak self] in
-            self?.viewModel.cellTapped(at: indexPath.row)
-        }
+        guard indexPath.section == 1 else { return nil }
+
+        viewModel.cellTapped(at: indexPath.row)
         return indexPath
     }
     

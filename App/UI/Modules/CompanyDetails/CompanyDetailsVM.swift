@@ -5,6 +5,7 @@
 //  Created by likils on 25.05.2021.
 //
 
+import Combine
 import UIKit
 
 class CompanyDetailsVM: CompanyDetailsViewModel {
@@ -94,9 +95,9 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         }
     }
     
-    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher? {
+    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher {
 
-        guard let imageLink = news[indexPath.row].imageLink else { return nil }
+        guard let imageLink = news[indexPath.row].imageLink else { return Just(nil).eraseToAnyPublisher() }
 
         return ImageRequestFactory
             .createRequest(imageLink: imageLink, imageSize: imageSize)
@@ -112,9 +113,11 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
 
     private func requestNews(tickerSymbol: String, periodInDays: Int) async {
         do {
-            news = try await NewsRequestFactory
+            let newsResponse = try await NewsRequestFactory
                 .createRequest(tickerSymbol: tickerSymbol, periodInDays: periodInDays)
                 .execute()
+
+            news = newsResponse.map { NewsModel.of(newsResponse: $0) }
 
             DispatchQueue.main.async {
                 self.view?.showNews()

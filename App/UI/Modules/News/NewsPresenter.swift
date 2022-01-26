@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  NewsViewModel.swift
+//  NewsPresenter.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
@@ -16,7 +16,14 @@ typealias NewsPublisher = AnyPublisher<[NewsModel], Never>
 
 // ----------------------------------------------------------------------------
 
-final class NewsViewModel {
+final class NewsPresenter {
+
+// MARK: - Private Properties
+
+    private let coordinator: NewsCoordination
+    private let newsCategories: [NewsCategory]
+
+    private let newsPublisher = PassthroughSubject<[NewsModel], Never>()
     
 // MARK: - Construction
 
@@ -25,20 +32,15 @@ final class NewsViewModel {
         self.newsCategories = newsCategories
     }
 
-//MARK: - Private Properties
-
-    private let coordinator: NewsCoordination
-    private let newsCategories: [NewsCategory]
-
-    private let newsPublisher = PassthroughSubject<[NewsModel], Never>()
-
 // MARK: - Private Methods
 
     private func requestNews(with category: NewsCategory) async {
         do {
-            let news = try await NewsRequestFactory
+            let newsResponse = try await NewsRequestFactory
                 .createRequest(newsCategory: category)
                 .execute()
+
+            let news = newsResponse.map { NewsModel.of(newsResponse: $0) }
 
             self.newsPublisher.send(news)
         }
@@ -56,7 +58,7 @@ final class NewsViewModel {
 // ----------------------------------------------------------------------------
 // MARK: - @protocol NewsViewOutput
 
-extension NewsViewModel: NewsViewOutput {
+extension NewsPresenter: NewsViewOutput {
 
 // MARK: - Methods
 
@@ -74,9 +76,11 @@ extension NewsViewModel: NewsViewOutput {
         }
     }
 
-    func requestNewsImage(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher? {
+    func requestNewsImage(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher {
 
-        guard let imageLink = newsModel.imageLink else { return nil }
+        guard let imageLink = newsModel.imageLink else {
+            return Just(nil).eraseToAnyPublisher()
+        }
 
         return ImageRequestFactory
             .createRequest(imageLink: imageLink, imageSize: imageSize)
@@ -85,6 +89,6 @@ extension NewsViewModel: NewsViewOutput {
 
     func showNewsArticle(with newsModel: NewsModel) {
         let newsLink = newsModel.sourceLink
-        coordinator.showWebPage(with: newsLink)
+        self.coordinator.showWebPage(with: newsLink)
     }
 }

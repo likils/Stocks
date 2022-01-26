@@ -22,7 +22,7 @@ protocol CompanyDetailsViewModel: AnyObject {
     func close()
     
     func getNews()
-    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher?
+    func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher
     func cellTapped(at index: Int)
     
 }

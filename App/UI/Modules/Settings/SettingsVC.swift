@@ -35,7 +35,7 @@ class SettingsVC: UITableViewController {
     
     // MARK: - Private Methods
     private func setupTableView() {
-        tableView.backgroundColor = .View.backgroundColor
+        tableView.backgroundColor = Color.background
         tableView.isScrollEnabled = false
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.inset, bottom: 0, right: Self.inset)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)

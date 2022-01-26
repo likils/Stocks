@@ -23,12 +23,12 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
 
     private let storage: AnyStorage<String, [CompanyProfileModel]>
     private let storageKey = "\(CompanyProfileModel.self)"
-    private let companyProfilesPublisher = CurrentValueSubject<[CompanyProfileModel], Never>([])
+    private let companyProfilesPublisher = CurrentValueSubject<[CompanyProfileModel], Never>(.empty)
 
 // MARK: - Methods
 
     func getCompanyProfiles() async -> [CompanyProfileModel] {
-        await storage.get(forKey: storageKey) ?? []
+        await storage.get(forKey: storageKey) ?? .empty
     }
 
     func getCompanyProfilesPublusher() async -> AnyPublisher<[CompanyProfileModel], Never> {
@@ -86,7 +86,7 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
     func removeAll() {
         Task {
             await storage.removeAll()
-            companyProfilesPublisher.value = []
+            companyProfilesPublisher.value = .empty
         }
     }
 

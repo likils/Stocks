@@ -55,7 +55,7 @@ final class NewsCoordinator: NewsCoordination {
     private func showNews() {
 
         let newsCategories: [NewsCategory] = [.general, .forex, .crypto, .merger]
-        let vm = NewsViewModel(coordinator: self, newsCategories: newsCategories)
+        let vm = NewsPresenter(coordinator: self, newsCategories: newsCategories)
         let vc = NewsViewController(viewOutput: vm)
 
         navController.viewControllers = [vc]

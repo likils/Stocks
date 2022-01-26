@@ -13,7 +13,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-protocol NewsViewOutput: AnyObject {
+protocol NewsViewOutput {
 
 // MARK: - Methods
 
@@ -23,7 +23,7 @@ protocol NewsViewOutput: AnyObject {
 
     func refreshNews(with category: NewsCategory)
 
-    func requestNewsImage(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher?
+    func requestNewsImage(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher
 
     func showNewsArticle(with newsModel: NewsModel)
 }
@@ -35,17 +35,12 @@ final class NewsViewController: UITableViewController {
 // MARK: - Subviews
     
     private let newsCategoriesView = NewsCategoriesView()
-    
-// MARK: - Dimensions
 
-    static private let tableHeaderHeight: CGFloat = 44
-    static private let tableContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
-    
 // MARK: - Private Properties
 
     private let viewOutput: NewsViewOutput
 
-    private var news: [NewsModel] = []
+    private var news: [NewsModel] = .empty
     private var newsSubscriber: AnyCancellable?
     private var refreshControlSubscriber: AnyCancellable?
     
@@ -69,7 +64,7 @@ final class NewsViewController: UITableViewController {
         navigationItem.title = "Business News"
 
         setupNewsCategoriesView()
-        setupNewsTableView()
+        setupTableView()
     }
     
 // MARK: - Actions
@@ -81,38 +76,61 @@ final class NewsViewController: UITableViewController {
     }
 
     private func refresh() {
-        let category = newsCategoriesView.getCurrentNewsCategory()
-        viewOutput.refreshNews(with: category)
+        let category = self.newsCategoriesView.getCurrentNewsCategory()
+        self.viewOutput.refreshNews(with: category)
     }
     
 // MARK: - Private Methods
 
     private func setupNewsCategoriesView() {
-        let newsCategories = viewOutput.getNewsCategories()
-        newsCategoriesView.updateView(with: newsCategories, listener: self)
+        let newsCategories = self.viewOutput.getNewsCategories()
+        self.newsCategoriesView.updateView(with: newsCategories, listener: self)
     }
 
-    private func setupNewsTableView() {
-        tableView.backgroundColor = .View.backgroundColor
-        tableView.separatorStyle = .none
-        tableView.showsVerticalScrollIndicator = false
-        tableView.contentInset = Self.tableContentInsets
-        tableView.refreshControl = UIRefreshControl()
-        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: NewsTableViewCell.identifier)
+    private func setupTableView() {
 
-        self.newsSubscriber = viewOutput
+        self.tableView? <- {
+            $0.backgroundColor = Color.background
+            $0.separatorStyle = .none
+            $0.showsVerticalScrollIndicator = false
+            $0.contentInset = Const.tableViewInsets
+            $0.refreshControl = UIRefreshControl()
+            $0.registerCell(NewsTableViewCell.self)
+        }
+
+        self.newsSubscriber = self.viewOutput
             .getNewsPublisher()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.reloadNews(with: $0) }
 
-        self.refreshControlSubscriber = tableView.refreshControl?
+        self.refreshControlSubscriber = self.tableView.refreshControl?
             .isRefreshingPublisher
             .sink { [weak self] _ in self?.refresh() }
+    }
+
+// MARK: - Inner Types
+
+    private enum Const {
+        static let tableViewInsets = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
+        static let tableViewHeaderHeight: CGFloat = 44.0
     }
 }
 
 // ----------------------------------------------------------------------------
-// MARK: - TableView Delegate & DataSource
+// MARK: - @protocol UITableViewDelegate
+
+extension NewsViewController {
+
+// MARK: - Methods
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let viewModel = self.news[indexPath.row]
+        self.viewOutput.showNewsArticle(with: viewModel)
+    }
+}
+
+// ----------------------------------------------------------------------------
+// MARK: - @protocol UITableViewDataSource
 
 extension NewsViewController {
 
@@ -123,35 +141,29 @@ extension NewsViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        section == 0 ? Self.tableHeaderHeight : 0
+        section == 0 ? Const.tableViewHeaderHeight : 0
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        section == 0 ? newsCategoriesView : nil
+        section == 0 ? self.newsCategoriesView : nil
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        section == 0 ? 0 : news.count
+        section == 0 ? 0 : self.news.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: NewsTableViewCell.identifier, for: indexPath)
-        if let cell = cell as? NewsTableViewCell {
 
-            let newsModel = news[indexPath.row]
-            cell.setNews(newsModel)
+        let cell = tableView.dequeueReusableCell(NewsTableViewCell.self, for: indexPath)
 
-            let maxImageSize = cell.frame.size.width
-            let imagePublisher = viewOutput.requestNewsImage(withSize: maxImageSize, for: newsModel)
+        let newsModel = self.news[indexPath.row]
+        cell?.updateView(with: newsModel)
 
-            cell.subscribeToImageChanges(with: imagePublisher)
-        }
-        return cell
-    }
+        let maxImageSize = cell?.frame.size.width ?? 0.0
+        let imagePublisher = self.viewOutput.requestNewsImage(withSize: maxImageSize, for: newsModel)
+        cell?.subscribeToImageChanges(with: imagePublisher)
 
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let viewModel = news[indexPath.row]
-        viewOutput.showNewsArticle(with: viewModel)
+        return cell ?? UITableViewCell()
     }
 }
 
@@ -163,6 +175,6 @@ extension NewsViewController: NewsCategoriesViewListener {
 // MARK: - Methods
 
     func newsCategoryDidSelect(_ newsCategory: NewsCategory) {
-        viewOutput.refreshNews(with: newsCategory)
+        self.viewOutput.refreshNews(with: newsCategory)
     }
 }

@@ -23,7 +23,7 @@ class GraphView: UIView {
     // MARK: - Private properties
     private var maxAveragePrice: Double = 0
     
-    private let graphColor = UIColor.View.defaultAppColor
+    private let graphColor = Color.brand
     private let viewCornerRadius = 16
     
     // MARK: - Construction

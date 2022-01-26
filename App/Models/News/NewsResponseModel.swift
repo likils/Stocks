@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  NewsModel.swift
+//  NewsResponseModel.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
@@ -12,7 +12,7 @@ import Foundation
 
 // ----------------------------------------------------------------------------
 
-public struct NewsModel: Codable, Equatable {
+public struct NewsResponseModel: Codable, Equatable {
 
 // MARK: - Properties
 

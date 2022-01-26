@@ -22,7 +22,7 @@ protocol NewsCategoriesViewListener: AnyObject {
 
 final class NewsCategoriesView: UIView {
 
-// MARK: - Outlets
+// MARK: - Subviews
 
     private let collectionView: UICollectionView = {
 
@@ -31,6 +31,12 @@ final class NewsCategoriesView: UIView {
 
         return UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
     }()
+
+// MARK: - Private Properties
+
+    private var newsCategories: [NewsCategory] = .empty
+    private var currentNewsCategoryIndex = 0
+    private weak var listener: NewsCategoriesViewListener?
 
 // MARK: - Construction
 
@@ -43,12 +49,6 @@ final class NewsCategoriesView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
-// MARK: - Private Properties
-
-    private var newsCategories: [NewsCategory] = []
-    private var currentNewsCategoryIndex = 0
-    private weak var listener: NewsCategoriesViewListener?
 
 // MARK: - Methods
 
@@ -64,21 +64,21 @@ final class NewsCategoriesView: UIView {
     }
 
     func getCurrentNewsCategory() -> NewsCategory {
-        return newsCategories[currentNewsCategoryIndex]
+        return self.newsCategories[currentNewsCategoryIndex]
     }
 
 // MARK: - Private Methods
 
     private func setupCollectionView() {
 
-        self.collectionView <- { cv in
-            cv.delegate = self
-            cv.dataSource = self
+        self.collectionView <- {
+            $0.delegate = self
+            $0.dataSource = self
 
-            cv.backgroundColor = .clear
-            cv.showsHorizontalScrollIndicator = false
-            cv.contentInset = CollectionViewSize.contentInset
-            cv.registerCell(NewsCategoryCollectionViewCell.self)
+            $0.backgroundColor = .clear
+            $0.showsHorizontalScrollIndicator = false
+            $0.contentInset = CollectionViewSize.contentInset
+            $0.registerCell(NewsCategoryCollectionViewCell.self)
         }
 
         addSubview(self.collectionView)
@@ -88,13 +88,13 @@ final class NewsCategoriesView: UIView {
         }
     }
 
-// MARK: - Dimensions
+// MARK: - Inner Types
 
     private enum CollectionViewSize {
         static let height: CGFloat = 44.0
         static let cellHeight: CGFloat = 34.0
-        static let cellSpacing: CGFloat = 12.0
         static let contentInset = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+        static let interitemSpacing: CGFloat = 12.0
     }
 }
 
@@ -106,17 +106,17 @@ extension NewsCategoriesView: UICollectionViewDataSource {
 // MARK: - Methods
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        newsCategories.count
+        self.newsCategories.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         let cell = collectionView.dequeueReusableCell(NewsCategoryCollectionViewCell.self, for: indexPath)
 
-        let category = newsCategories[indexPath.item]
-        cell.updateView(with: category)
+        let category = self.newsCategories[indexPath.item]
+        cell?.updateView(with: category)
 
-        return cell
+        return cell ?? UICollectionViewCell()
     }
 }
 
@@ -134,10 +134,10 @@ extension NewsCategoriesView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
 
-        currentNewsCategoryIndex = indexPath.item
+        self.currentNewsCategoryIndex = indexPath.item
 
-        let newsCategory = newsCategories[currentNewsCategoryIndex]
-        listener?.newsCategoryDidSelect(newsCategory)
+        let newsCategory = self.newsCategories[currentNewsCategoryIndex]
+        self.listener?.newsCategoryDidSelect(newsCategory)
     }
 }
 
@@ -154,7 +154,7 @@ extension NewsCategoriesView: UICollectionViewDelegateFlowLayout {
         sizeForItemAt indexPath: IndexPath
     ) -> CGSize {
 
-        let category = newsCategories[indexPath.row]
+        let category = self.newsCategories[indexPath.row]
         let width = getCellWidthForCategory(category)
         let height = CollectionViewSize.cellHeight
 
@@ -167,7 +167,7 @@ extension NewsCategoriesView: UICollectionViewDelegateFlowLayout {
         minimumInteritemSpacingForSectionAt section: Int
     ) -> CGFloat {
 
-        CollectionViewSize.cellSpacing
+        CollectionViewSize.interitemSpacing
     }
 
     private func getCellWidthForCategory(_ category: NewsCategory) -> CGFloat {
@@ -175,16 +175,16 @@ extension NewsCategoriesView: UICollectionViewDelegateFlowLayout {
 
         switch category {
             case .general:
-                cellWidth = 94
+                cellWidth = 94.0
 
             case .forex:
-                cellWidth = 80
+                cellWidth = 80.0
                 
             case .crypto:
-                cellWidth = 86
+                cellWidth = 86.0
 
             case .merger:
-                cellWidth = 90
+                cellWidth = 90.0
         }
 
         return cellWidth

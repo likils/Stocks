@@ -63,7 +63,7 @@ class StocksVC: UITableViewController, StocksView {
 
     // MARK: - Private Methods
     private func setupTableView() {
-        tableView.backgroundColor = .View.backgroundColor
+        tableView.backgroundColor = Color.background
         tableView.separatorStyle = .none
         
         tableView.dragInteractionEnabled = true
@@ -116,10 +116,7 @@ extension StocksVC {
     }
     
     override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        guard let cell = tableView.cellForRow(at: indexPath) as? StocksTableViewCell else { return nil }
-        cell.animate {
-            self.viewModel.cellTapped(at: indexPath.row)
-        }
+        viewModel.cellTapped(at: indexPath.row)
         return indexPath
     }
     

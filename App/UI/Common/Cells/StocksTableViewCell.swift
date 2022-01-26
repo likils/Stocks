@@ -11,7 +11,7 @@ import UIKit
 class StocksTableViewCell: UITableViewCell {
     
     // MARK: - Subviews
-    private let backView = CellBackgroundView()
+    private let backView = DefaultBackgroundView()
     
     private let logo: UIImageView = {
         let imageView = UIImageView()
@@ -33,7 +33,7 @@ class StocksTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .medium)
-        label.textColor = .Text.secondaryColor
+        label.textColor = Color.secondary
         label.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
         return label
     }()
@@ -76,15 +76,15 @@ class StocksTableViewCell: UITableViewCell {
                 let priceDiff = quotes.currentPrice - quotes.previousClosePrice
                 let priceDiffPercent = abs((priceDiff * 100) / quotes.previousClosePrice)
                 
-                let diffText = priceDiff > 0 ? ("+" + priceDiff.roundForText) : priceDiff.roundForText
+                let diffText = priceDiff > 0 ? ("+" + priceDiff.textRepresentation) : priceDiff.textRepresentation
                 
-                priceChangeLabel.textColor = priceDiff < 0 ? .Text.negativePriceColor : .Text.positivePriceColor
+                priceChangeLabel.textColor = priceDiff < 0 ? Color.negativePrice : Color.positivePrice
                 
-                let pricebackgroundColor: UIColor = quotes.currentPrice < (oldValue?.currentPrice ?? 0) ? .Text.negativePriceColor : .Text.positivePriceColor
+                let pricebackgroundColor: UIColor = quotes.currentPrice < (oldValue?.currentPrice ?? 0) ? Color.negativePrice : Color.positivePrice
                 stockPriceLabel.animateBackgroundColor(with: pricebackgroundColor)
                 
-                stockPriceLabel.text = quotes.currentPrice.roundForText + " " + profile.currency.symbol
-                priceChangeLabel.text = "\(diffText) \(profile.currency.symbol) (\(priceDiffPercent.roundForText)%)"
+                stockPriceLabel.text = quotes.currentPrice.textRepresentation + " " + profile.currency.symbol
+                priceChangeLabel.text = "\(diffText) \(profile.currency.symbol) (\(priceDiffPercent.textRepresentation)%)"
             }
         }
     }
@@ -113,10 +113,6 @@ class StocksTableViewCell: UITableViewCell {
         logoImageSubscriber = imagePublisher?
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.logo.image = $0 }
-    }
-    
-    func animate(completion: (() -> Void)? = nil) {
-        backView.animate(completion: completion)
     }
     
     // MARK: - Private Methods

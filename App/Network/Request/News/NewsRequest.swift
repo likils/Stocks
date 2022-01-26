@@ -7,7 +7,7 @@
 //
 // ----------------------------------------------------------------------------
 
-public final class NewsRequest: AbstractRequest<[NewsModel]> {
+public final class NewsRequest: AbstractRequest<[NewsResponseModel]> {
 
 // MARK: - Construction
     
@@ -16,7 +16,7 @@ public final class NewsRequest: AbstractRequest<[NewsModel]> {
         let requestEntity = try RequestEntity(requestModel: requestModel)
         let urlRequest = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
 
-        let requestTask = RequestValueTask<[NewsModel]>(urlRequest: urlRequest)
+        let requestTask = RequestValueTask<[NewsResponseModel]>(urlRequest: urlRequest)
         super.init(requestTask.eraseToAnyRequestTask())
     }
 }

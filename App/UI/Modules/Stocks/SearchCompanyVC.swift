@@ -42,7 +42,7 @@ class SearchCompanyVC: UITableViewController, SearchCompanyView {
     
     // MARK: - Private Methods
     private func setupTableView() {
-        tableView.backgroundColor = .View.backgroundColor
+        tableView.backgroundColor = Color.background
         tableView.contentInset = UIEdgeInsets(top: -Self.inset, left: 0, bottom: -Self.inset, right: 0)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.inset, bottom: 0, right: Self.inset)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
