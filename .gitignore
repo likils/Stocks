@@ -1,0 +1,7 @@
+# Xcode project
+.build/
+xcuserdata/
+
+# Other
+.DS_Store
+.LSOverride
