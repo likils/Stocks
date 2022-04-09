@@ -13,7 +13,7 @@ import UIKit
 
 extension UIColor {
     
-// MARK: - RGB Construction
+    // MARK: - RGB Construction
 
     convenience init(rgb: Int) {
         let r = CGFloat((rgb & 0xFF0000) >> 0x10) / 255.0

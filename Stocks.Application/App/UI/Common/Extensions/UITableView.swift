@@ -13,7 +13,7 @@ import UIKit
 
 extension UITableView {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func registerCell<T: UITableViewCell>(_ cellType: T.Type) {
         register(cellType, forCellReuseIdentifier: cellType.identifier)

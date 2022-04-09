@@ -13,13 +13,13 @@ import UIKit
 
 class CompanyDetailsVM: CompanyDetailsViewModel {
     
-    // MARK: - Public properties
+    // MARK: - Properties
     weak var view: CompanyDetailsView?
     private(set) var companyProfile: CompanyProfileModel
     private(set) var initTimeline: CompanyCandlesTimeline = .day
     private(set) var news = [NewsModel]()
     
-//MARK: - Private properties
+//MARK: - Private Properties
 
     private let coordinator: StocksCoordination
     
@@ -109,19 +109,16 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     func requestNewsImage(withSize imageSize: CGFloat, for indexPath: IndexPath) -> ImagePublisher {
 
         guard let imageLink = news[indexPath.row].imageLink else {
-            return Just(nil).eraseToAnyPublisher()
+            return Just(UIImage(named: "ic_news_placeholder")!).eraseToAnyPublisher()
         }
 
-        return Future<UIImage?, Never> { promise in
-
-            Task { [unowned self] in
-                let image = await self.imageRequestFactory
+        return Just(())
+            .asyncFlatMap { [weak self] in
+                return await self?.imageRequestFactory
                     .createRequest(imageLink: imageLink, imageSize: imageSize)
                     .prepareImage()
-                promise(.success(image))
             }
-        }
-        .eraseToAnyPublisher()
+            .eraseToAnyPublisher()
     }
     
     func cellTapped(at index: Int) {

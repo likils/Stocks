@@ -16,7 +16,7 @@ import UIKit
 
 final class StocksViewController: UITableViewController {
     
-    // MARK: - Private properties
+    // MARK: - Private Properties
 
     private let viewModel: StocksViewModel
 
@@ -40,7 +40,7 @@ final class StocksViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Stock Quotes"
+        navigationItem.title = "Stocks"
         
         setupTableView()
         setupSubscriptions()
@@ -70,7 +70,7 @@ final class StocksViewController: UITableViewController {
     private func setupTableView() {
 
         self.tableView? <- {
-            $0.backgroundColor = Color.background
+            $0.backgroundColor = StocksColor.background
             $0.separatorStyle = .none
 
             $0.dragInteractionEnabled = true

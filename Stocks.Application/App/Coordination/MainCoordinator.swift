@@ -17,7 +17,7 @@ final class MainCoordinator: Coordinator {
 
     var didFinishClosure: (() -> ())?
 
-    // MARK: - Private properties
+    // MARK: - Private Properties
 
     private let tabController: UITabBarController
 

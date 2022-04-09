@@ -95,11 +95,12 @@ extension NewsViewModelImpl: NewsViewModel {
 
     func getImagePublisher(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher {
 
+        guard let imageLink = newsModel.imageLink else {
+            return Just(UIImage(named: "ic_news_placeholder")!).eraseToAnyPublisher()
+        }
+
         return Just(())
-            .compactMap {
-                return newsModel.imageLink
-            }
-            .asyncFlatMap { [weak self] imageLink in
+            .asyncFlatMap { [weak self] in
                 return await self?.imageRequestFactory
                     .createRequest(imageLink: imageLink, imageSize: imageSize)
                     .prepareImage()

@@ -13,7 +13,7 @@ import UIKit
 
 extension UITableViewCell {
 
-// MARK: - Properties
+    // MARK: - Properties
 
     static var identifier: String {
         "\(Self.self)"

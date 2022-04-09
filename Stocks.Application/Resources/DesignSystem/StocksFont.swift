@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  Font.swift
+//  StocksFont.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -11,7 +11,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-enum Font {
+enum StocksFont {
 
     // MARK: - Properties
 

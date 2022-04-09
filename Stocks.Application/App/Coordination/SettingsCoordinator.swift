@@ -23,7 +23,7 @@ final class SettingsCoordinator: SettingsCoordination {
 
     var didFinishClosure: (() -> ())?
     
-    // MARK: - Private properties
+    // MARK: - Private Properties
 
     private let navController: UINavigationController
 
@@ -43,9 +43,10 @@ final class SettingsCoordinator: SettingsCoordination {
 
     private func showSettings() {
 
-        let vm = SettingsVM(coordinator: self)
-        let vc = SettingsVC(viewModel: vm)
+        let presenter = SettingsPresenter(coordinator: self)
+        let controller = SettingsViewController(viewOutput: presenter)
+        presenter.viewInput = controller
 
-        self.navController.viewControllers = [vc]
+        self.navController.viewControllers = [controller]
     }
 }

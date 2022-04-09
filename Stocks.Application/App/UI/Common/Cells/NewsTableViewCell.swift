@@ -15,28 +15,28 @@ import UIKit
 
 final class NewsTableViewCell: UITableViewCell {
 
-// MARK: - Subviews
+    // MARK: - Subviews
 
     private let defaultBackgroundView = DefaultBackgroundView()
 
     private let sourceLabel = UILabel() <- {
-        $0.font = Font.link
-        $0.textColor = Color.secondary
+        $0.font = StocksFont.link
+        $0.textColor = StocksColor.secondary
     }
 
     private let dateLabel = UILabel() <- {
-        $0.font = Font.subhead
-        $0.textColor = Color.secondary
+        $0.font = StocksFont.subhead
+        $0.textColor = StocksColor.secondary
     }
 
     private let headlineLabel = UILabel() <- {
-        $0.font = Font.title2
+        $0.font = StocksFont.title2
         $0.numberOfLines = 3
     }
 
     private let summaryLabel = UILabel() <- {
-        $0.font = Font.body
-        $0.textColor = Color.primary
+        $0.font = StocksFont.body
+        $0.textColor = StocksColor.primary
         $0.numberOfLines = 3
     }
 
@@ -46,11 +46,11 @@ final class NewsTableViewCell: UITableViewCell {
         $0.layer.cornerRadius = 12
     }
 
-// MARK: - Private Properties
+    // MARK: - Private Properties
 
     private var thumbnailImageSubscriber: AnyCancellable?
 
-// MARK: - Construction
+    // MARK: - Construction
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -62,7 +62,7 @@ final class NewsTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-// MARK: - Methods
+    // MARK: - Methods
 
     override func prepareForReuse() {
         thumbnailImageSubscriber?.cancel()
@@ -83,7 +83,7 @@ final class NewsTableViewCell: UITableViewCell {
             .sink { [weak self] in self?.thumbnailImageView.image = $0 }
     }
 
-// MARK: - Private Methods
+    // MARK: - Private Methods
 
     private func setupView() {
         selectionStyle = .none
@@ -136,7 +136,7 @@ final class NewsTableViewCell: UITableViewCell {
         }
     }
 
-// MARK: - Inner Types
+    // MARK: - Inner Types
 
     private enum Const {
         static let backgroundEdgeInset = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)

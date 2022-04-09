@@ -78,7 +78,6 @@ final class NewsViewController: UITableViewController {
     private func setupTableView() {
 
         self.tableView? <- {
-            $0.backgroundColor = Color.background
             $0.separatorStyle = .none
             $0.showsVerticalScrollIndicator = false
             $0.contentInset = Const.tableViewInsets

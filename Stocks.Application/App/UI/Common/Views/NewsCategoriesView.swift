@@ -15,7 +15,7 @@ import UIKit
 
 protocol NewsCategoriesViewListener: AnyObject {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func newsCategoryDidSelect(_ newsCategory: NewsCategory)
 }
@@ -24,7 +24,7 @@ protocol NewsCategoriesViewListener: AnyObject {
 
 final class NewsCategoriesView: UIView {
 
-// MARK: - Subviews
+    // MARK: - Subviews
 
     private let collectionView: UICollectionView = {
 
@@ -34,13 +34,13 @@ final class NewsCategoriesView: UIView {
         return UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLayout)
     }()
 
-// MARK: - Private Properties
+    // MARK: - Private Properties
 
     private var newsCategories: [NewsCategory] = .empty
     private var currentNewsCategoryIndex = 0
     private weak var listener: NewsCategoriesViewListener?
 
-// MARK: - Construction
+    // MARK: - Construction
 
     init() {
         super.init(frame: CGRect.zero)
@@ -52,7 +52,7 @@ final class NewsCategoriesView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func updateView(with newsCategories: [NewsCategory], listener: NewsCategoriesViewListener?) {
 
@@ -69,7 +69,7 @@ final class NewsCategoriesView: UIView {
         return self.newsCategories[currentNewsCategoryIndex]
     }
 
-// MARK: - Private Methods
+    // MARK: - Private Methods
 
     private func setupCollectionView() {
 
@@ -90,7 +90,7 @@ final class NewsCategoriesView: UIView {
         }
     }
 
-// MARK: - Inner Types
+    // MARK: - Inner Types
 
     private enum CollectionViewSize {
         static let height: CGFloat = 44.0
@@ -100,12 +100,11 @@ final class NewsCategoriesView: UIView {
     }
 }
 
-// ----------------------------------------------------------------------------
 // MARK: - @protocol UICollectionViewDataSource
 
 extension NewsCategoriesView: UICollectionViewDataSource {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         self.newsCategories.count
@@ -122,12 +121,11 @@ extension NewsCategoriesView: UICollectionViewDataSource {
     }
 }
 
-// ----------------------------------------------------------------------------
 // MARK: - @protocol UICollectionViewDelegate
 
 extension NewsCategoriesView: UICollectionViewDelegate {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         return (collectionView.cellForItem(at: indexPath)?.isSelected == false)
@@ -143,12 +141,11 @@ extension NewsCategoriesView: UICollectionViewDelegate {
     }
 }
 
-// ----------------------------------------------------------------------------
 // MARK: - @protocol UICollectionViewDelegateFlowLayout
 
 extension NewsCategoriesView: UICollectionViewDelegateFlowLayout {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func collectionView(
         _ collectionView: UICollectionView,
@@ -173,22 +170,6 @@ extension NewsCategoriesView: UICollectionViewDelegateFlowLayout {
     }
 
     private func getCellWidthForCategory(_ category: NewsCategory) -> CGFloat {
-        let cellWidth: CGFloat
-
-        switch category {
-            case .general:
-                cellWidth = 94.0
-
-            case .forex:
-                cellWidth = 80.0
-                
-            case .crypto:
-                cellWidth = 86.0
-
-            case .merger:
-                cellWidth = 90.0
-        }
-
-        return cellWidth
+        return category.minWidthForText
     }
 }

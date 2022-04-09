@@ -15,17 +15,17 @@ import UIKit
 
 final class NewsCategoryCollectionViewCell: UICollectionViewCell {
 
-// MARK: - Subviews
+    // MARK: - Subviews
 
     private let defaultBackgroundView = DefaultBackgroundView()
 
     private let categoryLabel = UILabel() <- {
-        $0.font = Font.body
-        $0.textColor = Color.secondary
+        $0.font = StocksFont.body
+        $0.textColor = StocksColor.secondary
         $0.textAlignment = .center
     }
 
-// MARK: - Properties
+    // MARK: - Properties
 
     override var isSelected: Bool {
         didSet {
@@ -33,7 +33,7 @@ final class NewsCategoryCollectionViewCell: UICollectionViewCell {
         }
     }
 
-// MARK: - Construction
+    // MARK: - Construction
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -45,33 +45,17 @@ final class NewsCategoryCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func updateView(with category: NewsCategory) {
-        let text: String
-
-        switch category {
-            case .crypto:
-                text = "💰Crypto"
-
-            case .forex:
-                text = "📈Forex"
-
-            case .general:
-                text = "👋🏻General"
-
-            case .merger:
-                text = "👔Merger"
-        }
-
-        categoryLabel.text = text
+        categoryLabel.text = category.text
     }
-
-// MARK: - Private Methods
+    
+    // MARK: - Private Methods
 
     private func changeCellColors(_ isSelected: Bool) {
-        categoryLabel.textColor = isSelected ? .white : Color.secondary
-        defaultBackgroundView.backgroundColor = isSelected ? Color.brand : .white
+        categoryLabel.textColor = isSelected ? .white : StocksColor.secondary
+        defaultBackgroundView.backgroundColor = isSelected ? StocksColor.brand : StocksColor.background
     }
 
     private func setupView() {

@@ -14,7 +14,7 @@ class CompanySearchViewController: UITableViewController {
     static private let tableHeaderHeight: CGFloat = 16
     static private let inset: CGFloat = 16
 
-    // MARK: - Private properties
+    // MARK: - Private Properties
     private let viewModel: CompanySearchViewModel
     private var searchResults = CompanySearchModel()
     private weak var delaySearchTimer: Timer?
@@ -43,7 +43,7 @@ class CompanySearchViewController: UITableViewController {
     
     // MARK: - Private Methods
     private func setupTableView() {
-        tableView.backgroundColor = Color.background
+        tableView.backgroundColor = StocksColor.background
         tableView.contentInset = UIEdgeInsets(top: -Self.inset, left: 0, bottom: -Self.inset, right: 0)
         tableView.separatorInset = UIEdgeInsets(top: 0, left: Self.inset, bottom: 0, right: Self.inset)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)

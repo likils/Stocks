@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  Color.swift
+//  StocksColor.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -11,7 +11,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-enum Color {
+enum StocksColor {
 
     // MARK: - Text
 
@@ -24,5 +24,4 @@ enum Color {
 
     static var background = UIColor(rgb: 0xF8F8FA)
     static var brand = UIColor(rgb: 0x8D75F2)
-    static var shadow = UIColor(rgb: 0x303040)
 }

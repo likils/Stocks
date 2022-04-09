@@ -13,13 +13,11 @@ import UIKit
 
 extension UIView {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func animateBackgroundColor(with color: UIColor) {
 
-        let initialColor = (self.backgroundColor == nil)
-            ? .clear
-            : self.backgroundColor!
+        let initialColor = (self.backgroundColor == nil) ? .clear : self.backgroundColor!
 
         UIView.animate(withDuration: 0.7) {
             self.layer.backgroundColor = color.cgColor.copy(alpha: 0.4)

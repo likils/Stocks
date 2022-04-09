@@ -18,7 +18,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFit
         imageView.layer.cornerRadius = CompanyDetailsTableViewCell.largeHeight / 2
-        imageView.layer.backgroundColor = Color.background.cgColor
+        imageView.layer.backgroundColor = StocksColor.background.cgColor
         imageView.clipsToBounds = true
         return imageView
     }()
@@ -26,7 +26,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     private let watchlistButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setBackgroundImage(UIImage(named: "circle"), for: .normal)
+        button.setBackgroundImage(UIImage(named: "ic_circle"), for: .normal)
         return button
     }()
     
@@ -41,7 +41,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 14, weight: .regular)
-        label.textColor = Color.secondary
+        label.textColor = StocksColor.secondary
         return label
     }()
     
@@ -73,7 +73,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = .systemFont(ofSize: 16, weight: .semibold)
-        button.setTitleColor(Color.secondary, for: .normal)
+        button.setTitleColor(StocksColor.secondary, for: .normal)
         button.addTarget(self, action: #selector(timelineButtonTapped), for: .touchUpInside)
         return button
     }
@@ -100,12 +100,12 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     static private let standartHeight: CGFloat = 20
     static private let largeHeight: CGFloat = 40
     
-    // MARK: - Private properties
+    // MARK: - Private Properties
 
     private var currencySymbol = ""
     private var logoImageSubscriber: AnyCancellable?
     
-    // MARK: - Public properties
+    // MARK: - Properties
     weak var delegate: CompanyDetailsCellDelegate?
     
     var inWatchlist = false {
@@ -185,9 +185,9 @@ class CompanyDetailsTableViewCell: UITableViewCell {
             guard let button = $0 as? UIButton else { return }
             if button.currentTitle == timeline.rawValue {
                 button.setTitleColor(.black, for: .normal)
-                button.setBackgroundImage(UIImage(named: "oval"), for: .normal)
+                button.setBackgroundImage(UIImage(named: "ic_oval"), for: .normal)
             } else {
-                button.setTitleColor(Color.secondary, for: .normal)
+                button.setTitleColor(StocksColor.secondary, for: .normal)
                 button.setBackgroundImage(nil, for: .normal)
             }
         }
@@ -202,7 +202,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         let diffText = priceDiff > 0 ? ("+" + priceDiff.textRepresentation) : priceDiff.textRepresentation
         let diffPercentText = abs((priceDiff * 100) / firstPrice).textRepresentation + "%"
         let priceText = diffText + " " + currencySymbol + " (" + diffPercentText + ")"
-        let priceColor: UIColor = priceDiff < 0 ? Color.negativePrice : Color.positivePrice
+        let priceColor: UIColor = priceDiff < 0 ? StocksColor.negativePrice : StocksColor.positivePrice
         let attributedPrice = NSAttributedString(string: priceText, attributes: [.foregroundColor: priceColor])
         
         text.append(attributedPrice)
@@ -210,15 +210,15 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     }
     
     private func updateMinAndMaxLabels(with minPrice: Double, and maxPrice: Double) {
-        let attributes: [NSAttributedString.Key : Any] = [.foregroundColor: Color.secondary]
+        let attributes: [NSAttributedString.Key : Any] = [.foregroundColor: StocksColor.secondary]
         
         let min = NSMutableAttributedString(string: "Min | ", attributes: attributes)
         let max = NSMutableAttributedString(string: "Max | ", attributes: attributes)
         
         let minPriceText = NSAttributedString(string: minPrice.textRepresentation + " " + currencySymbol,
-                                              attributes: [.foregroundColor: Color.negativePrice])
+                                              attributes: [.foregroundColor: StocksColor.negativePrice])
         let maxPriceText = NSAttributedString(string: maxPrice.textRepresentation + " " + currencySymbol,
-                                              attributes: [.foregroundColor: Color.positivePrice])
+                                              attributes: [.foregroundColor: StocksColor.positivePrice])
         min.append(minPriceText)
         max.append(maxPriceText)
         
@@ -227,7 +227,7 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     }
     
     private func toggleWatchlistButton() {
-        let pictureName = inWatchlist ? "filledStar" : "star"
+        let pictureName = inWatchlist ? "btn_star_filled" : "btn_star"
         watchlistButton.setImage(UIImage(named: pictureName), for: .normal)
     }
     

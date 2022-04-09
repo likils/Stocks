@@ -13,7 +13,7 @@ import UIKit
 
 extension UICollectionView {
 
-// MARK: - Methods
+    // MARK: - Methods
 
     func registerCell<T: UICollectionViewCell>(_ cellType: T.Type) {
         register(cellType, forCellWithReuseIdentifier: cellType.identifier)

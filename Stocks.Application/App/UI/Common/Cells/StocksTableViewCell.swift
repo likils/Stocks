@@ -16,7 +16,7 @@ import UIKit
 
 final class StocksTableViewCell: UITableViewCell {
 
-// MARK: - Subviews
+    // MARK: - Subviews
 
     private let defaultBackgroundView = DefaultBackgroundView()
 
@@ -27,28 +27,28 @@ final class StocksTableViewCell: UITableViewCell {
     }
 
     private let symbolLabel = UILabel() <- {
-        $0.font = Font.title3
+        $0.font = StocksFont.title3
         $0.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
     }
 
     private let companyLabel = UILabel() <- {
-        $0.font = Font.body
-        $0.textColor = Color.secondary
+        $0.font = StocksFont.body
+        $0.textColor = StocksColor.secondary
         $0.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
     }
 
     private let stockPriceLabel = UILabel() <- {
-        $0.font = Font.body
+        $0.font = StocksFont.body
         $0.textAlignment = .right
         $0.layer.cornerRadius = 4
     }
 
     private let priceDiffLabel = UILabel() <- {
-        $0.font = Font.body
+        $0.font = StocksFont.body
         $0.textAlignment = .right
     }
 
-// MARK: - Private Properties
+    // MARK: - Private Properties
 
     private var currencySymbol: String = .empty
     private var currentPrice: Double = .nan
@@ -57,7 +57,7 @@ final class StocksTableViewCell: UITableViewCell {
     private var logoImageSubscriber: AnyCancellable?
     private var onlineTradeSubscriber: AnyCancellable?
 
-// MARK: - Construction
+    // MARK: - Construction
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -69,7 +69,7 @@ final class StocksTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
 
-// MARK: - Methods
+    // MARK: - Methods
 
     override func prepareForReuse() {
         self.logoImageSubscriber?.cancel()
@@ -104,7 +104,7 @@ final class StocksTableViewCell: UITableViewCell {
             .sink { [weak self] in self?.updatePrice($0.price) }
     }
 
-// MARK: - Private Methods
+    // MARK: - Private Methods
 
     private func updatePrice(_ newPrice: Double) {
 
@@ -112,7 +112,7 @@ final class StocksTableViewCell: UITableViewCell {
 
         self.stockPriceLabel.text = newPrice.textRepresentation + " " + self.currencySymbol
 
-        let priceColor = (self.currentPrice > newPrice) ? Color.negativePrice : Color.positivePrice
+        let priceColor = (self.currentPrice > newPrice) ? StocksColor.negativePrice : StocksColor.positivePrice
         self.stockPriceLabel.animateBackgroundColor(with: priceColor)
 
         self.currentPrice = newPrice
@@ -126,11 +126,11 @@ final class StocksTableViewCell: UITableViewCell {
         let priceDiffPercent = abs((priceDiff * 100) / self.previousClosePrice)
 
         let diffText = (priceDiff > 0)
-            ? ("+" + priceDiff.textRepresentation)
-            : priceDiff.textRepresentation
+        ? ("+" + priceDiff.textRepresentation)
+        : priceDiff.textRepresentation
 
         self.priceDiffLabel.text = "\(diffText) \(self.currencySymbol) (\(priceDiffPercent.textRepresentation)%)"
-        self.priceDiffLabel.textColor = (priceDiff < 0) ? Color.negativePrice : Color.positivePrice
+        self.priceDiffLabel.textColor = (priceDiff < 0) ? StocksColor.negativePrice : StocksColor.positivePrice
     }
 
     private func setupView() {
@@ -184,7 +184,7 @@ final class StocksTableViewCell: UITableViewCell {
         }
     }
 
-// MARK: - Inner Types
+    // MARK: - Inner Types
 
     private enum Const {
         static let backgroundEdgeInset = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)

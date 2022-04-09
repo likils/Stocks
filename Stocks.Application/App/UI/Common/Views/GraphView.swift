@@ -10,7 +10,7 @@ import UIKit
 
 class GraphView: UIView {
     
-    // MARK: - Public properties
+    // MARK: - Properties
     var candles: CompanyCandlesModel! {
         didSet {
             minPrice = candles.lowPrices.min() ?? 0
@@ -21,10 +21,10 @@ class GraphView: UIView {
     private(set) var minPrice: Double = 0
     private(set) var maxPrice: Double = 0
     
-    // MARK: - Private properties
+    // MARK: - Private Properties
     private var maxAveragePrice: Double = 0
     
-    private let graphColor = Color.brand
+    private let graphColor = StocksColor.brand
     private let viewCornerRadius = 16
     
     // MARK: - Construction

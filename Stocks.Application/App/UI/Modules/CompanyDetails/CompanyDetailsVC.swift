@@ -29,7 +29,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
     static private let tableContentInsets = UIEdgeInsets(top: 0, left: 0, bottom: -inset, right: 0)
     static private let headerHeight: CGFloat = 48
     
-    // MARK: - Private properties
+    // MARK: - Private Properties
     private let viewModel: CompanyDetailsViewModel
     private var company: CompanyProfileModel {
         viewModel.companyProfile
@@ -108,12 +108,12 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         label.textAlignment = .center
         let text1 = NSMutableAttributedString(string: company.tickerSymbol, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
         let text2 = NSAttributedString(string: "\n\(company.name)", attributes: [.font : UIFont.systemFont(ofSize: 14, weight: .semibold),
-                                                                                 .foregroundColor: Color.secondary])
+                                                                                 .foregroundColor: StocksColor.secondary])
         text1.append(text2)
         label.attributedText = text1
         
         let backButton = UIButton()
-        backButton.setImage(UIImage(named: "arrow"), for: .normal)
+        backButton.setImage(UIImage(named: "btn_navbar_back"), for: .normal)
         backButton.addTarget(self, action: #selector(close), for: .touchUpInside)
         
         navigationItem.titleView = label
@@ -122,7 +122,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
     }
     
     private func setupTableView() {
-        tableView.backgroundColor = Color.background
+        tableView.backgroundColor = StocksColor.background
         tableView.separatorStyle = .none
         tableView.showsVerticalScrollIndicator = false
         tableView.contentInset = Self.tableContentInsets

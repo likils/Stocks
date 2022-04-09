@@ -13,7 +13,7 @@ import Foundation
 
 extension Date {
 
-// MARK: - Properties
+    // MARK: - Properties
 
     var isRelevant: Bool {
         Calendar.current.isDateInYesterday(self)
