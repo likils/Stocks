@@ -11,12 +11,12 @@ public struct CompanyProfileRequestModel: Codable {
 
     // MARK: - Properties
 
-    public let tickerSymbol: String
+    public let ticker: String
 
     // MARK: - Coding Keys
 
     private enum CodingKeys: String, CodingKey {
-        case tickerSymbol = "symbol"
+        case ticker = "symbol"
     }
 }
 
@@ -26,7 +26,7 @@ extension CompanyProfileRequestModel {
 
     // MARK: - Construction
 
-    public static func of(tickerSymbol: String) -> Self {
-        return Self.init(tickerSymbol: tickerSymbol)
+    public static func of(ticker: String) -> Self {
+        return Self.init(ticker: ticker)
     }
 }

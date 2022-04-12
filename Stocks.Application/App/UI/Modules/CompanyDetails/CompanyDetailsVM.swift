@@ -9,12 +9,14 @@ import Combine
 import Resolver
 import StocksData
 import StocksNetwork
+import StocksPersistence
 import UIKit
 
 class CompanyDetailsVM: CompanyDetailsViewModel {
     
     // MARK: - Properties
     weak var view: CompanyDetailsView?
+    private var companyProfileDataModel: CompanyProfileDataModel?
     private(set) var companyProfile: CompanyProfileModel
     private(set) var initTimeline: CompanyCandlesTimeline = .day
     private(set) var news = [NewsModel]()
@@ -28,12 +30,15 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     @LazyInjected private var companyCandlesRequestFactory: CompanyCandlesRequestFactory
     @LazyInjected private var companyNewsRequestFactory: CompanyNewsRequestFactory
     @LazyInjected private var imageRequestFactory: ImageRequestFactory
+    @LazyInjected private var companyProfileRepository: CompanyProfileRepository
     
     // MARK: - Construction
     init(coordinator: StocksCoordination,
+         companyProfileDataModel: CompanyProfileDataModel? = nil,
          companyProfile: CompanyProfileModel) {
         
         self.coordinator = coordinator
+        self.companyProfileDataModel = companyProfileDataModel
         self.companyProfile = companyProfile
     }
     
@@ -60,12 +65,13 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         initTimeline = timeline
 
         Task {
-            await requestCompanyCandles(tickerSymbol: companyProfile.tickerSymbol, timeline: timeline)
+            await requestCompanyCandles(ticker: companyProfile.ticker, timeline: timeline)
         }
     }
     
     func updateWatchlist() {
-
+        let companyProfile = companyProfileDataModel?.patch(inWatchlist: true)
+        self.companyProfileRepository.putCompanyProfile(companyProfile!)
     }
     
     func close() {
@@ -74,7 +80,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     }
     
     func onlineUpdateBegin() {
-//        webSocketService.initialCompanies = [companyProfile.tickerSymbol]
+//        webSocketService.initialCompanies = [companyProfile.ticker]
 //        webSocketService.receivedData = { [weak self] trades in
 //
 //            guard let self = self else { return }
@@ -102,7 +108,7 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     // MARK: Company news
     func getNews() {
         Task {
-            await requestNews(tickerSymbol: companyProfile.tickerSymbol, periodInDays: 10)
+            await requestNews(ticker: companyProfile.ticker, periodInDays: 10)
         }
     }
     
@@ -128,10 +134,10 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
 
     // MARK: - Private Methods
 
-    private func requestNews(tickerSymbol: String, periodInDays: Int) async {
+    private func requestNews(ticker: String, periodInDays: Int) async {
         do {
             let newsResponse = try await companyNewsRequestFactory
-                .createRequest(tickerSymbol: tickerSymbol, periodInDays: periodInDays)
+                .createRequest(ticker: ticker, periodInDays: periodInDays)
                 .execute()
 
             news = newsResponse.map { NewsModel(newsResponse: $0) }
@@ -145,10 +151,10 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
         }
     }
 
-    private func requestCompanyCandles(tickerSymbol: String, timeline: CompanyCandlesTimeline) async {
+    private func requestCompanyCandles(ticker: String, timeline: CompanyCandlesTimeline) async {
         do {
             let companyCandles = try await companyCandlesRequestFactory
-                .createRequest(tickerSymbol: tickerSymbol, timeline: timeline)
+                .createRequest(ticker: ticker, timeline: timeline)
                 .execute()
 
             DispatchQueue.main.async {

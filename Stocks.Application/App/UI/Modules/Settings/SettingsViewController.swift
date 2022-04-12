@@ -65,7 +65,7 @@ final class SettingsViewController: UITableViewController {
     private func setupTableView() {
 
         self.tableView? <- {
-            $0.backgroundColor = StocksColor.background
+            $0.backgroundColor = .white
             $0.isScrollEnabled = false
             $0.separatorInset = Const.tableViewSeparatorInsets
             $0.registerCell(UITableViewCell.self)
@@ -102,7 +102,10 @@ extension SettingsViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+
         let cell = tableView.dequeueReusableCell(UITableViewCell.self, for: indexPath)
+        cell?.backgroundColor = StocksColor.background
+
         let settingsType = self.settingsType[indexPath.row]
 
         switch settingsType {

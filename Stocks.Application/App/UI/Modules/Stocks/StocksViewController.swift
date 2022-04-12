@@ -70,7 +70,6 @@ final class StocksViewController: UITableViewController {
     private func setupTableView() {
 
         self.tableView? <- {
-            $0.backgroundColor = StocksColor.background
             $0.separatorStyle = .none
 
             $0.dragInteractionEnabled = true
@@ -109,6 +108,8 @@ extension StocksViewController {
         if editingStyle == .delete {
             let company = self.watchlist.remove(at: indexPath.row)
             self.viewModel.removeCompany(company)
+
+            self.tableView.deleteRows(at: [indexPath], with: .automatic)
         }
     }
 }
@@ -128,6 +129,9 @@ extension StocksViewController {
 
         let companyProfile = watchlist[indexPath.row]
         cell?.updateView(with: companyProfile)
+
+        let separatorIsHidden = (self.watchlist.count - 1) == indexPath.row
+        cell?.updateSeparator(isHidden: separatorIsHidden)
 
         let maxLogoSize = cell?.bounds.height ?? 0.0
         let imagePublisher = self.viewModel.getImagePublisher(withSize: maxLogoSize, for: companyProfile)
@@ -182,6 +186,9 @@ extension StocksViewController: UITableViewDropDelegate {
             item.sourceIndexPath?.row <- { sourceIndex in
 
                 let company = self.watchlist.move(fromIndex: sourceIndex, toIndex: destinationIndex)
+
+                self.tableView.reloadData() // reloadData() here is necessary because Drag&Drop is buggy
+
                 self.viewModel.moveCompany(company, to: destinationIndex)
 
                 coordinator.drop(item.dragItem, toRowAt: destinationIndexPath)

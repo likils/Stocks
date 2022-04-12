@@ -106,7 +106,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
         let label = UILabel()
         label.numberOfLines = 2
         label.textAlignment = .center
-        let text1 = NSMutableAttributedString(string: company.tickerSymbol, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
+        let text1 = NSMutableAttributedString(string: company.ticker, attributes: [.font : UIFont.systemFont(ofSize: 16, weight: .semibold)])
         let text2 = NSAttributedString(string: "\n\(company.name)", attributes: [.font : UIFont.systemFont(ofSize: 14, weight: .semibold),
                                                                                  .foregroundColor: StocksColor.secondary])
         text1.append(text2)
@@ -155,7 +155,7 @@ extension CompanyDetailsVC {
         if indexPath.section == 0,
            let cell = tableView.dequeueReusableCell(withIdentifier: CompanyDetailsTableViewCell.identifier, for: indexPath) as? CompanyDetailsTableViewCell {
             cell.updateCompanyDetails(by: company)
-            cell.companyQuotes = company.companyQuotes
+//            cell.companyQuotes = company.companyQuotes
             cell.delegate = self
             let publisher = viewModel.requestLogoImage()
             cell.subscribeToImageChanges(with: publisher)

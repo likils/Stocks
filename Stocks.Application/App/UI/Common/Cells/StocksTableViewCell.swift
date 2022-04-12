@@ -18,20 +18,18 @@ final class StocksTableViewCell: UITableViewCell {
 
     // MARK: - Subviews
 
-    private let defaultBackgroundView = DefaultBackgroundView()
-
     private let logoImageView = UIImageView() <- {
         $0.contentMode = .scaleAspectFit
         $0.clipsToBounds = true
         $0.layer.cornerRadius = Const.logoCornerRadius
     }
 
-    private let symbolLabel = UILabel() <- {
+    private let tickerLabel = UILabel() <- {
         $0.font = StocksFont.title3
         $0.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
     }
 
-    private let companyLabel = UILabel() <- {
+    private let companyNameLabel = UILabel() <- {
         $0.font = StocksFont.body
         $0.textColor = StocksColor.secondary
         $0.setContentCompressionResistancePriority(UILayoutPriority(749), for: .horizontal)
@@ -46,6 +44,10 @@ final class StocksTableViewCell: UITableViewCell {
     private let priceDiffLabel = UILabel() <- {
         $0.font = StocksFont.body
         $0.textAlignment = .right
+    }
+
+    private let separatorView = UIView() <- {
+        $0.backgroundColor = StocksColor.separator
     }
 
     // MARK: - Private Properties
@@ -80,8 +82,8 @@ final class StocksTableViewCell: UITableViewCell {
 
     func updateView(with companyProfile: CompanyProfileModel) {
 
-        self.symbolLabel.text = companyProfile.tickerSymbol
-        self.companyLabel.text = companyProfile.name
+        self.tickerLabel.text = companyProfile.ticker
+        self.companyNameLabel.text = companyProfile.name
 
         self.currencySymbol = companyProfile.currency.symbol
 
@@ -102,6 +104,10 @@ final class StocksTableViewCell: UITableViewCell {
         self.onlineTradeSubscriber = onlineTradePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.updatePrice($0.price) }
+    }
+
+    func updateSeparator(isHidden: Bool) {
+        self.separatorView.isHidden = isHidden
     }
 
     // MARK: - Private Methods
@@ -126,34 +132,25 @@ final class StocksTableViewCell: UITableViewCell {
         let priceDiffPercent = abs((priceDiff * 100) / self.previousClosePrice)
 
         let diffText = (priceDiff > 0)
-        ? ("+" + priceDiff.textRepresentation)
-        : priceDiff.textRepresentation
+            ? ("+" + priceDiff.textRepresentation)
+            : priceDiff.textRepresentation
 
         self.priceDiffLabel.text = "\(diffText) \(self.currencySymbol) (\(priceDiffPercent.textRepresentation)%)"
         self.priceDiffLabel.textColor = (priceDiff < 0) ? StocksColor.negativePrice : StocksColor.positivePrice
     }
 
     private func setupView() {
-        selectionStyle = .none
-        backgroundColor = .clear
-        contentView.backgroundColor = .clear
-
-        contentView.addSubview(defaultBackgroundView)
-
-        defaultBackgroundView.addSubview(logoImageView)
-        defaultBackgroundView.addSubview(symbolLabel)
-        defaultBackgroundView.addSubview(companyLabel)
-        defaultBackgroundView.addSubview(stockPriceLabel)
-        defaultBackgroundView.addSubview(priceDiffLabel)
+        contentView.addSubview(logoImageView)
+        contentView.addSubview(tickerLabel)
+        contentView.addSubview(companyNameLabel)
+        contentView.addSubview(stockPriceLabel)
+        contentView.addSubview(priceDiffLabel)
+        contentView.addSubview(separatorView)
 
         setupConstraints()
     }
 
     private func setupConstraints() {
-
-        defaultBackgroundView.snp.makeConstraints { make in
-            make.edges.equalToSuperview().inset(Const.backgroundEdgeInset)
-        }
 
         logoImageView.snp.makeConstraints { make in
             make.top.leading.bottom.equalToSuperview().inset(Const.inset)
@@ -161,36 +158,43 @@ final class StocksTableViewCell: UITableViewCell {
             make.height.equalTo(Const.logoHeight)
         }
 
-        symbolLabel.snp.makeConstraints { make in
+        tickerLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView)
             make.leading.equalTo(logoImageView.snp.trailing).offset(Const.offset)
         }
 
-        companyLabel.snp.makeConstraints { make in
-            make.leading.equalTo(symbolLabel)
+        companyNameLabel.snp.makeConstraints { make in
+            make.leading.equalTo(tickerLabel)
             make.bottom.equalTo(logoImageView)
         }
 
         stockPriceLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(symbolLabel)
-            make.leading.greaterThanOrEqualTo(symbolLabel.snp.trailing).offset(Const.offset)
+            make.centerY.equalTo(tickerLabel)
+            make.leading.greaterThanOrEqualTo(tickerLabel.snp.trailing).offset(Const.offset)
             make.trailing.equalToSuperview().inset(Const.inset)
         }
 
         priceDiffLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(companyLabel)
-            make.leading.greaterThanOrEqualTo(companyLabel.snp.trailing).offset(Const.offset)
+            make.centerY.equalTo(companyNameLabel)
+            make.leading.greaterThanOrEqualTo(companyNameLabel.snp.trailing).offset(Const.offset)
             make.trailing.equalTo(stockPriceLabel)
+        }
+
+        separatorView.snp.makeConstraints { make in
+            make.leading.equalTo(logoImageView)
+            make.trailing.equalTo(stockPriceLabel)
+            make.bottom.equalToSuperview()
+            make.height.equalTo(Const.separatorViewHeight)
         }
     }
 
     // MARK: - Inner Types
 
     private enum Const {
-        static let backgroundEdgeInset = UIEdgeInsets(top: 4, left: 8, bottom: 4, right: 8)
         static let inset: CGFloat = 16.0
         static let logoCornerRadius: CGFloat = logoHeight / 2
         static let logoHeight: CGFloat = 40.0
         static let offset: CGFloat = 8.0
+        static let separatorViewHeight: CGFloat = 1.0
     }
 }

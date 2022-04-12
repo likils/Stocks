@@ -11,7 +11,7 @@ import StocksData
 
 // ----------------------------------------------------------------------------
 
-public final class CompanySearchRequest: AbstractRequest<CompaniesModel> {
+public final class CompanySearchRequest: AbstractRequest<CompaniesResponseModel> {
 
     // MARK: - Construction
 
@@ -20,7 +20,7 @@ public final class CompanySearchRequest: AbstractRequest<CompaniesModel> {
         let requestEntity = try RequestEntity(requestModel: requestModel)
         let urlRequest = UrlRequestFactory.createUrlRequest(requestProvider, requestEntity)
 
-        let requestTask = RequestValueTask<CompaniesModel>(urlRequest: urlRequest)
+        let requestTask = RequestValueTask<CompaniesResponseModel>(urlRequest: urlRequest)
         super.init(requestTask.eraseToAnyRequestTask())
     }
 }

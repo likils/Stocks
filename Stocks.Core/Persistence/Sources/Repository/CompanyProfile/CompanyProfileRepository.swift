@@ -16,15 +16,17 @@ public protocol CompanyProfileRepository: AnyObject {
 
     // MARK: - Methods
 
-    func getCompanyProfiles() async -> [CompanyProfileResponseModel]
+    func getCompanyProfiles() async -> [CompanyProfileDataModel]
 
-    func getCompanyProfilesPublisher() -> AnyPublisher<[CompanyProfileResponseModel], Never>
+    func getCompanyProfilesPublisher() -> AnyPublisher<[CompanyProfileDataModel], Never>
 
-    func putCompanyProfile(_ companyProfile: CompanyProfileResponseModel)
+    func getCompanyProfile(with ticker: String) async -> CompanyProfileDataModel?
 
-    func moveCompanyProfile(with tickerSymbol: String, to newIndex: Int)
+    func putCompanyProfile(_ companyProfile: CompanyProfileDataModel)
 
-    func removeCompanyProfile(with tickerSymbol: String)
+    func moveCompanyProfile(with ticker: String, to newIndex: Int)
+
+    func removeCompanyProfile(with ticker: String)
 
     func removeAll()
 }

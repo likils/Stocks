@@ -18,35 +18,39 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
 
     // MARK: - Private Properties
 
-    private let storage: AnyStorage<String, [CompanyProfileResponseModel]>
+    private let storage: AnyStorage<String, [CompanyProfileDataModel]>
     private let storageKey = "company_profiles_key"
-    private let companyProfilesPublisher = PassthroughSubject<[CompanyProfileResponseModel], Never>()
+    private let companyProfilesPublisher = CurrentValueSubject<[CompanyProfileDataModel], Never>(.empty)
 
     // MARK: - Construction
 
-    init(storage: AnyStorage<String, [CompanyProfileResponseModel]>) {
+    init(storage: AnyStorage<String, [CompanyProfileDataModel]>) {
         self.storage = storage
     }
 
     // MARK: - Methods
 
-    func getCompanyProfiles() async -> [CompanyProfileResponseModel] {
+    func getCompanyProfiles() async -> [CompanyProfileDataModel] {
         await self.storage.get(forKey: self.storageKey) ?? .empty
     }
 
-    func getCompanyProfilesPublisher() -> AnyPublisher<[CompanyProfileResponseModel], Never> {
+    func getCompanyProfilesPublisher() -> AnyPublisher<[CompanyProfileDataModel], Never> {
 
-        Task {
-            let companyProfiles = await getCompanyProfiles()
-            self.companyProfilesPublisher.send(companyProfiles)
-        }
-
-        return self.companyProfilesPublisher
-            .subscribe(on: DispatchQueue.global())
+        return Just(())
+            .asyncFlatMap { [unowned self] in
+                await self.getCompanyProfiles()
+            }
+            .flatMap { [unowned self] companyProfiles in
+                return self.companyProfilesPublisher <- { $0.value = companyProfiles }
+            }
             .eraseToAnyPublisher()
     }
 
-    func putCompanyProfile(_ companyProfile: CompanyProfileResponseModel) {
+    func getCompanyProfile(with ticker: String) async -> CompanyProfileDataModel? {
+        return await getCompanyProfiles().first { $0.ticker == ticker }
+    }
+
+    func putCompanyProfile(_ companyProfile: CompanyProfileDataModel) {
         Task {
             var companyProfiles = await getCompanyProfiles()
             companyProfiles.append(companyProfile)
@@ -55,38 +59,37 @@ final class CompanyProfileRepositoryImpl: CompanyProfileRepository {
         }
     }
 
-    func moveCompanyProfile(with tickerSymbol: String, to newIndex: Int) {
+    func moveCompanyProfile(with ticker: String, to newIndex: Int) {
         Task {
 
-            guard let companyProfile = await getCompanyProfiles().first(where: { tickerSymbol == $0.tickerSymbol })
-            else {
+            guard let companyProfile = await getCompanyProfile(with: ticker) else {
                 return
             }
 
-            var companyProfiles = await getCompanyProfiles().filter { tickerSymbol != $0.tickerSymbol }
+            var companyProfiles = await getCompanyProfiles().filter { ticker != $0.ticker }
             companyProfiles.insert(companyProfile, at: newIndex)
 
             await updateStorage(with: companyProfiles)
         }
     }
 
-    func removeCompanyProfile(with tickerSymbol: String) {
+    func removeCompanyProfile(with ticker: String) {
         Task {
-            let companyProfiles = await getCompanyProfiles().filter { tickerSymbol != $0.tickerSymbol }
+            let companyProfiles = await getCompanyProfiles().filter { ticker != $0.ticker }
             await updateStorage(with: companyProfiles)
         }
     }
 
     func removeAll() {
         Task {
-            await self.storage.removeAll()
+            await updateStorage(with: .empty)
         }
     }
 
     // MARK: - Private Methods
 
-    private func updateStorage(with companyProfiles: [CompanyProfileResponseModel]) async {
+    private func updateStorage(with companyProfiles: [CompanyProfileDataModel]) async {
         await self.storage.put(companyProfiles, forKey: self.storageKey)
-        self.companyProfilesPublisher.send(companyProfiles)
+        self.companyProfilesPublisher.value = companyProfiles
     }
 }

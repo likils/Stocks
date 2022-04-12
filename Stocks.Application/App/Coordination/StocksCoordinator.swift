@@ -7,6 +7,7 @@
 //
 // ----------------------------------------------------------------------------
 
+import StocksData
 import SafariServices
 import UIKit
 
@@ -16,7 +17,7 @@ protocol StocksCoordination: Coordinator {
 
     // MARK: - Methods
 
-    func showCompanyDetails(_ company: CompanyProfileModel)
+    func showCompanyDetails(_ company: CompanyProfileModel, data: CompanyProfileDataModel?)
     func showWebPage(with url: URL)
 }
 
@@ -44,8 +45,8 @@ final class StocksCoordinator: StocksCoordination {
         showStocks()
     }
     
-    func showCompanyDetails(_ company: CompanyProfileModel) {
-        let vm = CompanyDetailsVM(coordinator: self, companyProfile: company)
+    func showCompanyDetails(_ company: CompanyProfileModel, data: CompanyProfileDataModel? = nil) {
+        let vm = CompanyDetailsVM(coordinator: self, companyProfileDataModel: data, companyProfile: company)
         let vc = CompanyDetailsVC(viewModel: vm)
 
         didFinishClosure = { [weak self] in

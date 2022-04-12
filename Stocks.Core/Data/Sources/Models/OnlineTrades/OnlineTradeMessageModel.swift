@@ -11,14 +11,14 @@ public struct OnlineTradeMessageModel: Codable {
 
     // MARK: - Properties
 
-    public let companySymbol: String
+    public let companyTicker: String
 
     public let messageType: MessageType
 
     // MARK: - Coding Keys
 
     private enum CodingKeys: String, CodingKey {
-        case companySymbol = "symbol"
+        case companyTicker = "symbol"
         case messageType = "type"
     }
 }
@@ -29,7 +29,7 @@ extension OnlineTradeMessageModel {
 
     // MARK: - Construction
 
-    public static func of(companySymbol: String, messageType: MessageType) -> Self {
-        return Self.init(companySymbol: companySymbol, messageType: messageType)
+    public static func of(companyTicker: String, messageType: MessageType) -> Self {
+        return Self.init(companyTicker: companyTicker, messageType: messageType)
     }
 }

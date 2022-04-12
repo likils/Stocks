@@ -13,20 +13,22 @@ import StocksData
 
 struct CompanySearchModel {
 
-// MARK: - Properties
+    // MARK: - Properties
 
-    let internalSearchResults: [CompanyModel]
+    let name: String
 
-    let externalSearchResults: [CompanyModel]
+    let ticker: String
+
+    let inWatchList: Bool
 }
 
 // ----------------------------------------------------------------------------
 
 extension CompanySearchModel {
 
-// MARK: - Construction
+    // MARK: - Construction
 
-    init() {
-        self.init(internalSearchResults: .empty, externalSearchResults: .empty)
+    init(companyModel: CompanyModel, inWatchlist: Bool) {
+        self.init(name: companyModel.name, ticker: companyModel.ticker, inWatchList: inWatchlist)
     }
 }

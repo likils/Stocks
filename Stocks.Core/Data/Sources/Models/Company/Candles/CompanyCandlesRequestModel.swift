@@ -16,7 +16,7 @@ public struct CompanyCandlesRequestModel: Codable {
 
     // MARK: - Properties
 
-    public let tickerSymbol: String
+    public let ticker: String
 
     public let resolution: CandlesResolution
 
@@ -29,7 +29,7 @@ public struct CompanyCandlesRequestModel: Codable {
     // MARK: - Coding Keys
 
     private enum CodingKeys: String, CodingKey {
-        case tickerSymbol = "symbol"
+        case ticker = "symbol"
         case resolution
         case fromDate = "from"
         case toDate = "to"
@@ -43,14 +43,14 @@ extension CompanyCandlesRequestModel {
     // MARK: - Construction
 
     public static func of(
-        tickerSymbol: String,
+        ticker: String,
         resolution: CandlesResolution,
         fromDate: Date,
         toDate: Date
     ) -> Self {
 
         return Self.init(
-            tickerSymbol: tickerSymbol,
+            ticker: ticker,
             resolution: resolution,
             fromDate: fromDate,
             toDate: toDate

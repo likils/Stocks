@@ -17,7 +17,10 @@ final class NewsTableViewCell: UITableViewCell {
 
     // MARK: - Subviews
 
-    private let defaultBackgroundView = DefaultBackgroundView()
+    private let defaultBackgroundView = UIView() <- {
+        $0.backgroundColor = StocksColor.background
+        $0.layer.cornerRadius = 16.0
+    }
 
     private let sourceLabel = UILabel() <- {
         $0.font = StocksFont.link
@@ -65,20 +68,20 @@ final class NewsTableViewCell: UITableViewCell {
     // MARK: - Methods
 
     override func prepareForReuse() {
-        thumbnailImageSubscriber?.cancel()
+        self.thumbnailImageSubscriber?.cancel()
 
         super.prepareForReuse()
     }
 
     func updateView(with news: NewsModel) {
-        sourceLabel.text = news.source
-        dateLabel.text = news.date.relativeDateTime
-        headlineLabel.text = news.headline
-        summaryLabel.text = news.summary
+        self.sourceLabel.text = news.source
+        self.dateLabel.text = news.date.relativeDateTime
+        self.headlineLabel.text = news.headline
+        self.summaryLabel.text = news.summary
     }
 
     func subscribeToImageChanges(with imagePublisher: ImagePublisher) {
-        thumbnailImageSubscriber = imagePublisher
+        self.thumbnailImageSubscriber = imagePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.thumbnailImageView.image = $0 }
     }

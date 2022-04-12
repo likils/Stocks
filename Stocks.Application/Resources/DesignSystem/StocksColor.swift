@@ -24,4 +24,5 @@ enum StocksColor {
 
     static var background = UIColor(rgb: 0xF8F8FA)
     static var brand = UIColor(rgb: 0x8D75F2)
+    static let separator = UIColor(rgb: 0xF2F2F2)
 }

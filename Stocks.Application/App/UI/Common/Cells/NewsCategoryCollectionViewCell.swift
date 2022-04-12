@@ -17,7 +17,10 @@ final class NewsCategoryCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Subviews
 
-    private let defaultBackgroundView = DefaultBackgroundView()
+    private let defaultBackgroundView = UIView() <- {
+        $0.backgroundColor = StocksColor.background
+        $0.layer.cornerRadius = 16.0
+    }
 
     private let categoryLabel = UILabel() <- {
         $0.font = StocksFont.body
@@ -48,14 +51,14 @@ final class NewsCategoryCollectionViewCell: UICollectionViewCell {
     // MARK: - Methods
 
     func updateView(with category: NewsCategory) {
-        categoryLabel.text = category.text
+        self.categoryLabel.text = category.text
     }
     
     // MARK: - Private Methods
 
     private func changeCellColors(_ isSelected: Bool) {
-        categoryLabel.textColor = isSelected ? .white : StocksColor.secondary
-        defaultBackgroundView.backgroundColor = isSelected ? StocksColor.brand : StocksColor.background
+        self.categoryLabel.textColor = isSelected ? .white : StocksColor.secondary
+        self.defaultBackgroundView.backgroundColor = isSelected ? StocksColor.brand : StocksColor.background
     }
 
     private func setupView() {

@@ -25,8 +25,8 @@ public final class CompanyQuotesRequestFactory {
 
     // MARK: - Methods
 
-    public func createRequest(tickerSymbol: String) throws -> CompanyQuotesRequest {
-        let requestModel = CompanyProfileRequestModel.of(tickerSymbol: tickerSymbol)
+    public func createRequest(ticker: String) throws -> CompanyQuotesRequest {
+        let requestModel = CompanyProfileRequestModel.of(ticker: ticker)
         return try CompanyQuotesRequest(requestModel: requestModel, requestProvider: self.requestProvider)
     }
 }

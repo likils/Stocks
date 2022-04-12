@@ -26,10 +26,10 @@ public final class CompanyNewsRequestFactory {
 
     // MARK: - Methods
 
-    public func createRequest(tickerSymbol: String, periodInDays: Int) throws -> NewsRequest {
+    public func createRequest(ticker: String, periodInDays: Int) throws -> NewsRequest {
 
         let pastDate = Calendar.current.date(byAdding: .day, value: -periodInDays, to: Date()) ?? Date()
-        let requestModel = CompanyNewsRequestModel.of(tickerSymbol: tickerSymbol, fromDate: pastDate, toDate: Date())
+        let requestModel = CompanyNewsRequestModel.of(ticker: ticker, fromDate: pastDate, toDate: Date())
 
         return try NewsRequest(requestModel: requestModel, requestProvider: self.requestProvider)
     }

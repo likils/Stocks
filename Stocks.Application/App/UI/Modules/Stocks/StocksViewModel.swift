@@ -69,8 +69,8 @@ final class StocksViewModelImpl {
     
     // MARK: - Private Methods
 
-    private func createCompanyProfileViewModels(
-        with companyProfiles: [CompanyProfileResponseModel]
+    private func createCompanyProfiles(
+        with companyProfiles: [CompanyProfileDataModel]
     ) async -> [CompanyProfileModel] {
 
         var companyProfileViewModels: [CompanyProfileModel] = .empty
@@ -78,18 +78,18 @@ final class StocksViewModelImpl {
         for companyProfile in companyProfiles {
             do {
                 let companyQuotes = try await companyQuotesRequestFactory
-                    .createRequest(tickerSymbol: companyProfile.tickerSymbol)
+                    .createRequest(ticker: companyProfile.ticker)
                     .execute()
 
-                let viewModel = CompanyProfileModel(
-                    companyProfile: companyProfile,
-                    companyQuotes: companyQuotes,
-                    inWatchlist: true
+                let companyProfile = CompanyProfileModel(
+                    companyProfileDataModel: companyProfile,
+                    companyQuotes: companyQuotes
                 )
 
-                companyProfileViewModels.append(viewModel)
+                companyProfileViewModels.append(companyProfile)
             }
             catch {
+                self.companyProfileRepository.removeCompanyProfile(with: companyProfile.ticker)
                 handleError(error)
             }
         }
@@ -97,19 +97,9 @@ final class StocksViewModelImpl {
         return companyProfileViewModels
     }
 
-    private func subscribeToCompanyTrades(with companyTicker: String) {
+    private func updateCompanyTradesSubscription(companyTicker: String, messageType: MessageType) {
         do {
-            let message = OnlineTradeMessageModel.of(companySymbol: companyTicker, messageType: .subscribe)
-            try onlineTradesWebSocket.sendMessage(message)
-        }
-        catch {
-            handleError(error)
-        }
-    }
-
-    private func unsubscribeFromCompanyTrades(with companyTicker: String) {
-        do {
-            let message = OnlineTradeMessageModel.of(companySymbol: companyTicker, messageType: .unsubscribe)
+            let message = OnlineTradeMessageModel.of(companyTicker: companyTicker, messageType: messageType)
             try onlineTradesWebSocket.sendMessage(message)
         }
         catch {
@@ -132,14 +122,18 @@ extension StocksViewModelImpl: StocksViewModel {
     func beginOnlineTradeUpdates() {
         Task {
             let companies = await self.companyProfileRepository.getCompanyProfiles()
-            companies.forEach { subscribeToCompanyTrades(with: $0.tickerSymbol) }
+            companies.forEach {
+                updateCompanyTradesSubscription(companyTicker: $0.ticker, messageType: .subscribe)
+            }
         }
     }
 
     func endOnlineTradeUpdates() {
         Task {
             let companies = await self.companyProfileRepository.getCompanyProfiles()
-            companies.forEach { unsubscribeFromCompanyTrades(with: $0.tickerSymbol) }
+            companies.forEach {
+                updateCompanyTradesSubscription(companyTicker: $0.ticker, messageType: .unsubscribe)
+            }
         }
     }
 
@@ -147,8 +141,8 @@ extension StocksViewModelImpl: StocksViewModel {
 
         return self.companyProfileRepository
             .getCompanyProfilesPublisher()
-            .asyncFlatMap { [weak self] in
-                await self?.createCompanyProfileViewModels(with: $0) ?? .empty
+            .asyncFlatMap { [unowned self] in
+                await self.createCompanyProfiles(with: $0)
             }
             .eraseToAnyPublisher()
     }
@@ -172,7 +166,7 @@ extension StocksViewModelImpl: StocksViewModel {
             }
             .switchToLatest()
             .compactMap {
-                return $0.onlineTrades.last { $0.ticker == company.tickerSymbol }
+                return $0.onlineTrades.last { $0.ticker == company.ticker }
             }
             .collect(.byTime(DispatchQueue.global(), .seconds(2)))
             .compactMap {
@@ -186,14 +180,14 @@ extension StocksViewModelImpl: StocksViewModel {
     }
 
     func moveCompany(_ company: CompanyProfileModel, to index: Int) {
-        self.companyProfileRepository.moveCompanyProfile(with: company.tickerSymbol, to: index)
+        self.companyProfileRepository.moveCompanyProfile(with: company.ticker, to: index)
     }
 
     func removeCompany(_ company: CompanyProfileModel) {
-        self.companyProfileRepository.removeCompanyProfile(with: company.tickerSymbol)
+        self.companyProfileRepository.removeCompanyProfile(with: company.ticker)
     }
 
     func showCompanyDetails(for company: CompanyProfileModel) {
-        self.coordinator.showCompanyDetails(company)
+        self.coordinator.showCompanyDetails(company, data: nil)
     }
 }

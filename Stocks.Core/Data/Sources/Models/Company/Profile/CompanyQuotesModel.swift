@@ -40,23 +40,3 @@ public struct CompanyQuotesModel: Codable {
         case previousClosePrice = "pc"
     }
 }
-
-// ----------------------------------------------------------------------------
-
-extension CompanyQuotesModel {
-
-    // MARK: - Public Methods
-
-    @available(*, deprecated, message: "Remove after UI refactoring.")
-    public func patch(currentPrice: Double) -> Self {
-        
-        return CompanyQuotesModel(
-            currentPrice: currentPrice,
-            date: Date(),
-            highPrice: self.highPrice,
-            lowPrice: self.lowPrice,
-            openPrice: self.openPrice,
-            previousClosePrice: self.previousClosePrice
-        )
-    }
-}

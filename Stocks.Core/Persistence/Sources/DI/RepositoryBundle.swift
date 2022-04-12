@@ -24,7 +24,7 @@ extension Resolver {
             let documentDirectoryStorage = createDocumentDirectoryStorage(
                 repositoryType: CompanyProfileRepository.self,
                 keyType: String.self,
-                valueType: [CompanyProfileResponseModel].self
+                valueType: [CompanyProfileDataModel].self
             )
 
             return CompanyProfileRepositoryImpl(storage: documentDirectoryStorage)

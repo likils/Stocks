@@ -30,7 +30,7 @@ struct CompanyProfileModel {
 
     let name: String
 
-    let tickerSymbol: String
+    let ticker: String
 
     let websiteLink: URL
 
@@ -45,19 +45,19 @@ extension CompanyProfileModel {
 
     // MARK: - Construction
 
-    init(companyProfile: CompanyProfileResponseModel, companyQuotes: CompanyQuotesModel, inWatchlist: Bool) {
+    init(companyProfileDataModel: CompanyProfileDataModel, companyQuotes: CompanyQuotesModel) {
         self.init(
-            currency: companyProfile.currency,
-            headquarterCountry: companyProfile.headquarterCountry,
-            ipoDate: companyProfile.ipoDate,
-            listedExchange: companyProfile.listedExchange,
-            logoLink: companyProfile.logoLink,
-            marketCapitalization: companyProfile.marketCapitalization,
-            name: companyProfile.name,
-            tickerSymbol: companyProfile.tickerSymbol,
-            websiteLink: companyProfile.websiteLink,
+            currency: companyProfileDataModel.currency,
+            headquarterCountry: companyProfileDataModel.headquarterCountry,
+            ipoDate: companyProfileDataModel.ipoDate,
+            listedExchange: companyProfileDataModel.listedExchange,
+            logoLink: companyProfileDataModel.logoLink,
+            marketCapitalization: companyProfileDataModel.marketCapitalization,
+            name: companyProfileDataModel.name,
+            ticker: companyProfileDataModel.ticker,
+            websiteLink: companyProfileDataModel.websiteLink,
             companyQuotes: companyQuotes,
-            inWatchlist: inWatchlist
+            inWatchlist: companyProfileDataModel.inWatchlist
         )
     }
 }

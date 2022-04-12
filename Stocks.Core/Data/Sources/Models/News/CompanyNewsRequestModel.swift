@@ -16,7 +16,7 @@ public struct CompanyNewsRequestModel: Codable {
     
     // MARK: - Properties
     
-    public let tickerSymbol: String
+    public let ticker: String
     
     @Immutable @DateCoding
     public var fromDate: Date
@@ -27,7 +27,7 @@ public struct CompanyNewsRequestModel: Codable {
     // MARK: - Coding Keys
     
     private enum CodingKeys: String, CodingKey {
-        case tickerSymbol = "symbol"
+        case ticker = "symbol"
         case fromDate = "from"
         case toDate = "to"
     }
@@ -39,7 +39,7 @@ extension CompanyNewsRequestModel {
     
     // MARK: - Construction
     
-    public static func of(tickerSymbol: String, fromDate: Date, toDate: Date) -> Self {
-        return Self.init(tickerSymbol: tickerSymbol, fromDate: fromDate, toDate: toDate)
+    public static func of(ticker: String, fromDate: Date, toDate: Date) -> Self {
+        return Self.init(ticker: ticker, fromDate: fromDate, toDate: toDate)
     }
 }

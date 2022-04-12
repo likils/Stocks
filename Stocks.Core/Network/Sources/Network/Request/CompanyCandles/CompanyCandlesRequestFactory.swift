@@ -26,10 +26,10 @@ public final class CompanyCandlesRequestFactory {
 
     // MARK: - Methods
 
-    public func createRequest(tickerSymbol: String, timeline: CompanyCandlesTimeline) throws -> CompanyCandlesRequest {
+    public func createRequest(ticker: String, timeline: CompanyCandlesTimeline) throws -> CompanyCandlesRequest {
 
         let requestModel = CompanyCandlesRequestModel.of(
-            tickerSymbol: tickerSymbol,
+            ticker: ticker,
             resolution: timeline.resolution,
             fromDate: timeline.pastDate,
             toDate: Date()
