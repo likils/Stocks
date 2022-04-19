@@ -152,17 +152,12 @@ class CompanyDetailsVM: CompanyDetailsViewModel {
     }
 
     private func requestCompanyCandles(ticker: String, timeline: CompanyCandlesTimeline) async {
-        do {
-            let companyCandles = try await companyCandlesRequestFactory
-                .createRequest(ticker: ticker, timeline: timeline)
-                .execute()
+        let companyCandles = try? await companyCandlesRequestFactory
+            .createRequest(ticker: ticker, timeline: timeline)
+            .execute()
 
-            DispatchQueue.main.async {
-                self.view?.updateValues(by: companyCandles, and: timeline)
-            }
-        }
-        catch {
-            handleError(error)
+        DispatchQueue.main.async {
+            self.view?.updateValues(by: companyCandles, and: timeline)
         }
     }
 

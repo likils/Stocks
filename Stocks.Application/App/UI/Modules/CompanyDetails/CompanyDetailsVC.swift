@@ -86,7 +86,7 @@ class CompanyDetailsVC: UITableViewController, CompanyDetailsView, CompanyDetail
     }
     
     // MARK: Detail View
-    func updateValues(by candles: CompanyCandlesModel, and timeline: CompanyCandlesTimeline) {
+    func updateValues(by candles: CompanyCandlesModel?, and timeline: CompanyCandlesTimeline) {
         guard let cell = tableView.cellForRow(at: IndexPath(row: 0, section: 0)) as? CompanyDetailsTableViewCell else { return }
         cell.updateValues(by: candles, and: timeline)
     }

@@ -8,6 +8,7 @@
 import Combine
 import StocksData
 import StocksNetwork
+import StocksSystem
 import UIKit
 
 class CompanyDetailsTableViewCell: UITableViewCell {
@@ -54,6 +55,13 @@ class CompanyDetailsTableViewCell: UITableViewCell {
     
     private let backView = DefaultBackgroundView()
     private let graphView = GraphView()
+
+    private let noDataLabel = UILabel() <- {
+        $0.font = StocksFont.body
+        $0.textColor = StocksColor.secondary
+        $0.textAlignment = .center
+        $0.text = "No Data"
+    }
     
     private let minPriceLabel: UILabel = {
         let label = UILabel()
@@ -171,12 +179,21 @@ class CompanyDetailsTableViewCell: UITableViewCell {
         inWatchlist = company.inWatchlist
     }
     
-    func updateValues(by candles: CompanyCandlesModel, and timeline: CompanyCandlesTimeline) {
-        guard let firstPrice = candles.openPrices.first else { return }
-        
-        graphView.candles = candles
-        updatePriceDifference(with: firstPrice, in: timeline)
-        updateMinAndMaxLabels(with: graphView.minPrice, and: graphView.maxPrice)
+    func updateValues(by candles: CompanyCandlesModel?, and timeline: CompanyCandlesTimeline) {
+        let firstPrice = candles?.openPrices.first ?? 0
+
+        if let candles = candles {
+            let prices = candles.highPrices.enumerated().map { ($1 + candles.lowPrices[$0]) / 2 }
+            let minPrice = candles.lowPrices.min() ?? 0
+            let maxPrice = candles.highPrices.max() ?? 0
+            let graphModel = GraphModel(prices: prices, minPrice: minPrice, maxPrice: maxPrice)
+
+            graphView.updateView(with: graphModel)
+            updateMinAndMaxLabels(with: minPrice, and: maxPrice)
+            updatePriceDifference(with: firstPrice, in: timeline)
+        }
+
+
     }
     
     // MARK: - Private Methods

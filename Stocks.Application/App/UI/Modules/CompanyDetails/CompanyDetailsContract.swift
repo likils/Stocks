@@ -31,7 +31,7 @@ protocol CompanyDetailsViewModel: AnyObject {
 
 protocol CompanyDetailsView: AnyObject {
     
-    func updateValues(by candles: CompanyCandlesModel, and timeline: CompanyCandlesTimeline)
+    func updateValues(by candles: CompanyCandlesModel?, and timeline: CompanyCandlesTimeline)
     func updateQuotes()
     func showNews()
     

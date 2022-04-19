@@ -51,6 +51,7 @@
 		B2BFBFB62636BE89004F40B0 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */; };
 		B2BFBFBB2636BF86004F40B0 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2BFBFBA2636BF86004F40B0 /* Coordinator.swift */; };
 		B2C2EE092736718B00ED8BC1 /* CompanyProfileModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C2EE082736718B00ED8BC1 /* CompanyProfileModel.swift */; };
+		B2C56513280D4F0600112DB2 /* GraphModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C56512280D4F0600112DB2 /* GraphModel.swift */; };
 		B2DEC14D26209D3600C13589 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14C26209D3600C13589 /* AppDelegate.swift */; };
 		B2DEC14F26209D3600C13589 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2DEC14E26209D3600C13589 /* SceneDelegate.swift */; };
 		B2DEC15626209D3600C13589 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2DEC15526209D3600C13589 /* Assets.xcassets */; };
@@ -100,6 +101,7 @@
 		B2BFBFB52636BE89004F40B0 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		B2BFBFBA2636BF86004F40B0 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		B2C2EE082736718B00ED8BC1 /* CompanyProfileModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompanyProfileModel.swift; sourceTree = "<group>"; };
+		B2C56512280D4F0600112DB2 /* GraphModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphModel.swift; sourceTree = "<group>"; };
 		B2DEC14926209D3600C13589 /* Stocks.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Stocks.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B2DEC14C26209D3600C13589 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B2DEC14E26209D3600C13589 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -170,8 +172,8 @@
 		B22D09C6263C28FF0032380F /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B2C56511280D4EED00112DB2 /* Graph */,
 				B2535275264D32B6005CEB74 /* DefaultBackgroundView.swift */,
-				B26005E7265FB01100F814D7 /* GraphView.swift */,
 				B20C8D7D2795C33100C80BD5 /* NewsCategoriesView.swift */,
 			);
 			path = Views;
@@ -299,6 +301,15 @@
 			path = Coordination;
 			sourceTree = "<group>";
 		};
+		B2C56511280D4EED00112DB2 /* Graph */ = {
+			isa = PBXGroup;
+			children = (
+				B2C56512280D4F0600112DB2 /* GraphModel.swift */,
+				B26005E7265FB01100F814D7 /* GraphView.swift */,
+			);
+			path = Graph;
+			sourceTree = "<group>";
+		};
 		B2DEC14026209D3600C13589 = {
 			isa = PBXGroup;
 			children = (
@@ -416,6 +427,7 @@
 				B23D1564263DA52F0010AB57 /* StocksTableViewCell.swift in Sources */,
 				B245A96327A123A100D533DB /* NewsModel.swift in Sources */,
 				B285E1AE28045CC400BD3933 /* CompanySearchTableViewCell.swift in Sources */,
+				B2C56513280D4F0600112DB2 /* GraphModel.swift in Sources */,
 				B26005E0265D2D7200F814D7 /* CompanyDetailsVC.swift in Sources */,
 				B2A55B522636DD1B0036AB01 /* NewsCoordinator.swift in Sources */,
 				B256DF26265BADE100870576 /* UICollectionViewCell.swift in Sources */,
