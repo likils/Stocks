@@ -16,6 +16,15 @@ import UIKit
 
 final class CompanySearchViewController: UITableViewController {
 
+    // MARK: - Subviews
+
+    private let loadingDataLabel = UILabel() <- {
+        $0.font = StocksFont.body
+        $0.textColor = StocksColor.secondary
+        $0.textAlignment = .center
+        $0.text = "Loading..."
+    }
+
     // MARK: - Private Properties
 
     private let viewModel: CompanySearchViewModel
@@ -60,6 +69,8 @@ final class CompanySearchViewController: UITableViewController {
     private func reloadSearchlist(with companies: [CompanySearchModel]) {
         self.companies = companies
         self.tableView.reloadSections(IndexSet(integer: 0), with: .fade)
+
+        self.loadingDataLabel.isHidden = !companies.isEmpty
     }
 
     // MARK: - Private Methods
@@ -69,6 +80,12 @@ final class CompanySearchViewController: UITableViewController {
         self.tableView? <- {
             $0.separatorStyle = .none
             $0.registerCell(CompanySearchTableViewCell.self)
+        }
+
+        self.tableView.addSubview(self.loadingDataLabel)
+        self.loadingDataLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(Const.loadingDataLabelTopInset)
+            make.centerX.equalToSuperview()
         }
     }
 
@@ -83,7 +100,8 @@ final class CompanySearchViewController: UITableViewController {
     // MARK: - Inner Types
 
     private enum Const {
-        static let cellHeight: CGFloat = 54
+        static let cellHeight: CGFloat = 54.0
+        static let loadingDataLabelTopInset: CGFloat = 20
     }
 }
 
@@ -127,16 +145,14 @@ extension CompanySearchViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(CompanySearchTableViewCell.self, for: indexPath) <- {
 
-        let cell = tableView.dequeueReusableCell(CompanySearchTableViewCell.self, for: indexPath)
+            let company = self.companies[indexPath.row]
+            $0.updateView(with: company)
 
-        let company = self.companies[indexPath.row]
-        cell?.updateView(with: company)
-
-        let separatorIsHidden = (self.companies.count - 1) == indexPath.row
-        cell?.updateSeparator(isHidden: separatorIsHidden)
-
-        return cell ?? UITableViewCell()
+            let separatorIsHidden = (self.companies.count - 1) == indexPath.row
+            $0.updateSeparator(isHidden: separatorIsHidden)
+        }
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

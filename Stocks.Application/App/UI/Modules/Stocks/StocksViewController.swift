@@ -125,22 +125,21 @@ extension StocksViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(StocksTableViewCell.self, for: indexPath)
+        return tableView.dequeueReusableCell(StocksTableViewCell.self, for: indexPath) <- {
 
-        let companyProfile = watchlist[indexPath.row]
-        cell?.updateView(with: companyProfile)
+            let companyProfile = self.watchlist[indexPath.row]
+            $0.updateView(with: companyProfile)
 
-        let separatorIsHidden = (self.watchlist.count - 1) == indexPath.row
-        cell?.updateSeparator(isHidden: separatorIsHidden)
+            let separatorIsHidden = (self.watchlist.count - 1) == indexPath.row
+            $0.updateSeparator(isHidden: separatorIsHidden)
 
-        let maxLogoSize = cell?.bounds.height ?? 0.0
-        let imagePublisher = self.viewModel.getImagePublisher(withSize: maxLogoSize, for: companyProfile)
-        cell?.subscribeToImageChanges(with: imagePublisher)
+            let maxLogoSize = $0.bounds.height
+            let imagePublisher = self.viewModel.getImagePublisher(withSize: maxLogoSize, for: companyProfile)
+            $0.subscribeToImageChanges(with: imagePublisher)
 
-        let onlineTradePublisher = self.viewModel.getOnlineTradePublisher(for: companyProfile)
-        cell?.subscribeToOnlineTrade(with: onlineTradePublisher)
-        
-        return cell ?? UITableViewCell()
+            let onlineTradePublisher = self.viewModel.getOnlineTradePublisher(for: companyProfile)
+            $0.subscribeToOnlineTrade(with: onlineTradePublisher)
+        }
     }
 }
 

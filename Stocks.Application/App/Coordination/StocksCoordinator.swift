@@ -17,8 +17,9 @@ protocol StocksCoordination: Coordinator {
 
     // MARK: - Methods
 
-    func showCompanyDetails(_ company: CompanyProfileModel, data: CompanyProfileDataModel?)
-    func showWebPage(with url: URL)
+    func showCompanyDetails(with company: CompanyProfileDataModel)
+
+    func showWebPage(with link: URL)
 }
 
 // ----------------------------------------------------------------------------
@@ -45,9 +46,9 @@ final class StocksCoordinator: StocksCoordination {
         showStocks()
     }
     
-    func showCompanyDetails(_ company: CompanyProfileModel, data: CompanyProfileDataModel? = nil) {
-        let vm = CompanyDetailsVM(coordinator: self, companyProfileDataModel: data, companyProfile: company)
-        let vc = CompanyDetailsVC(viewModel: vm)
+    func showCompanyDetails(with company: CompanyProfileDataModel) {
+        let vm = CompanyDetailsViewModelImpl(coordinator: self, companyProfileDataModel: company)
+        let vc = CompanyDetailsViewController(viewModel: vm)
 
         didFinishClosure = { [weak self] in
             self?.navController.popViewController(animated: true)
@@ -56,8 +57,8 @@ final class StocksCoordinator: StocksCoordination {
         self.navController.pushViewController(vc, animated: true)
     }
     
-    func showWebPage(with url: URL) {
-        let vc = SFSafariViewController(url: url)
+    func showWebPage(with link: URL) {
+        let vc = SFSafariViewController(url: link)
         self.navController.present(vc, animated: true)
     }
 

@@ -97,6 +97,7 @@ final class CompanySearchViewModelImpl {
     }
 
     private func getCompanyProfileDataModel(with ticker: String) async throws -> CompanyProfileDataModel {
+
         if let companyProfile = self.companiesInWatchList.first(where: { $0.ticker == ticker }) {
             return companyProfile
         }
@@ -140,6 +141,10 @@ extension CompanySearchViewModelImpl: CompanySearchViewModel {
     }
 
     func searchCompany(with symbol: String) {
+
+        self.companyModels = .empty
+        updateSearchlist()
+
         self.delayedSearchTimer?.invalidate()
 
         let text = symbol.trimmingCharacters(in: .whitespaces).lowercased()
@@ -156,17 +161,8 @@ extension CompanySearchViewModelImpl: CompanySearchViewModel {
         Task {
             let companyProfileDataModel = try await getCompanyProfileDataModel(with: company.ticker)
 
-            let companyQuotes = try await companyQuotesRequestFactory
-                .createRequest(ticker: company.ticker)
-                .execute()
-
-            let companyProfile = CompanyProfileModel(
-                companyProfileDataModel: companyProfileDataModel,
-                companyQuotes: companyQuotes
-            )
-
             DispatchQueue.main.async {
-                self.coordinator.showCompanyDetails(companyProfile, data: companyProfileDataModel)
+                self.coordinator.showCompanyDetails(with: companyProfileDataModel)
             }
         }
     }

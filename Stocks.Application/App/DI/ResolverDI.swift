@@ -20,6 +20,5 @@ extension Resolver: ResolverRegistering {
     public static func registerAllServices() {
         registerRepositories()
         registerRequestFactories()
-        registerWebSocket()
     }
 }

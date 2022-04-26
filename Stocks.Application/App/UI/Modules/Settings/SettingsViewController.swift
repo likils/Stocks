@@ -102,18 +102,16 @@ extension SettingsViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(UITableViewCell.self, for: indexPath) <- {
 
-        let cell = tableView.dequeueReusableCell(UITableViewCell.self, for: indexPath)
-        cell?.backgroundColor = StocksColor.background
+            $0.backgroundColor = StocksColor.background
+            let settingsType = self.settingsType[indexPath.row]
 
-        let settingsType = self.settingsType[indexPath.row]
-
-        switch settingsType {
-            case .reset(let title):
-                cell?.textLabel?.text = title
+            switch settingsType {
+                case .reset(let title):
+                    $0.textLabel?.text = title
+            }
         }
-
-        return cell ?? UITableViewCell()
     }
 }
 

@@ -141,17 +141,15 @@ extension NewsViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return tableView.dequeueReusableCell(NewsTableViewCell.self, for: indexPath) <- {
 
-        let cell = tableView.dequeueReusableCell(NewsTableViewCell.self, for: indexPath)
+            let newsModel = self.news[indexPath.row]
+            $0.updateView(with: newsModel)
 
-        let newsModel = self.news[indexPath.row]
-        cell?.updateView(with: newsModel)
-
-        let maxImageSize = cell?.frame.size.width ?? 0.0
-        let imagePublisher = self.viewModel.getImagePublisher(withSize: maxImageSize, for: newsModel)
-        cell?.subscribeToImageChanges(with: imagePublisher)
-
-        return cell ?? UITableViewCell()
+            let maxImageSize = $0.frame.size.width
+            let imagePublisher = self.viewModel.getImagePublisher(withSize: maxImageSize, for: newsModel)
+            $0.subscribeToImageChanges(with: imagePublisher)
+        }
     }
 }
 
@@ -162,6 +160,7 @@ extension NewsViewController: NewsCategoriesViewListener {
     // MARK: - Methods
 
     func newsCategoryDidSelect(_ newsCategory: NewsCategory) {
+        self.tableView.refreshControl?.beginRefreshing()
         self.viewModel.refreshNews(with: newsCategory)
     }
 }

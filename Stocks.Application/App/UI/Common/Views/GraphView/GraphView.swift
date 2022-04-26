@@ -112,7 +112,7 @@ final class GraphView: UIView {
     private func drawGradient(in rect: CGRect) {
 
         let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let colors = [StocksColor.brand.cgColor, UIColor.white.cgColor]
+        let colors = [StocksColor.brand.cgColor, StocksColor.background.cgColor]
         let locations: [CGFloat] = [0.0, 1.0]
 
         guard let gradient = CGGradient(colorsSpace: colorSpace, colors: colors as CFArray, locations: locations)

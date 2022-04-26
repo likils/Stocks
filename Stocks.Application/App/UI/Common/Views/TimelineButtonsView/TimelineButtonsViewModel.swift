@@ -1,25 +1,23 @@
 // ----------------------------------------------------------------------------
 //
-//  WebSocketBundle.swift
+//  TimelineButtonsViewModel.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
-import Resolver
+import StocksData
 
 // ----------------------------------------------------------------------------
 
-extension Resolver {
+struct TimelineButtonsViewModel {
 
-    // MARK: - Methods
+// MARK: - Properties
 
-    public static func registerWebSocket() {
-        Resolver.defaultScope = .shared
+    let timelines: [CompanyCandlesTimeline]
 
-        register {
-            OnlineTradesWebSocketContainer(requestProvider: .init(), token: resolve(name: .token))
-        }
-    }
+    let selectedTimeline: CompanyCandlesTimeline
+
+    let listener: TimelineButtonsViewListener
 }

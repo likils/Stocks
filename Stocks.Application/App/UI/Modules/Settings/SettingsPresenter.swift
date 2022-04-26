@@ -7,6 +7,11 @@
 //
 // ----------------------------------------------------------------------------
 
+import StocksPersistence
+import Resolver
+
+// ----------------------------------------------------------------------------
+
 final class SettingsPresenter {
 
     // MARK: - Properties
@@ -16,6 +21,7 @@ final class SettingsPresenter {
     // MARK: - Private Properties
 
     private let coordinator: SettingsCoordination
+    @LazyInjected private var companyProfileRepository: CompanyProfileRepository
     
     // MARK: - Construction
 
@@ -38,7 +44,8 @@ extension SettingsPresenter: SettingsViewOutput {
     func cellTapped(with type: SettingsType) {
         switch type {
             case .reset(_):
-                coordinator.didFinishClosure?()
+                self.companyProfileRepository.removeAll()
+                self.coordinator.didFinishClosure?()
         }
     }
 }

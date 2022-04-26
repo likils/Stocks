@@ -25,19 +25,23 @@ extension CompanyCandlesTimeline {
 
     // MARK: - Properties
 
-    public var description: String {
+    public var caseIndex: Int {
+        let caseIndex: Int
+
         switch self {
             case .day:
-                return "day"
+                caseIndex = 0
             case .week:
-                return "week"
+                caseIndex = 1
             case .month:
-                return "month"
+                caseIndex = 2
             case .year:
-                return "year"
+                caseIndex = 3
             case .all:
-                return "10 years"
+                caseIndex = 4
         }
+
+        return caseIndex
     }
 
     public var pastDate: Date {

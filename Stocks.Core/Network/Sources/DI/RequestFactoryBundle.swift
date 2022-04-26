@@ -47,5 +47,9 @@ extension Resolver {
         register {
             ImageRequestFactory(cachedImageRepository: Resolver.resolve())
         }
+
+        register {
+            OnlineTradesWebSocketContainer(requestProvider: .init(), token: resolve(name: .token))
+        }
     }
 }

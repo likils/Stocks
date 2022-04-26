@@ -95,6 +95,8 @@ final class StocksTableViewCell: UITableViewCell {
     }
 
     func subscribeToImageChanges(with imagePublisher: ImagePublisher) {
+        self.logoImageSubscriber?.cancel()
+
         self.logoImageSubscriber = imagePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.logoImageView.image = $0 }

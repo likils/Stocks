@@ -89,7 +89,6 @@ final class StocksViewModelImpl {
                 companyProfileViewModels.append(companyProfile)
             }
             catch {
-                self.companyProfileRepository.removeCompanyProfile(with: companyProfile.ticker)
                 handleError(error)
             }
         }
@@ -188,6 +187,13 @@ extension StocksViewModelImpl: StocksViewModel {
     }
 
     func showCompanyDetails(for company: CompanyProfileModel) {
-        self.coordinator.showCompanyDetails(company, data: nil)
+        Task {
+            await companyProfileRepository.getCompanyProfile(with: company.ticker).map { company in
+
+                DispatchQueue.main.async {
+                    self.coordinator.showCompanyDetails(with: company)
+                }
+            }
+        }
     }
 }
