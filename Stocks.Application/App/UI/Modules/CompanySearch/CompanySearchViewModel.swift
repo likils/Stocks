@@ -41,7 +41,7 @@ final class CompanySearchViewModelImpl {
 
     // MARK: - Private Properties
 
-    private let coordinator: StocksCoordination
+    private unowned var coordinator: StocksCoordination
 
     private var companyModels: [CompanyModel] = .empty
     private var companiesInWatchList: [CompanyProfileDataModel] = .empty

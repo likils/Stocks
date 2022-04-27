@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  NewsCategoryCollectionViewCell.swift
+//  NewsCategoryCell.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
@@ -13,7 +13,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-final class NewsCategoryCollectionViewCell: UICollectionViewCell {
+final class NewsCategoryCell: UICollectionViewCell {
 
     // MARK: - Subviews
 

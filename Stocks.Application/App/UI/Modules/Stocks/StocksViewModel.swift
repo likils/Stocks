@@ -48,7 +48,7 @@ final class StocksViewModelImpl {
 
     // MARK: - Private Properties
 
-    private let coordinator: StocksCoordination
+    private unowned var coordinator: StocksCoordination
 
     @LazyInjected private var companyProfileRepository: CompanyProfileRepository
     @LazyInjected private var companyQuotesRequestFactory: CompanyQuotesRequestFactory
@@ -96,6 +96,12 @@ final class StocksViewModelImpl {
         return companyProfileViewModels
     }
 
+    private func getImage(_ imageLink: URL, _ imageSize: Double) async -> UIImage? {
+        return await self.imageRequestFactory
+                .createRequest(imageLink: imageLink, imageSize: imageSize)
+                .prepareImage()
+    }
+
     private func updateCompanyTradesSubscription(companyTicker: String, messageType: MessageType) {
         do {
             let message = OnlineTradeMessageModel.of(companyTicker: companyTicker, messageType: messageType)
@@ -137,42 +143,34 @@ extension StocksViewModelImpl: StocksViewModel {
     }
 
     func getCompanyProfilesPublisher() -> CompanyProfilesPublisher {
-
         return self.companyProfileRepository
             .getCompanyProfilesPublisher()
-            .asyncFlatMap { [unowned self] in
-                await self.createCompanyProfiles(with: $0)
-            }
+            .asyncFlatMap(createCompanyProfiles)
             .eraseToAnyPublisher()
     }
 
     func getImagePublisher(withSize imageSize: Double, for company: CompanyProfileModel) -> ImagePublisher {
-
-        return Just(())
-            .asyncFlatMap { [weak self] in
-                return await self?.imageRequestFactory
-                    .createRequest(imageLink: company.logoLink, imageSize: imageSize)
-                    .prepareImage()
-            }
+        return Just((company.logoLink, imageSize))
+            .asyncFlatMap(getImage)
             .eraseToAnyPublisher()
     }
 
     func getOnlineTradePublisher(for company: CompanyProfileModel) -> OnlineTradePublisher {
 
         return Just(())
-            .tryCompactMap { [weak self] in
-                try self?.onlineTradesWebSocket.getPublisher()
+            .tryCompactMap {
+                try self.onlineTradesWebSocket.getPublisher()
             }
             .switchToLatest()
             .compactMap {
-                return $0.onlineTrades.last { $0.ticker == company.ticker }
+                $0.onlineTrades.last { $0.ticker == company.ticker }
             }
             .collect(.byTime(DispatchQueue.global(), .seconds(2)))
             .compactMap {
-                return $0.last
+                $0.last
             }
-            .catch { [weak self] error -> Empty in
-                self?.handleError(error)
+            .catch { error -> Empty in
+                self.handleError(error)
                 return Empty(completeImmediately: false)
             }
             .eraseToAnyPublisher()

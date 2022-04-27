@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  NewsTableViewCell.swift
+//  NewsCell.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
@@ -13,7 +13,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-final class NewsTableViewCell: UITableViewCell {
+final class NewsCell: UITableViewCell {
 
     // MARK: - Subviews
 

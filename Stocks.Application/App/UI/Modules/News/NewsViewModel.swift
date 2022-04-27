@@ -41,7 +41,7 @@ final class NewsViewModelImpl {
 
     // MARK: - Private Properties
 
-    private let coordinator: NewsCoordination
+    private unowned var coordinator: NewsCoordination
     private let newsCategories: [NewsCategory]
 
     private let newsPublisher = PassthroughSubject<[NewsModel], Never>()
@@ -73,6 +73,18 @@ final class NewsViewModelImpl {
         }
     }
 
+    private func getImage(_ imageLink: URL?, _ imageSize: Double) async -> UIImage? {
+        var image = UIImage(named: "ic_news_placeholder")
+
+        if let imageLink = imageLink {
+            image = await self.imageRequestFactory
+                .createRequest(imageLink: imageLink, imageSize: imageSize)
+                .prepareImage()
+        }
+
+        return image
+    }
+
     private func handleError(_ error: Error) {
         // TODO: Negative scenario
         print("\n\tNewsViewModel Error:", error, "\n")
@@ -94,17 +106,8 @@ extension NewsViewModelImpl: NewsViewModel {
     }
 
     func getImagePublisher(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher {
-
-        guard let imageLink = newsModel.imageLink else {
-            return Just(UIImage(named: "ic_news_placeholder")!).eraseToAnyPublisher()
-        }
-
-        return Just(())
-            .asyncFlatMap { [weak self] in
-                return await self?.imageRequestFactory
-                    .createRequest(imageLink: imageLink, imageSize: imageSize)
-                    .prepareImage()
-            }
+        return Just((newsModel.imageLink, imageSize))
+            .asyncFlatMap(getImage)
             .eraseToAnyPublisher()
     }
 

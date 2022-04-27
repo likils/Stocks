@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  StocksTableViewCell.swift
+//  StocksCell.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
@@ -14,7 +14,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-final class StocksTableViewCell: UITableViewCell {
+final class StocksCell: UITableViewCell {
 
     // MARK: - Subviews
 
@@ -55,9 +55,7 @@ final class StocksTableViewCell: UITableViewCell {
     private var currencySymbol: String = .empty
     private var currentPrice: Double = .nan
     private var previousClosePrice: Double = .nan
-
-    private var logoImageSubscriber: AnyCancellable?
-    private var onlineTradeSubscriber: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable> = .empty
 
     // MARK: - Construction
 
@@ -74,8 +72,7 @@ final class StocksTableViewCell: UITableViewCell {
     // MARK: - Methods
 
     override func prepareForReuse() {
-        self.logoImageSubscriber?.cancel()
-        self.onlineTradeSubscriber?.cancel()
+        self.subscriptions.removeAll()
 
         super.prepareForReuse()
     }
@@ -95,17 +92,17 @@ final class StocksTableViewCell: UITableViewCell {
     }
 
     func subscribeToImageChanges(with imagePublisher: ImagePublisher) {
-        self.logoImageSubscriber?.cancel()
-
-        self.logoImageSubscriber = imagePublisher
+        imagePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.logoImageView.image = $0 }
+            .store(in: &self.subscriptions)
     }
 
     func subscribeToOnlineTrade(with onlineTradePublisher: OnlineTradePublisher) {
-        self.onlineTradeSubscriber = onlineTradePublisher
+        onlineTradePublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.updatePrice($0.price) }
+            .store(in: &self.subscriptions)
     }
 
     func updateSeparator(isHidden: Bool) {

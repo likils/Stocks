@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  CompanySearchTableViewCell.swift
+//  CompanySearchViewController.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -79,7 +79,7 @@ final class CompanySearchViewController: UITableViewController {
 
         self.tableView? <- {
             $0.separatorStyle = .none
-            $0.registerCell(CompanySearchTableViewCell.self)
+            $0.registerCell(CompanySearchCell.self)
         }
 
         self.tableView.addSubview(self.loadingDataLabel)
@@ -145,7 +145,7 @@ extension CompanySearchViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(CompanySearchTableViewCell.self, for: indexPath) <- {
+        return tableView.dequeueReusableCell(CompanySearchCell.self, for: indexPath) <- {
 
             let company = self.companies[indexPath.row]
             $0.updateView(with: company)

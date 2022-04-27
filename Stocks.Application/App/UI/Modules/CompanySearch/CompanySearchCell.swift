@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  CompanySearchTableViewCell.swift
+//  CompanySearchCell.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -12,7 +12,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-final class CompanySearchTableViewCell: UITableViewCell {
+final class CompanySearchCell: UITableViewCell {
 
     // MARK: - Subviews
 

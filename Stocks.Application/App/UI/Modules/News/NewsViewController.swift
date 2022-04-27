@@ -25,11 +25,8 @@ final class NewsViewController: UITableViewController {
     // MARK: - Private Properties
 
     private let viewModel: NewsViewModel
-
     private var news: [NewsModel] = .empty
-
-    private var newsSubscriber: AnyCancellable?
-    private var refreshControlSubscriber: AnyCancellable?
+    private var subscriptions: Set<AnyCancellable> = .empty
     
     // MARK: - Construction
 
@@ -82,20 +79,22 @@ final class NewsViewController: UITableViewController {
             $0.showsVerticalScrollIndicator = false
             $0.contentInset = Const.tableViewInsets
             $0.refreshControl = UIRefreshControl()
-            $0.registerCell(NewsTableViewCell.self)
+            $0.registerCell(NewsCell.self)
         }
     }
 
     private func setupSubscriptions() {
 
-        self.newsSubscriber = self.viewModel
+        self.viewModel
             .getNewsPublisher()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.reloadNews(with: $0) }
+            .store(in: &self.subscriptions)
 
-        self.refreshControlSubscriber = self.tableView.refreshControl?
+        self.tableView.refreshControl?
             .isRefreshingPublisher
             .sink { [weak self] _ in self?.refresh() }
+            .store(in: &self.subscriptions)
     }
 
     // MARK: - Inner Types
@@ -141,7 +140,7 @@ extension NewsViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(NewsTableViewCell.self, for: indexPath) <- {
+        return tableView.dequeueReusableCell(NewsCell.self, for: indexPath) <- {
 
             let newsModel = self.news[indexPath.row]
             $0.updateView(with: newsModel)

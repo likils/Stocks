@@ -90,7 +90,7 @@ final class CompanyDetailsViewController: UITableViewController {
             $0.contentInset = Const.tableViewInsets
 
             $0.registerCell(CompanyDetailsTableViewCell.self)
-            $0.registerCell(NewsTableViewCell.self)
+            $0.registerCell(NewsCell.self)
         }
     }
 
@@ -162,16 +162,14 @@ final class CompanyDetailsViewController: UITableViewController {
     }
 
     private func prepareNewsCell(for indexPath: IndexPath) -> UITableViewCell {
-        return self.tableView.dequeueReusableCell(NewsTableViewCell.self, for: indexPath) <- { cell in
+        return self.tableView.dequeueReusableCell(NewsCell.self, for: indexPath) <- { cell in
 
             let newsModel = self.news[indexPath.row]
             cell.updateView(with: newsModel)
 
-            newsModel.imageLink.map { link in
-                let maxImageSize = cell.frame.size.width
-                let imagePublisher = self.viewModel.getImagePublisher(imageLink: link, imageSize: maxImageSize)
-                cell.subscribeToImageChanges(with: imagePublisher)
-            }
+            let maxImageSize = cell.frame.size.width
+            let imagePublisher = self.viewModel.getImagePublisher(imageLink: newsModel.imageLink, imageSize: maxImageSize)
+            cell.subscribeToImageChanges(with: imagePublisher)
         }
     }
 

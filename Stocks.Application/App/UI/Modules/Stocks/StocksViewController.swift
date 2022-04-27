@@ -76,7 +76,7 @@ final class StocksViewController: UITableViewController {
             $0.dragDelegate = self
             $0.dropDelegate = self
 
-            $0.registerCell(StocksTableViewCell.self)
+            $0.registerCell(StocksCell.self)
         }
     }
 
@@ -125,7 +125,7 @@ extension StocksViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return tableView.dequeueReusableCell(StocksTableViewCell.self, for: indexPath) <- {
+        return tableView.dequeueReusableCell(StocksCell.self, for: indexPath) <- {
 
             let companyProfile = self.watchlist[indexPath.row]
             $0.updateView(with: companyProfile)

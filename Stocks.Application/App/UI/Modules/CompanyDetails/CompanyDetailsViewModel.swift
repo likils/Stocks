@@ -8,11 +8,11 @@
 // ----------------------------------------------------------------------------
 
 import Combine
-import Foundation
 import Resolver
 import StocksData
 import StocksNetwork
 import StocksPersistence
+import UIKit
 
 // ----------------------------------------------------------------------------
 
@@ -37,7 +37,7 @@ protocol CompanyDetailsViewModel: AnyObject {
 
     func getCompanyProfilePublisher() -> CompanyProfilePublisher
 
-    func getImagePublisher(imageLink: URL, imageSize: Double) -> ImagePublisher
+    func getImagePublisher(imageLink: URL?, imageSize: Double) -> ImagePublisher
 
     func getNewsPublisher() -> NewsPublisher
 
@@ -58,7 +58,7 @@ final class CompanyDetailsViewModelImpl {
 
     // MARK: - Private Properties
 
-    private let coordinator: StocksCoordination
+    private unowned var coordinator: StocksCoordination
     private var companyProfileDataModel: CompanyProfileDataModel
 
     private let companyCandlesPublisher = PassthroughSubject<CompanyCandlesModel, Never>()
@@ -95,6 +95,30 @@ final class CompanyDetailsViewModelImpl {
         }
     }
 
+    private func requestImage(_ imageLink: URL?, _ imageSize: Double) async -> UIImage? {
+        var image = UIImage(named: "ic_news_placeholder")
+
+        if let imageLink = imageLink {
+            image = await self.imageRequestFactory
+                .createRequest(imageLink: imageLink, imageSize: imageSize)
+                .prepareImage()
+        }
+
+        return image
+    }
+
+    private func requestCompanyQuotes(_ ticker: String) async throws -> CompanyQuotesModel {
+        return try await self.companyQuotesRequestFactory
+            .createRequest(ticker: ticker)
+            .execute()
+    }
+
+    private func requestCompanyNews(_ ticker: String, periodInDays: Int) async throws -> [NewsResponseModel] {
+        return try await self.companyNewsRequestFactory
+            .createRequest(ticker: ticker, periodInDays: periodInDays)
+            .execute()
+    }
+
     private func handleError(_ error: Error) {
         // TODO: Negative scenario
         print(error)
@@ -128,57 +152,39 @@ extension CompanyDetailsViewModelImpl: CompanyDetailsViewModel {
     }
 
     func getCompanyProfilePublisher() -> CompanyProfilePublisher {
-        let ticker = self.companyProfileDataModel.ticker
 
-        return Just(())
+        return Just(self.companyProfileDataModel.ticker)
             .setFailureType(to: Error.self)
-            .tryAsyncFlatMap { [weak self] in
-                return try await self?.companyQuotesRequestFactory
-                    .createRequest(ticker: ticker)
-                    .execute()
+            .tryAsyncFlatMap(requestCompanyQuotes)
+            .map {
+                CompanyProfileModel(
+                    companyProfileDataModel: self.companyProfileDataModel,
+                    companyQuotes: $0
+                )
             }
-            .compactMap { companyQuotes in
-                return companyQuotes.map { companyQuotes in
-
-                    return CompanyProfileModel(
-                        companyProfileDataModel: self.companyProfileDataModel,
-                        companyQuotes: companyQuotes
-                    )
-                }
-            }
-            .catch { [weak self] error -> Empty in
-                self?.handleError(error)
+            .catch { error -> Empty in
+                self.handleError(error)
                 return Empty()
             }
             .eraseToAnyPublisher()
     }
 
-    func getImagePublisher(imageLink: URL, imageSize: Double) -> ImagePublisher {
-        return Just(())
-            .asyncFlatMap { [weak self] in
-                return await self?.imageRequestFactory
-                    .createRequest(imageLink: imageLink, imageSize: imageSize)
-                    .prepareImage()
-            }
+    func getImagePublisher(imageLink: URL?, imageSize: Double) -> ImagePublisher {
+        return Just((imageLink, imageSize))
+            .asyncFlatMap(requestImage)
             .eraseToAnyPublisher()
     }
 
     func getNewsPublisher() -> NewsPublisher {
-        let ticker = self.companyProfileDataModel.ticker
 
-        return Just(())
+        return Just((self.companyProfileDataModel.ticker, 14))
             .setFailureType(to: Error.self)
-            .tryAsyncFlatMap { [weak self] in
-                return try await self?.companyNewsRequestFactory
-                    .createRequest(ticker: ticker, periodInDays: 14)
-                    .execute()
+            .tryAsyncFlatMap(requestCompanyNews)
+            .map {
+                $0.map { NewsModel(newsResponse: $0) }
             }
-            .replaceNil(with: .empty)
-            .map { response in
-                return response.map { NewsModel(newsResponse: $0) }
-            }
-            .catch { [weak self] error -> Empty in
-                self?.handleError(error)
+            .catch { error -> Empty in
+                self.handleError(error)
                 return Empty()
             }
             .eraseToAnyPublisher()
@@ -186,21 +192,21 @@ extension CompanyDetailsViewModelImpl: CompanyDetailsViewModel {
 
     func getOnlineTradePublisher() -> OnlineTradePublisher {
         return Just(())
-            .tryCompactMap { [weak self] in
-                try self?.onlineTradesWebSocket.getPublisher()
+            .tryCompactMap {
+                try self.onlineTradesWebSocket.getPublisher()
             }
             .switchToLatest()
-            .compactMap { [weak self] in
-                return $0.onlineTrades.last(
-                    where: { $0.ticker == self?.companyProfileDataModel.ticker }
-                )
+            .compactMap {
+                $0.onlineTrades.last {
+                    $0.ticker == self.companyProfileDataModel.ticker
+                }
             }
             .collect(.byTime(DispatchQueue.global(), .seconds(2)))
             .compactMap {
-                return $0.last
+                $0.last
             }
-            .catch { [weak self] error -> Empty in
-                self?.handleError(error)
+            .catch { error -> Empty in
+                self.handleError(error)
                 return Empty(completeImmediately: false)
             }
             .eraseToAnyPublisher()

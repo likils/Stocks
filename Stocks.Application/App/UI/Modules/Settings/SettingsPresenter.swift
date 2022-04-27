@@ -20,7 +20,7 @@ final class SettingsPresenter {
     
     // MARK: - Private Properties
 
-    private let coordinator: SettingsCoordination
+    private unowned var coordinator: SettingsCoordination
     @LazyInjected private var companyProfileRepository: CompanyProfileRepository
     
     // MARK: - Construction

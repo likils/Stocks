@@ -80,7 +80,7 @@ final class NewsCategoriesView: UIView {
             $0.backgroundColor = .clear
             $0.showsHorizontalScrollIndicator = false
             $0.contentInset = CollectionViewSize.contentInset
-            $0.registerCell(NewsCategoryCollectionViewCell.self)
+            $0.registerCell(NewsCategoryCell.self)
         }
 
         addSubview(self.collectionView)
@@ -112,7 +112,7 @@ extension NewsCategoriesView: UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
-        let cell = collectionView.dequeueReusableCell(NewsCategoryCollectionViewCell.self, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(NewsCategoryCell.self, for: indexPath)
 
         let category = self.newsCategories[indexPath.item]
         cell?.updateView(with: category)
