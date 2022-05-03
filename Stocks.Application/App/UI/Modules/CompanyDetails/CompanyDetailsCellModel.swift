@@ -15,7 +15,7 @@ struct CompanyDetailsCellModel {
 
     // MARK: - Properties
 
-    let listener: CompanyDetailsTableViewCellListener
+    let listener: CompanyDetailsCellListener
     
     let timelines: [CompanyCandlesTimeline]
 

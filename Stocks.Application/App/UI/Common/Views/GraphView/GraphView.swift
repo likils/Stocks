@@ -17,7 +17,7 @@ final class GraphView: UIView {
 
     // MARK: - Private Properties
 
-    private var graphModel = GraphModel()
+    private var graphModel = GraphViewModel()
 
     // MARK: - Construction
 
@@ -38,7 +38,7 @@ final class GraphView: UIView {
         }
     }
 
-    func updateView(with graphModel: GraphModel) {
+    func updateView(with graphModel: GraphViewModel) {
         self.graphModel = graphModel
         setNeedsDisplay()
     }

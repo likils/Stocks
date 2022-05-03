@@ -15,7 +15,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-typealias NewsPublisher = AnyPublisher<[NewsModel], Never>
+typealias NewsPublisher = AnyPublisher<[NewsCellModel], Never>
 typealias ImagePublisher = AnyPublisher<UIImage?, Never>
 
 // ----------------------------------------------------------------------------
@@ -28,11 +28,11 @@ protocol NewsViewModel: AnyObject {
 
     func getNewsPublisher() -> NewsPublisher
 
-    func getImagePublisher(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher
+    func getImagePublisher(withSize imageSize: Double, for newsModel: NewsCellModel) -> ImagePublisher
 
     func refreshNews(with category: NewsCategory)
 
-    func showNewsArticle(with newsModel: NewsModel)
+    func showNewsArticle(with newsModel: NewsCellModel)
 }
 
 // ----------------------------------------------------------------------------
@@ -44,7 +44,7 @@ final class NewsViewModelImpl {
     private unowned var coordinator: NewsCoordination
     private let newsCategories: [NewsCategory]
 
-    private let newsPublisher = PassthroughSubject<[NewsModel], Never>()
+    private let newsPublisher = PassthroughSubject<[NewsCellModel], Never>()
 
     @LazyInjected private var imageRequestFactory: ImageRequestFactory
     @LazyInjected private var newsRequestFactory: NewsRequestFactory
@@ -64,7 +64,7 @@ final class NewsViewModelImpl {
                 .createRequest(newsCategory: category)
                 .execute()
 
-            let news = newsResponse.map { NewsModel(newsResponse: $0) }
+            let news = newsResponse.map { NewsCellModel(newsResponse: $0) }
 
             self.newsPublisher.send(news)
         }
@@ -105,7 +105,7 @@ extension NewsViewModelImpl: NewsViewModel {
         return self.newsPublisher.eraseToAnyPublisher()
     }
 
-    func getImagePublisher(withSize imageSize: Double, for newsModel: NewsModel) -> ImagePublisher {
+    func getImagePublisher(withSize imageSize: Double, for newsModel: NewsCellModel) -> ImagePublisher {
         return Just((newsModel.imageLink, imageSize))
             .asyncFlatMap(getImage)
             .eraseToAnyPublisher()
@@ -117,7 +117,7 @@ extension NewsViewModelImpl: NewsViewModel {
         }
     }
 
-    func showNewsArticle(with newsModel: NewsModel) {
+    func showNewsArticle(with newsModel: NewsCellModel) {
         let newsLink = newsModel.sourceLink
         self.coordinator.showWebPage(with: newsLink)
     }

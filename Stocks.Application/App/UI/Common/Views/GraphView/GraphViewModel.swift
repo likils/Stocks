@@ -1,13 +1,13 @@
 // ----------------------------------------------------------------------------
 //
-//  GraphModel.swift
+//  GraphViewModel.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
 //
 // ----------------------------------------------------------------------------
 
-struct GraphModel {
+struct GraphViewModel {
 
     // MARK: - Properties
 
@@ -20,7 +20,7 @@ struct GraphModel {
 
 // ----------------------------------------------------------------------------
 
-extension GraphModel {
+extension GraphViewModel {
 
     // MARK: - Construction
 

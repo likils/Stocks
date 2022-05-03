@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  NewsModel.swift
+//  NewsCellModel.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2022. All rights reserved.
@@ -12,7 +12,7 @@ import StocksData
 
 // ----------------------------------------------------------------------------
 
-struct NewsModel {
+struct NewsCellModel {
 
     // MARK: - Properties
 
@@ -31,7 +31,7 @@ struct NewsModel {
 
 // ----------------------------------------------------------------------------
 
-extension NewsModel {
+extension NewsCellModel {
 
     // MARK: - Construction
 

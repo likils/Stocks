@@ -25,7 +25,7 @@ final class NewsViewController: UITableViewController {
     // MARK: - Private Properties
 
     private let viewModel: NewsViewModel
-    private var news: [NewsModel] = .empty
+    private var news: [NewsCellModel] = .empty
     private var subscriptions: Set<AnyCancellable> = .empty
     
     // MARK: - Construction
@@ -54,7 +54,7 @@ final class NewsViewController: UITableViewController {
     
     // MARK: - Actions
 
-    private func reloadNews(with newsModels: [NewsModel]) {
+    private func reloadNews(with newsModels: [NewsCellModel]) {
         self.tableView.refreshControl?.endRefreshing()
         self.news = newsModels
         self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)

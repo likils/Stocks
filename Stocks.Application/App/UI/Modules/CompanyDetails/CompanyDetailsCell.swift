@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------------
 //
-//  CompanyDetailsTableViewCell.swift
+//  CompanyDetailsCell.swift
 //
 //  @likils <likils@icloud.com>
 //  Copyright (c) 2021. All rights reserved.
@@ -15,7 +15,7 @@ import UIKit
 
 // ----------------------------------------------------------------------------
 
-protocol CompanyDetailsTableViewCellListener: AnyObject {
+protocol CompanyDetailsCellListener: AnyObject {
 
     // MARK: - Methods
 
@@ -26,7 +26,7 @@ protocol CompanyDetailsTableViewCellListener: AnyObject {
 
 // ----------------------------------------------------------------------------
 
-final class CompanyDetailsTableViewCell: UITableViewCell {
+final class CompanyDetailsCell: UITableViewCell {
 
     // MARK: - Subviews
 
@@ -100,7 +100,7 @@ final class CompanyDetailsTableViewCell: UITableViewCell {
 
     private var subscriptions: Set<AnyCancellable> = .empty
 
-    private weak var listener: CompanyDetailsTableViewCellListener?
+    private weak var listener: CompanyDetailsCellListener?
     
     // MARK: - Construction
 
@@ -170,7 +170,7 @@ final class CompanyDetailsTableViewCell: UITableViewCell {
         let minPrice = candles.lowPrices.min() ?? 0
         let maxPrice = candles.highPrices.max() ?? 0
 
-        let graphModel = GraphModel(prices: prices, minPrice: minPrice, maxPrice: maxPrice)
+        let graphModel = GraphViewModel(prices: prices, minPrice: minPrice, maxPrice: maxPrice)
         self.graphView.updateView(with: graphModel)
 
         self.minPriceLabel.text = minPrice.textRepresentation.with(self.currencySymbol)
@@ -252,19 +252,19 @@ final class CompanyDetailsTableViewCell: UITableViewCell {
     private func setupConstraints() {
 
         logoImageView.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(Const.inset)
+            make.top.leading.equalToSuperview().inset(16)
             make.height.equalTo(logoImageView.snp.width)
             make.height.equalTo(Const.logoHeight)
         }
 
         stockPriceLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView)
-            make.leading.equalTo(logoImageView.snp.trailing).offset(Const.smallInset)
+            make.leading.equalTo(logoImageView.snp.trailing).offset(8)
         }
 
         exchangeLabel.snp.makeConstraints { make in
-            make.leading.equalTo(stockPriceLabel.snp.leading)
-            make.bottom.equalTo(logoImageView.snp.bottom)
+            make.leading.equalTo(stockPriceLabel)
+            make.bottom.equalTo(logoImageView)
         }
 
         watchlistButton.snp.makeConstraints { make in
@@ -275,39 +275,39 @@ final class CompanyDetailsTableViewCell: UITableViewCell {
 
         minPriceNameLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView.snp.bottom).offset(24)
-            make.leading.equalTo(logoImageView.snp.leading)
+            make.leading.equalTo(logoImageView)
         }
 
         minPriceLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(minPriceNameLabel.snp.centerY)
+            make.centerY.equalTo(minPriceNameLabel)
             make.leading.equalTo(minPriceNameLabel.snp.trailing).offset(4)
         }
 
         maxPriceNameLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(minPriceLabel.snp.centerY)
+            make.centerY.equalTo(minPriceLabel)
             make.leading.equalTo(minPriceLabel.snp.trailing).offset(4)
         }
 
         maxPriceLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(maxPriceNameLabel.snp.centerY)
+            make.centerY.equalTo(maxPriceNameLabel)
             make.leading.equalTo(maxPriceNameLabel.snp.trailing).offset(4)
         }
 
         priceDiffLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(maxPriceLabel.snp.centerY)
+            make.centerY.equalTo(maxPriceLabel)
             make.trailing.equalToSuperview().inset(16)
         }
 
         graphBackgrounView.snp.makeConstraints { make in
             make.top.equalTo(minPriceNameLabel.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview().inset(Const.inset)
+            make.leading.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview()
-            make.height.equalTo(240)
+            make.height.equalTo(Const.graphBackgrounViewHeight)
         }
 
         timelineButtonsView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(44)
+            make.height.equalTo(Const.timelineButtonsViewHeight)
         }
 
         graphView.snp.makeConstraints { make in
@@ -316,7 +316,7 @@ final class CompanyDetailsTableViewCell: UITableViewCell {
         }
 
         loadingDataLabel.snp.makeConstraints { make in
-            make.edges.equalTo(graphView.snp.edges)
+            make.edges.equalTo(graphView)
         }
     }
 
@@ -324,17 +324,17 @@ final class CompanyDetailsTableViewCell: UITableViewCell {
 
     private enum Const {
         static let graphBackgrounViewCornerRadius: CGFloat = 16.0
+        static let graphBackgrounViewHeight: CGFloat = 240.0
         static let logoCornerRadius: CGFloat = logoHeight / 2
         static let logoHeight: CGFloat = 40.0
-        static let inset: CGFloat = 16.0
-        static let smallInset: CGFloat = 8.0
+        static let timelineButtonsViewHeight: CGFloat = 44.0
         static let watchlistButtonHeight: CGFloat = 20.0
     }
 }
 
 // MARK: - @protocol TimelineButtonsViewListener
 
-extension CompanyDetailsTableViewCell: TimelineButtonsViewListener {
+extension CompanyDetailsCell: TimelineButtonsViewListener {
 
     // MARK: - Methods
 

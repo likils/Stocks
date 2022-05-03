@@ -45,7 +45,7 @@ protocol CompanyDetailsViewModel: AnyObject {
 
     func pop()
 
-    func showNewsArticle(with newsModel: NewsModel)
+    func showNewsArticle(with newsModel: NewsCellModel)
 
     func updateCompanyCandles(with timeline: CompanyCandlesTimeline)
 
@@ -181,7 +181,7 @@ extension CompanyDetailsViewModelImpl: CompanyDetailsViewModel {
             .setFailureType(to: Error.self)
             .tryAsyncFlatMap(requestCompanyNews)
             .map {
-                $0.map { NewsModel(newsResponse: $0) }
+                $0.map { NewsCellModel(newsResponse: $0) }
             }
             .catch { error -> Empty in
                 self.handleError(error)
@@ -216,7 +216,7 @@ extension CompanyDetailsViewModelImpl: CompanyDetailsViewModel {
         self.coordinator.didFinishClosure?()
     }
 
-    func showNewsArticle(with newsModel: NewsModel) {
+    func showNewsArticle(with newsModel: NewsCellModel) {
         self.coordinator.showWebPage(with: newsModel.sourceLink)
     }
 

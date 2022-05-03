@@ -28,7 +28,7 @@ final class CompanyDetailsViewController: UITableViewController {
             view.addSubview(lbl)
             lbl.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
-                make.leading.trailing.equalToSuperview().inset(Const.inset)
+                make.leading.trailing.equalToSuperview().inset(16)
             }
         }
     }
@@ -36,7 +36,7 @@ final class CompanyDetailsViewController: UITableViewController {
     // MARK: - Private Properties
 
     private let viewModel: CompanyDetailsViewModel
-    private var news: [NewsModel] = .empty
+    private var news: [NewsCellModel] = .empty
     private var subscriptions: Set<AnyCancellable> = .empty
     
     // MARK: - Construction
@@ -74,7 +74,7 @@ final class CompanyDetailsViewController: UITableViewController {
 
     // MARK: - Actions
 
-    private func reloadNews(with newsModels: [NewsModel]) {
+    private func reloadNews(with newsModels: [NewsCellModel]) {
         self.news = newsModels
         self.tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
     }
@@ -89,7 +89,7 @@ final class CompanyDetailsViewController: UITableViewController {
             $0.showsVerticalScrollIndicator = false
             $0.contentInset = Const.tableViewInsets
 
-            $0.registerCell(CompanyDetailsTableViewCell.self)
+            $0.registerCell(CompanyDetailsCell.self)
             $0.registerCell(NewsCell.self)
         }
     }
@@ -142,7 +142,7 @@ final class CompanyDetailsViewController: UITableViewController {
     }
 
     private func prepareCompanyDetailsCell(for indexPath: IndexPath) -> UITableViewCell {
-        return self.tableView.dequeueReusableCell(CompanyDetailsTableViewCell.self, for: indexPath) <- { cell in
+        return self.tableView.dequeueReusableCell(CompanyDetailsCell.self, for: indexPath) <- { cell in
 
             let companyLogoLink = self.viewModel.getCompanyProfileDataModel().logoLink
             let maxLogoSize = cell.bounds.height
@@ -177,7 +177,6 @@ final class CompanyDetailsViewController: UITableViewController {
 
     private enum Const {
         static let headerHeight: CGFloat = 48.0
-        static let inset: CGFloat = 16.0
         static let tableViewInsets = UIEdgeInsets(top: 0, left: 0, bottom: -16, right: 0)
     }
 }
@@ -229,9 +228,9 @@ extension CompanyDetailsViewController {
     }
 }
 
-// MARK: - @protocol CompanyDetailsTableViewCellListener
+// MARK: - @protocol CompanyDetailsCellListener
 
-extension CompanyDetailsViewController: CompanyDetailsTableViewCellListener {
+extension CompanyDetailsViewController: CompanyDetailsCellListener {
 
     // MARK: - Methods
 

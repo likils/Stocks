@@ -152,14 +152,14 @@ final class StocksCell: UITableViewCell {
     private func setupConstraints() {
 
         logoImageView.snp.makeConstraints { make in
-            make.top.leading.bottom.equalToSuperview().inset(Const.inset)
+            make.top.leading.bottom.equalToSuperview().inset(16)
             make.height.equalTo(logoImageView.snp.width)
             make.height.equalTo(Const.logoHeight)
         }
 
         tickerLabel.snp.makeConstraints { make in
             make.top.equalTo(logoImageView)
-            make.leading.equalTo(logoImageView.snp.trailing).offset(Const.offset)
+            make.leading.equalTo(logoImageView.snp.trailing).offset(8)
         }
 
         companyNameLabel.snp.makeConstraints { make in
@@ -169,13 +169,13 @@ final class StocksCell: UITableViewCell {
 
         stockPriceLabel.snp.makeConstraints { make in
             make.centerY.equalTo(tickerLabel)
-            make.leading.greaterThanOrEqualTo(tickerLabel.snp.trailing).offset(Const.offset)
-            make.trailing.equalToSuperview().inset(Const.inset)
+            make.leading.greaterThanOrEqualTo(tickerLabel.snp.trailing).offset(8)
+            make.trailing.equalToSuperview().inset(16)
         }
 
         priceDiffLabel.snp.makeConstraints { make in
             make.centerY.equalTo(companyNameLabel)
-            make.leading.greaterThanOrEqualTo(companyNameLabel.snp.trailing).offset(Const.offset)
+            make.leading.greaterThanOrEqualTo(companyNameLabel.snp.trailing).offset(8)
             make.trailing.equalTo(stockPriceLabel)
         }
 
@@ -190,10 +190,8 @@ final class StocksCell: UITableViewCell {
     // MARK: - Inner Types
 
     private enum Const {
-        static let inset: CGFloat = 16.0
         static let logoCornerRadius: CGFloat = logoHeight / 2
         static let logoHeight: CGFloat = 40.0
-        static let offset: CGFloat = 8.0
         static let separatorViewHeight: CGFloat = 1.0
     }
 }

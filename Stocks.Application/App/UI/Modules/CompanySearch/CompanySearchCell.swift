@@ -72,13 +72,13 @@ final class CompanySearchCell: UITableViewCell {
     private func setupConstraints() {
 
         companyTickerLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(Const.verticalIndent)
-            make.leading.equalToSuperview().offset(Const.horizontalIndent)
+            make.top.equalToSuperview().offset(8)
+            make.leading.equalToSuperview().offset(16)
         }
 
         inWatchListImageView.snp.makeConstraints { make in
-            make.centerY.equalTo(companyTickerLabel.snp.centerY)
-            make.leading.equalTo(companyTickerLabel.snp.trailing).offset(Const.horizontalIndentSmall)
+            make.centerY.equalTo(companyTickerLabel)
+            make.leading.equalTo(companyTickerLabel.snp.trailing).offset(4)
             make.height.equalTo(inWatchListImageView.snp.width)
             make.height.equalTo(Const.inWatchListImageViewHeight)
         }
@@ -90,7 +90,7 @@ final class CompanySearchCell: UITableViewCell {
 
         separatorView.snp.makeConstraints { make in
             make.leading.equalTo(companyNameLabel)
-            make.trailing.equalToSuperview().inset(Const.horizontalIndent)
+            make.trailing.equalToSuperview().inset(16)
             make.bottom.equalToSuperview()
             make.height.equalTo(Const.separatorViewHeight)
         }
@@ -100,9 +100,6 @@ final class CompanySearchCell: UITableViewCell {
 
     private enum Const {
         static let inWatchListImageViewHeight: CGFloat = 8.0
-        static let horizontalIndent: CGFloat = 16.0
-        static let horizontalIndentSmall: CGFloat = 4.0
         static let separatorViewHeight: CGFloat = 1.0
-        static let verticalIndent: CGFloat = 8.0
     }
 }

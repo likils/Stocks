@@ -84,7 +84,7 @@ final class CompanySearchViewController: UITableViewController {
 
         self.tableView.addSubview(self.loadingDataLabel)
         self.loadingDataLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(Const.loadingDataLabelTopInset)
+            make.top.equalToSuperview().inset(20)
             make.centerX.equalToSuperview()
         }
     }
@@ -101,7 +101,6 @@ final class CompanySearchViewController: UITableViewController {
 
     private enum Const {
         static let cellHeight: CGFloat = 54.0
-        static let loadingDataLabelTopInset: CGFloat = 20
     }
 }
 

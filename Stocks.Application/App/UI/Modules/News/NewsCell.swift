@@ -73,7 +73,7 @@ final class NewsCell: UITableViewCell {
         super.prepareForReuse()
     }
 
-    func updateView(with news: NewsModel) {
+    func updateView(with news: NewsCellModel) {
         self.sourceLabel.text = news.source
         self.dateLabel.text = news.date.relativeDateTime
         self.headlineLabel.text = news.headline
@@ -111,30 +111,30 @@ final class NewsCell: UITableViewCell {
         }
 
         sourceLabel.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview().inset(Const.inset)
+            make.top.leading.equalToSuperview().inset(16)
         }
 
         dateLabel.snp.makeConstraints { make in
             make.centerY.equalTo(sourceLabel)
-            make.leading.equalTo(sourceLabel.snp.trailing).offset(Const.offset)
-            make.trailing.lessThanOrEqualToSuperview().inset(Const.inset)
+            make.leading.equalTo(sourceLabel.snp.trailing).offset(8)
+            make.trailing.lessThanOrEqualToSuperview().inset(16)
         }
 
         headlineLabel.snp.makeConstraints { make in
-            make.top.equalTo(sourceLabel.snp.bottom).offset(Const.offset)
+            make.top.equalTo(sourceLabel.snp.bottom).offset(8)
             make.leading.equalTo(sourceLabel)
-            make.trailing.equalToSuperview().inset(Const.inset)
+            make.trailing.equalToSuperview().inset(16)
         }
 
         summaryLabel.snp.makeConstraints { make in
-            make.top.equalTo(headlineLabel.snp.bottom).offset(Const.offset)
+            make.top.equalTo(headlineLabel.snp.bottom).offset(8)
             make.leading.trailing.equalTo(headlineLabel)
         }
 
         thumbnailImageView.snp.makeConstraints { make in
-            make.top.equalTo(summaryLabel.snp.bottom).offset(Const.offset)
+            make.top.equalTo(summaryLabel.snp.bottom).offset(8)
             make.leading.trailing.equalTo(summaryLabel)
-            make.bottom.equalToSuperview().inset(Const.inset)
+            make.bottom.equalToSuperview().inset(16)
             make.height.equalTo(thumbnailImageView.snp.width).dividedBy(2)
         }
     }
@@ -143,7 +143,5 @@ final class NewsCell: UITableViewCell {
 
     private enum Const {
         static let backgroundEdgeInset = UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
-        static let inset: CGFloat = 16.0
-        static let offset: CGFloat = 8.0
     }
 }
